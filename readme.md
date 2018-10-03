@@ -20,8 +20,9 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 3. `composer install` to install all the required dependencies
 4. `cp .env.example .env` create a new environment config based on project's default
 5. `php artisan key:generate` to create new APP_KEY in your local .env (**REQUIRED**)
-6. `docker-compose up --build` (only for the first time or major changes) or `docker-compose up`
-7. open http://localhost:8080 in a web browser
+6. `chmod -R o+rw bootstrap/ storage/` to allow Apache to edit project's files
+7. `docker-compose up --build` (only for the first time or major changes) or `docker-compose up`
+8. open http://localhost:8080 in a web browser
 
 ### General workflow
 
