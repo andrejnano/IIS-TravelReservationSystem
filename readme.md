@@ -6,6 +6,22 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 
 **Project Repository**: https://github.com/andrejnano/IIS-projekt
 
+## Setup guide
+
+**Install prerequisites**:
+
+- [Docker](https://docs.docker.com/install/)
+- [Composer](https://getcomposer.org/)
+
+1. `git clone https://github.com/andrejnano/IIS-projekt`
+2. `cd IIS-projekt`
+3. `docker-compose up --build` or `docker-compose up`
+
+- CTRL+C to exit and stop the running container
+- To stop all running containers: `docker-compose stop`
+- To remove all containers locally: `docker-compose rm -f`
+- To enter the running container: `docker-compose exec web /bin/bash`
+
 ## Learning Resources
 
 - [Learn Docker in 12 Minutes🐳](https://www.youtube.com/watch?v=YFl2mCHdv24)
