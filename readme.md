@@ -13,6 +13,8 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 - [Docker](https://docs.docker.com/install/)
 - [Composer](https://getcomposer.org/)
 
+### First setup
+
 1. `git clone https://github.com/andrejnano/IIS-projekt`
 2. `cd IIS-projekt`
 3. `composer install` to install all the required dependencies
@@ -21,10 +23,20 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 6. `docker-compose up --build` (only for the first time or major changes) or `docker-compose up`
 7. open http://localhost:8080 in a web browser
 
+### General workflow
+
+1. go to your project's root directory
+2. `docker-compose up` to run containers (Apache+PHP & MySQL)
+3. http://localhost:8080 in a web browser
+4. make changes in the project's source files
+5. see them reflected instantly in the container
+6. `docker-compose stop && docker-compose rm -f` to stop the containers and clear up your local workspace
+
 - CTRL+C to exit and stop the running container
 - To stop all running containers: `docker-compose stop`
 - To remove all containers locally: `docker-compose rm -f`
 - To enter the running container: `docker-compose exec web /bin/bash`
+- Use `--build` flag on `docker-compose up` to rebuild the whole image
 
 ## Learning Resources
 
