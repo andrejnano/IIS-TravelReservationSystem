@@ -15,7 +15,8 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 
 1. `git clone https://github.com/andrejnano/IIS-projekt`
 2. `cd IIS-projekt`
-3. `docker-compose up --build` or `docker-compose up`
+3. `docker-compose up --build` (only for the first time or major changes) or `docker-compose up`
+4. open http://localhost:8080 in a web browser
 
 - CTRL+C to exit and stop the running container
 - To stop all running containers: `docker-compose stop`
