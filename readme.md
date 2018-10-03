@@ -15,8 +15,11 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 
 1. `git clone https://github.com/andrejnano/IIS-projekt`
 2. `cd IIS-projekt`
-3. `docker-compose up --build` (only for the first time or major changes) or `docker-compose up`
-4. open http://localhost:8080 in a web browser
+3. `composer install` to install all the required dependencies
+4. `cp .env.example .env` create a new environment config based on project's default
+5. `php artisan key:generate` to create new APP_KEY in your local .env (**REQUIRED**)
+6. `docker-compose up --build` (only for the first time or major changes) or `docker-compose up`
+7. open http://localhost:8080 in a web browser
 
 - CTRL+C to exit and stop the running container
 - To stop all running containers: `docker-compose stop`
