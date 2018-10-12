@@ -21,3 +21,5 @@ RUN docker-php-ext-install mbstring pdo pdo_mysql
 
 # give ownership of the project files to Apache 'www-data' user
 RUN chown -R www-data:www-data /srv/app
+
+RUN a2enmod rewrite
