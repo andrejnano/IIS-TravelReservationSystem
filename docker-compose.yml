@@ -18,6 +18,7 @@ services:
       DB_USERNAME: admin
       DB_PASSWORD: password
   mysql:
+    build: db/.
     image: mysql:5.7
     restart: always
     ports:
@@ -27,6 +28,9 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
+      command: printf "USE $$MYSQL_DATABASE;`cat db.sql`\n" | mysql -u $$MYSQL_USER -p$$MYSQL_PASSWORD
+    # command: mysql -u admin -ppassword
+    # printf "USE $$MYSQL_DATABASE;\n$$(cat db.sql)" | 
   adminer:
     image: adminer
     restart: always
