@@ -17,7 +17,7 @@ COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /srv/app
 
 # install PHP extensions for MySQL usage
-RUN docker-php-ext-install mbstring pdo pdo_mysql
+RUN docker-php-ext-install mbstring pdo pdo_mysql mysqli
 
 # give ownership of the project files to Apache 'www-data' user
 RUN chown -R www-data:www-data /srv/app

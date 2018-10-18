@@ -13,6 +13,7 @@
 
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
+Route::get('/booking', 'PagesController@booking');
 
 Route::get('/hello', function () {
     return "Hello World!";

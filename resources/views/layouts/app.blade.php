@@ -1,15 +1,16 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ config('app.locale') }}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{asset('saas/app.scss')}}">
-        <title>{{config('app.name', 'ISS')}}</title>
+        {{-- css not working; npm install fails --}}
+        <link rel="stylesheet" href="{{ asset('sass/app.scss') }}" type="text/css">
+        <title>{{config('app.name', 'IIS')}}</title>
         {{-- <title>42</title> --}}
 
     </head>
-    <body>
+    <body class="navbar-laravel">
         <ul>
             <li><a href="/booking">BOOKING</a></li>
             <li><a href="/promotional">PROMOTIONAL OFFERS</a></li>
