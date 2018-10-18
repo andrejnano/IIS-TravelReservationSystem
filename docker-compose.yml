@@ -18,8 +18,9 @@ services:
       DB_USERNAME: admin
       DB_PASSWORD: password
   mysql:
-    build: db/.
-    image: mysql:5.7
+    build: 
+      context: ./db/
+      dockerfile: ./Dockerfile
     restart: always
     ports:
       - 13306:3306
@@ -28,7 +29,6 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
-    command: --init-file /db.sql
   adminer:
     image: adminer
     restart: always
