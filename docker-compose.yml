@@ -28,9 +28,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
-      command: printf "USE $$MYSQL_DATABASE;`cat db.sql`\n" | mysql -u $$MYSQL_USER -p$$MYSQL_PASSWORD
-    # command: mysql -u admin -ppassword
-    # printf "USE $$MYSQL_DATABASE;\n$$(cat db.sql)" | 
+    command: --init-file /db.sql
   adminer:
     image: adminer
     restart: always
