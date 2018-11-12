@@ -17,5 +17,4 @@ class PagesController extends Controller
     public function booking(){
         return view('pages.booking');
     }
-
 }

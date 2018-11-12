@@ -13,8 +13,13 @@
 
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
-Route::get('/booking', 'PagesController@booking');
+Route::resource('/booking', 'BookingController');
+// Route::controller('/booking', 'BookingController');
 
+// Route::get('/booking', 'PagesController@booking');
+// Route::post('/booking/form', function () {
+//     return "It works";
+// });
 Route::get('/hello', function () {
     return "Hello World!";
 });
