@@ -1,0 +1,9 @@
+
+body.webpage {
+  margin-top: 57px;   // navigation bar offset
+  display: grid;
+  grid-template: [header-left] "header header" 200px [header-right]
+                 [main-left]   "sidebar  main" 1fr  [main-right]
+                 [footer-left] "footer footer" 200px [footer-right]
+                 / 200px 1fr;
+}

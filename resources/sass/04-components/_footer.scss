@@ -1,1 +1,13 @@
 // footer styles
+footer {
+  background: $color-accent;
+  color: $white;
+  grid-area: footer;
+    // spacing for different views
+  @include for-phone-only {
+    padding: var(--space-sm);
+  }
+  @include for-tablet-portrait-up {
+    padding: var(--space-md);
+  }
+}

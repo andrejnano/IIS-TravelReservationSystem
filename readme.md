@@ -12,12 +12,14 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 
 - [Docker](https://docs.docker.com/install/)
 - [Composer](https://getcomposer.org/)
+- [Node.js](https://getcomposer.org/)
 
 ### First setup
 
 1. `git clone https://github.com/andrejnano/IIS-projekt`
 2. `cd IIS-projekt`
 3. `composer install` to install all the required dependencies
+4. `npm install`
 4. `cp .env.example .env` create a new environment config based on project's default
 5. `php artisan key:generate` to create new APP_KEY in your local .env (**REQUIRED**)
 6. `chmod -R o+rw bootstrap/ storage/` to allow Apache to edit project's files
@@ -28,6 +30,7 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 
 1. go to your project's root directory
 2. `docker-compose up` to run containers (Apache+PHP & MySQL)
+3. `npm run watch` to watch SCSS/JS files for changes and compile them automatically
 3. http://localhost:8080 in a web browser
 4. make changes in the project's source files
 5. see them reflected instantly in the container

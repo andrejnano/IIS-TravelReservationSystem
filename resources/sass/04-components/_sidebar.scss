@@ -1,1 +1,14 @@
 // sidebar/widget panel styles
+
+aside {
+  background: $color-primary-light;
+  color: $white;
+  grid-area: sidebar;
+    // spacing for different views
+  @include for-phone-only {
+    padding: var(--space-sm);
+  }
+  @include for-tablet-portrait-up {
+    padding: var(--space-md);
+  }
+}

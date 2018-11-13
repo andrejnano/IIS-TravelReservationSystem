@@ -1,1 +1,20 @@
 // main section styles
+main {
+   grid-area: main;
+  // spacing for different views
+  @include for-phone-only {
+    padding: var(--space-sm);
+  }
+  @include for-tablet-portrait-up {
+    padding: var(--space-md);
+  }
+  @include for-tablet-landscape-up {
+    padding: var(--space-lg);
+  }
+  @include for-desktop-up {
+    padding: var(--space-xl);
+  }
+  @include for-big-desktop-up {
+    padding: var(--space-xxl);
+  }
+}

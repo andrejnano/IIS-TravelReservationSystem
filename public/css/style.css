@@ -11738,8 +11738,107 @@ table tr:nth-child(even) {
 *  Specific site parts composed of multiple objects.
 * -------------------------------------------------------------------------------------------------------------------*/
 
+footer {
+  background: #f5414f;
+  color: white;
+  grid-area: footer;
+}
+
+@media (max-width: 599px) {
+  footer {
+    padding: var(--space-sm);
+  }
+}
+
+@media (min-width: 600px) {
+  footer {
+    padding: var(--space-md);
+  }
+}
+
+header {
+  background: #4D84F4;
+  color: white;
+  grid-area: header;
+}
+
+@media (max-width: 599px) {
+  header {
+    padding: var(--space-sm);
+  }
+}
+
+@media (min-width: 600px) {
+  header {
+    padding: var(--space-md);
+  }
+}
+
+main {
+  grid-area: main;
+}
+
+@media (max-width: 599px) {
+  main {
+    padding: var(--space-sm);
+  }
+}
+
+@media (min-width: 600px) {
+  main {
+    padding: var(--space-md);
+  }
+}
+
+@media (min-width: 900px) {
+  main {
+    padding: var(--space-lg);
+  }
+}
+
+@media (min-width: 1200px) {
+  main {
+    padding: var(--space-xl);
+  }
+}
+
+@media (min-width: 1800px) {
+  main {
+    padding: var(--space-xxl);
+  }
+}
+
+aside {
+  background: #95b6f8;
+  color: white;
+  grid-area: sidebar;
+}
+
+@media (max-width: 599px) {
+  aside {
+    padding: var(--space-sm);
+  }
+}
+
+@media (min-width: 600px) {
+  aside {
+    padding: var(--space-md);
+  }
+}
+
 /**--------------------------------------------------------------------------------------------------------------------
-* 05 - PAGES
+* 05 - TEMPLATES
+*  Putting the components together.
+* -------------------------------------------------------------------------------------------------------------------*/
+
+body.webpage {
+  margin-top: 57px;
+  display: grid;
+  grid-template: [header-left] "header header" 200px [header-right] [main-left] "sidebar  main" 1fr [main-right] [footer-left] "footer footer" 200px [footer-right]/200px 1fr;
+}
+
+/**--------------------------------------------------------------------------------------------------------------------
+* 06 - PAGES
 *  Specific pages on the website w/ their specific styling that cannot be abstracted in any way
 * -------------------------------------------------------------------------------------------------------------------*/
 
