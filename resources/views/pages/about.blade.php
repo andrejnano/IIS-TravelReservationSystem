@@ -5,8 +5,8 @@
     <p>abouttttt</p>
     <div class="grid">
     <table>
-    <?php
 
+    <?php
     $results = DB::select('select * FROM flights', [1]);
     // dd($results);
     

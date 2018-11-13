@@ -96,3 +96,40 @@ If you're not in the mood to read, [Laracasts](https://laracasts.com) contains o
 - HTML
 - Javascript
 - ? Angular || React || ...
+
+**Apach config on Eva**
+ - change login xmarko15 to your login in this files .env.example, ./public/.htaccess, ./resources/views/inc/navbar.blade.php
+ - Inserted this lines into .htacess, allow laravel routing in your base route
+ ```
+ RewriteEngine On
+ RewriteBase /~xlogin00/
+ ```
+ - if you have created mysql database, then run initialisation script <br>
+    if you are using Eva, then your password for database can be found here https://wis.fit.vutbr.cz/FIT/st/csmeva.php
+ ```
+ mysql xlogin00 -u xlogin00 -p  < ./db/db.sql
+ ```
+ - set environment variables for database in .env.example and run
+ ```
+ cp .env.example .env
+ ```
+ - update project/ to your directory name
+ ```
+  cp -a ./public/. ../
+  ```
+  - allow read for others
+  ```
+    chmod 755 ../
+    chmod 755 ../index.php
+  ```
+  - set links in WWW/index.php to apropriate values <br>
+  before:
+  ```
+  require __DIR__.'/../vendor/autoload.php';
+  $app = require_once __DIR__.'/../bootstrap/app.php';
+  ```
+  after:
+  ```
+  require __DIR__.'/IIS-projekt/vendor/autoload.php';
+  $app = require_once __DIR__.'/IIS-projekt/bootstrap/app.php';
+  ```

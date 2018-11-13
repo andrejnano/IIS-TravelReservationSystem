@@ -81,7 +81,7 @@
 -- END; //
 
 -- DELIMITER ;
-
+  SET FOREIGN_KEY_CHECKS=0;
   DROP TABLE IF EXISTS customers;
   DROP TABLE IF EXISTS reservations;
   DROP TABLE IF EXISTS tickets;
@@ -91,6 +91,7 @@
   DROP TABLE IF EXISTS airlines;
   DROP TABLE IF EXISTS passengers;
   DROP TABLE IF EXISTS search_records;
+  SET FOREIGN_KEY_CHECKS=1;
 
 /* CREATE ALL TABLES */
 
@@ -270,30 +271,20 @@ DELIMITER ;
     CONSTRAINT searched_for_flight_fk   FOREIGN KEY (flight)    REFERENCES flights(flight_number)
   );
 
-DROP TRIGGER IF EXISTS f_tickets_trig;
-DROP TRIGGER IF EXISTS b_tickets_trig;
-DROP TRIGGER IF EXISTS e_tickets_trig;
+DROP TRIGGER IF EXISTS tickets_trig;
 DELIMITER $$
-CREATE TRIGGER f_tickets_trig BEFORE INSERT ON tickets
+CREATE TRIGGER tickets_trig BEFORE INSERT ON tickets
     FOR EACH ROW BEGIN
       IF (NEW.seat_class = 'F') THEN
         UPDATE flights
         SET fclass_seats_free = fclass_seats_free - 1
         WHERE flights.flight_number = NEW.flight;
         END IF;
-    END$$
-
-CREATE TRIGGER b_tickets_trig BEFORE INSERT ON tickets
-    FOR EACH ROW BEGIN
       IF (NEW.seat_class = 'B') THEN
         UPDATE flights
         SET bclass_seats_free = bclass_seats_free - 1
         WHERE flights.flight_number = NEW.flight;
         END IF;
-    END$$
-
-CREATE TRIGGER e_tickets_trig BEFORE INSERT ON tickets
-    FOR EACH ROW BEGIN
       IF (NEW.seat_class = 'B') THEN
         UPDATE flights
         SET eclass_seats_free = eclass_seats_free - 1
