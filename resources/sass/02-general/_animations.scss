@@ -1,0 +1,40 @@
+
+@mixin simpleTransition {
+  transition: all .1s cubic-bezier(.4,0,.2,1)
+}
+
+@mixin simpleColorTransition {
+  transition: color .1s cubic-bezier(.4,0,.2,1)
+}
+
+@-webkit-keyframes gradient_move {
+  0%{background-position:67% 0%}
+  50%{background-position:34% 100%}
+  100%{background-position:67% 0%}
+}
+@-moz-keyframes gradient_move {
+  0%{background-position:67% 0%}
+  50%{background-position:34% 100%}
+  100%{background-position:67% 0%}
+}
+@keyframes gradient_move {
+  0%{background-position:67% 0%}
+  50%{background-position:34% 100%}
+  100%{background-position:67% 0%}
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(.3, .3, .3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

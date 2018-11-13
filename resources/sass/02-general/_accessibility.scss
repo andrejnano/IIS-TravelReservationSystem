@@ -1,0 +1,40 @@
+// optional accessibility support
+// https://medium.com/@addyosmani/accessible-ui-components-for-the-web-39e727101a67
+// https://www.wuhcag.com/wcag-checklist/
+
+/**
+* Visibilly hidden but still accessible to screen readers
+*/
+.is-vishidden {
+  position: absolute !important;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+/**
+* ARIA roles include visual cursor hints
+*/
+[aria-busy="true"] {
+  cursor: progress;
+}
+
+[aria-controls] {
+  cursor: pointer;
+}
+
+[aria-disabled], [disabled] {
+  cursor: default;
+}
+
+/**
+* Visually hidden content remains accessible
+*/
+[aria-hidden="false"][hidden]:not(:focus) {
+  clip: rect(0, 0, 0, 0);
+  display: inherit;
+  position: absolute;
+}

@@ -1,0 +1,38 @@
+// mixins used for simpler responsive styling
+// for any screen size specific style, just include the declarations
+// inside the mixin: like this
+/*
+
+  body {
+    color: blue;
+    @include for-phone-only { color: red; }
+  }
+
+  or include the whole element style declaration in the scope of mixin
+
+  @include for-desktop-up {
+    main {
+      margin: 10%;
+    }
+    footer {
+      height: 200px;
+    }
+  }
+
+*/
+
+@mixin for-phone-only {
+  @media (max-width: 599px) { @content; }
+}
+@mixin for-tablet-portrait-up {
+  @media (min-width: 600px) { @content; }
+}
+@mixin for-tablet-landscape-up {
+  @media (min-width: 900px) { @content; }
+}
+@mixin for-desktop-up {
+  @media (min-width: 1200px) { @content; }
+}
+@mixin for-big-desktop-up {
+  @media (min-width: 1800px) { @content; }
+}

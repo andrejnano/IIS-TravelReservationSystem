@@ -1,0 +1,18 @@
+@mixin article {
+  margin: var(--space-lg);
+}
+
+.article--centered {
+  @include article;
+  text-align: center;
+}
+
+.article--left-aligned {
+  @include article;
+  text-align: left;
+}
+
+.article--right-aligned {
+  @include article;
+  text-align: right;
+}

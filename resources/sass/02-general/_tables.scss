@@ -1,0 +1,13 @@
+table {
+  td, th {
+    color: $gray-10;
+    border: 1px solid $color-border;
+    text-align: left;
+    padding: var(--space-xs);
+  }
+
+  tr:nth-child(even) {
+    background:$gray-10;
+    color: $white;
+  }
+}

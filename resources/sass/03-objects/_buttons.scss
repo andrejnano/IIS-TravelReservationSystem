@@ -1,0 +1,31 @@
+
+.btn {
+  background-color: $btn-primary-bg;
+  color: $btn-primary-label;
+  padding: var(--space-sm) var(--space-md);
+  margin: var(--space-md);
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 2px;
+  font-weight: 500;
+  font-size: var(--text-sm);
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  @include simpleTransition;
+  @include googleShadow;
+
+  &:hover {
+    background-color: $btn-primary-hover;
+    color: $btn-primary-bg;
+    @include simpleTransition;
+  }
+
+  &:active {
+    background-color: $btn-primary-active;
+    @include simpleTransition;
+  }
+
+  &:visited {
+    color: $btn-primary-label;
+  }
+}

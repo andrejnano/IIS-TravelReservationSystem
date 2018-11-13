@@ -1,0 +1,73 @@
+// the MASTER stylesheet for this application
+// imports all the underyling stylesheets into a single SCSS file
+// for more info, see the README or Documentation
+
+/**  DO NOT ADD EXPLICIT STYLE DECLARATIONS INTO THIS FILE **/
+
+  @charset "UTF-8";
+
+/**--------------------------------------------------------------------------------------------------------------------
+* 00 - UTILITIES
+*  Helpful tools/mixins/resets
+* -------------------------------------------------------------------------------------------------------------------*/
+
+    @import     '~bootstrap/scss/bootstrap'; // bootstrap framework imports; TODO: maybe we dont need it
+    @import     "00-utilities/normalize";    // normalization of the styles for all browswers
+
+
+/**--------------------------------------------------------------------------------------------------------------------
+* 01 - SETTINGS
+*  Variable values defining the underlying constants
+* -------------------------------------------------------------------------------------------------------------------*/
+
+    @import     "01-settings/base";         // the most basic styling and resets
+    @import     "01-settings/colors";       // text colors
+    @import     "01-settings/spacing";      // text spacing
+    @import     "01-settings/typography";   // text sizing
+
+
+/**--------------------------------------------------------------------------------------------------------------------
+* 02 - BASE
+*  General document styling.
+* -------------------------------------------------------------------------------------------------------------------*/
+
+    @import     "02-general/accessibility";     // accessibility
+    @import     "02-general/alignment";         // simple align directives
+    @import     "02-general/animations";        // transitions and animations
+    @import     "02-general/fx";                // effects, polishes, special styling
+    @import     "02-general/layout";            // general page layout / grid mixins
+    @import     "02-general/media";             // media query mixins
+    @import     "02-general/shadows";           // transitions and animations
+    @import     "02-general/tables";            // tables
+
+/**--------------------------------------------------------------------------------------------------------------------
+* 03 - OBJECTS
+*  Atomic elements reusable in other, more complicated components.
+* -------------------------------------------------------------------------------------------------------------------*/
+
+    @import     "03-objects/buttons";           // button styles
+    @import     "03-objects/article";           // simple article
+
+
+/**--------------------------------------------------------------------------------------------------------------------
+* 04 - COMPONENTS
+*  Specific site parts composed of multiple objects.
+* -------------------------------------------------------------------------------------------------------------------*/
+
+    @import     "04-components/footer";         // footer of the page
+    @import     "04-components/header";         // header of the page
+    @import     "04-components/main";           // main section
+    @import     "04-components/navigation";     // navigation panel
+    @import     "04-components/sidebar";        // sidebar / widget area
+
+
+/**--------------------------------------------------------------------------------------------------------------------
+* 05 - PAGES
+*  Specific pages on the website w/ their specific styling that cannot be abstracted in any way
+* -------------------------------------------------------------------------------------------------------------------*/
+
+    @import     "05-pages/frontpage";
+    @import     "05-pages/about";
+    @import     "05-pages/booking";
+    @import     "05-pages/prices";
+    @import     "05-pages/timetables";

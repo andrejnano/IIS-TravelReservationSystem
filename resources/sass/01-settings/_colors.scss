@@ -1,0 +1,101 @@
+// color manipulation in a single place
+// ideally all color values in style declarations should be referenced from this file
+
+/**--------------------------------------------------------------------------------------------------------------------
+*  BASE COLOR PALETTE
+*  -> the most dominant colors of the website's UI
+*   ~ https://www.websitebuilderexpert.com/designing-websites/how-to-choose-color-for-your-website/
+*   ~ https://uxplanet.org/designing-systematic-colors-b5d2605b15c
+* -------------------------------------------------------------------------------------------------------------------*/
+
+// note: These are example colors :)
+
+$color-primary: #4D84F4;
+  $color-primary-light: lighten($color-primary, 15%);
+  $color-primary-dark: darken($color-primary, 15%);
+  $color-primary-bg: rgba($color-primary, 20%);
+
+$color-accent: #f5414f;
+  $color-accent-light: lighten($color-accent, 15%);
+  $color-accent-dark: darken($color-accent, 10%);
+  $color-accent-bg: rgba($color-accent, 20%);
+
+// shades - generated using chroma.js - 12 steps
+$black: #1d1d21;
+$gray-10: #2e2e31;
+$gray-6: #7b7a7d;
+$gray-4: #a5a5a6;
+$gray-3: #bbbbbc;
+$gray-2: #d1d0d2;
+$gray-1: #e8e7e8;
+$white: white;
+
+/* feedback */
+$color-success: #88c459;
+$color-error: #f5414f;
+$color-warning: #ffd137;
+$color-info: $color-primary-light;
+
+/* general colors */
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66D9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+
+/* gradients */
+$primary-accent-vertical-bottom: linear-gradient(to bottom, $color-primary, $color-accent);
+$primary-accent-vertical-top: linear-gradient(to top, $color-primary, $color-accent);
+$primary-accent-horizontal-left: linear-gradient(to left, $color-primary, $color-accent);
+$primary-accent-horizontal-rigt: linear-gradient(to right, $color-primary, $color-accent);
+
+/* typography */
+$color-text: $gray-10;
+$color-text-heading: $black;
+$color-text-subtle: $gray-6;
+$color-link: $color-primary;
+$color-link-hover: $color-primary-light;
+$color-link-visited: $color-primary-dark;
+$color-mark: $color-accent-bg;
+$color-blockquote-border: $gray-2;
+
+/* border */
+$color-border: $gray-2;
+
+/* body */
+$color-body: $white;
+
+/* forms */
+$form-element-border: $color-border;
+$form-element-border-focus: $color-primary;
+$form-element-border-error: $color-error;
+$form-element-bg: $white;
+$form-text-placeholder: $gray-4;
+
+/* buttons */
+$btn-primary-bg: $color-primary;
+$btn-primary-hover: $color-primary-light;
+$btn-primary-active: $color-primary-dark;
+$btn-primary-label: $white;
+
+body { color: $color-text; }
+
+article p { color: $color-text; }
+
+h1, h2, h3, h4, form legend {
+  color: $color-text-heading;
+}
+
+a {
+  color: $color-link;
+  &:visited { color: $color-link-visited; }
+  &:hover { color: $color-link-hover; }
+}
+
+.overline { color: $color-text; }
+.subtitle { color: $color-text-subtle; }
