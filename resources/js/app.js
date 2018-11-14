@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -15,8 +14,29 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+import Vue from 'vue'
 
-const app = new Vue({
-    el: '#app'
-});
+import {
+  library
+} from '@fortawesome/fontawesome-svg-core'
+import {
+  faPlaneDeparture
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  faPlaneArrival
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  FontAwesomeIcon
+} from '@fortawesome/vue-fontawesome'
+
+library.add(faPlaneDeparture)
+library.add(faPlaneArrival)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app'
+})

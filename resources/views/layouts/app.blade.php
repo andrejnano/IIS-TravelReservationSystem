@@ -14,5 +14,7 @@
       @yield('content')
     </main>
     @include('inc.footer')
+
+    <script src="{{ asset('js/app.js') }}"></script>
   </body>
 </html>

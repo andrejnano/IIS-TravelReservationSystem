@@ -11289,13 +11289,13 @@ article u {
 */
 
 ::-moz-selection {
-  background: #1d1d21;
+  background: #4D84F4;
   color: white;
   text-shadow: none;
 }
 
 ::selection {
-  background: #1d1d21;
+  background: #4D84F4;
   color: white;
   text-shadow: none;
 }
@@ -11731,6 +11731,53 @@ table tr:nth-child(even) {
 .article--right-aligned {
   margin: var(--space-lg);
   text-align: right;
+}
+
+.form-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.text-field {
+  padding: var(--space-sm) var(--space-md);
+  margin: var(--space-md);
+  position: relative;
+}
+
+.text-field .text-field__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  margin: var(--space-xs) var(--space-md);
+  padding: var(--space-xs);
+  border-bottom: 3px solid #1d1d21;
+}
+
+.text-field .text-field__label {
+  color: #1d1d21;
+  position: absolute;
+  top: var(--space-xs);
+  left: var(--space-xxl);
+  font-size: var(--text-xs);
+}
+
+.text-field--white {
+  background: white;
+  color: #2e2e31;
 }
 
 /**--------------------------------------------------------------------------------------------------------------------
