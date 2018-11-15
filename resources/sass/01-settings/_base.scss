@@ -1,0 +1,116 @@
+
+*, ::before, ::after {
+  // Apply border-box to all elements
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+
+  // Disable background repetition by default
+  background-repeat: no-repeat;
+}
+
+// make pseudo-elements inherit by default
+::before,
+::after {
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
+
+html { cursor: default; }
+
+
+/**
+* reset basic elements
+*/
+
+body, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, hr,
+dl, dd, ol, ul, figure {
+  margin: 0;
+  padding: 0;
+}
+
+/**
+* disable bold in headings by default
+*/
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+/**
+* Navigation lists unstyling
+*/
+nav ol, nav ul {
+  list-style: none;
+}
+
+/**
+* Pre-formatted and code-formatted text uses the monospace system ui font
+*/
+code, kbd, pre, samp {
+  font-family:
+    /* macOS 10.10+ */ Menlo,
+    /* Windows 6+ */ Consolas,
+    /* Android 4+ */ Roboto Mono,
+    /* Ubuntu 10.10+ */ Ubuntu Monospace,
+    /* KDE Plasma 4+ */ Oxygen Mono,
+    /* Linux/OpenOffice fallback */ Liberation Mono,
+    /* fallback */ monospace;
+}
+
+/**
+* images reset for responsiveness
+*/
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+img:not([src]) {
+  visibility: hidden;
+}
+
+
+/**
+* Media elements align to the text center of other content
+*/
+audio, canvas, iframe, img, svg, video {
+  vertical-align: middle;
+}
+
+/**
+* SVGs fallback to the current text color
+*/
+svg {
+  fill: currentColor;
+}
+
+/**
+* Tables do not include additional border spacing
+*/
+table {
+  border-collapse: collapse;
+}
+
+/**
+* Form controls are easily style-able
+*/
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/**
+* Single taps are dispatched immediately on clickable elements
+*/
+a, area, button, input, label, select, summary, textarea, [tabindex] {
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
+/**
+* Textareas only resize vertically by default
+*/
+textarea {
+  resize: vertical;
+}

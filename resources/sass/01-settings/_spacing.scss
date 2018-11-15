@@ -1,0 +1,44 @@
+:root {
+  /* spacing values */
+  --space-unit: 1em;
+
+  /* fibonacci sequence applied to spacing for the ＡＥＳＴＨＥＴＩＣＳ　フト援 */
+  --space-xxs:  calc(0.25 * var(--space-unit));
+  --space-xs:   calc(0.5 * var(--space-unit));
+  --space-sm:   calc(0.75 * var(--space-unit));
+  --space-md:   calc(1.25 * var(--space-unit));
+  --space-lg:   calc(2 * var(--space-unit));
+  --space-xl:   calc(3.25 * var(--space-unit));
+  --space-xxl:  calc(5.25 * var(--space-unit));
+
+  /* line-height */
+  --heading-line-height: 1.2;
+  --body-line-height: 1.4;
+}
+
+h1, h2, h3, h4, form legend {
+  margin-bottom: var(--space-xxs);
+  line-height: var(--heading-line-height);
+}
+
+p {
+  line-height: var(--body-line-height);
+}
+
+article {
+  h2, h3, h4 {
+    margin-top: var(--space-sm);
+  }
+
+  ul, ol, p {
+    margin-bottom: var(--space-md);
+  }
+
+  ul, ol {
+    padding-left: 24px;
+  }
+
+  ul li, ol li {
+    line-height: var(--body-line-height);
+  }
+}

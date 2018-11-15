@@ -1,0 +1,36 @@
+
+.form-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-field {
+  padding: var(--space-sm) var(--space-md);
+  margin: var(--space-md);
+  position: relative;
+
+  .text-field__input {
+    border: none;
+    outline: none;
+    background: transparent;
+    appearance: none;
+    margin: var(--space-xs) var(--space-md);
+    padding: var(--space-xs);
+    border-bottom: 3px solid $black;
+  }
+
+  .text-field__label {
+    color: $black;
+    position: absolute;
+    top: var(--space-xs);
+    left: var(--space-xxl);
+    font-size: var(--text-xs);
+  }
+}
+
+.text-field--white {
+  background: $white;
+  color: $gray-10;
+}

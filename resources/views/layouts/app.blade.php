@@ -1,17 +1,20 @@
 <!doctype html>
 <html lang="{{ config('app.locale') }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        {{-- css not working; npm install fails --}}
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css">
-        <title>{{config('app.name', 'IIS')}}</title>
-        {{-- <title>42</title> --}}
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?<?php echo time(); ?>" type="text/css"  media="all">
+    <title>{{config('app.name', 'IIS')}}</title>
+  </head>
+  <body class='webpage'>
+    @include('inc.header')
+    @include('inc.sidebar')
+    <main>
+      @yield('content')
+    </main>
+    @include('inc.footer')
 
-        @include('inc.navbar')
-    </head>
-    <body class="navbar-laravel">
-        @yield('content')
-    </body>
+    <script src="{{ asset('js/app.js') }}"></script>
+  </body>
 </html>

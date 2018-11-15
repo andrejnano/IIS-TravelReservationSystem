@@ -1,0 +1,13 @@
+// header styles
+header {
+  background: $color-primary;
+  color: $white;
+  grid-area: header;
+    // spacing for different views
+  @include for-phone-only {
+    padding: var(--space-sm);
+  }
+  @include for-tablet-portrait-up {
+    padding: var(--space-md);
+  }
+}

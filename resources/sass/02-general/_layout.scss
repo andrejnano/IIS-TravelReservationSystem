@@ -1,0 +1,256 @@
+
+:root {
+  --grid-gap: 10px;
+}
+
+$gap-horizontal: 10px;
+$gap-vertical: $gap-horizontal;
+
+$grid-columns: 12;
+
+/**
+ * Layout with an auto-generated number of columns in grid.
+ *
+ * To use put this inside the parent element:
+ *  @include grid;
+ *  @include gridAuto([min-width]px);
+ */
+
+/**
+* Basic grid layout display styling
+*/
+@mixin grid {
+
+  // IE fallback, CSS GRID not supported
+  &::before, &::after {
+    content: '';
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
+
+  > * {
+    float: left;
+    margin-right: $gap-horizontal;
+    margin-bottom: $gap-vertical;
+  }
+
+  // all other modern browsers, CSS GRID supported
+  @supports(grid-area: auto) {
+    display: grid;
+    grid-column-gap: $gap-horizontal;
+    grid-row-gap: $gap-vertical;
+
+    &::before, &::after {
+      content: none;
+    }
+
+    > * {
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+/**
+* Automatic responsive grid
+* $min-width: minimal width for each grid item
+* $fallback: (optional) number of items per row on browsers not supporting CSS grid
+*/
+@mixin gridAuto($min-width, $fallback: 3) {
+
+  // IE fallback, CSS GRID not supported
+  > * {
+    float: left;
+    width: calc(100%/#{$fallback} - #{$gap-horizontal});
+
+    &:nth-child(#{$fallback}n + 1) {
+      clear: both;
+    }
+  }
+
+  // all other modern browsers, CSS GRID supported
+  @supports(grid-area: auto) {
+    grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+
+    > * {
+      width: auto;
+      margin: 0;
+    }
+  }
+}
+
+
+
+/**
+ * One-dimensional layout (only width control)
+ *
+ * Example use:
+ *  <ul class="flex-grid">
+ *    <li class="col col--8">one</li>
+ *    <li class="col col--4">two</li>
+ *  </ul>
+ */
+
+.flex-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: calc(var(--grid-gap) * -1) 0 0 calc(var(--grid-gap) * -1);
+  // negative margins are added to balance the padding created by elements
+  // no empty space is left between the .flex-grid and its container
+}
+
+.col {
+  padding: calc(var(--grid-gap)) 0 0 calc(var(--grid-gap));
+  background-clip: content-box;
+  flex-basis: 100%;
+}
+
+@function round-width ($i) {
+  $width : floor(100 * $i * 100/ $grid-columns) / 100;
+  @return $width#{"%"};
+}
+
+// this will create classes .col--1 up to .col--12
+@for $i from 1 through $grid-columns {
+  .col--#{$i} {
+    flex-basis: round-width($i);
+    max-width: round-width($i);
+  }
+}
+
+
+
+/**
+ * Two-dimensional layout (width+height control)
+ *
+ * Example use:
+ * .grid {
+ *    @include gridLayout(
+ *      (7, 2), //item 1
+ *      (5, 1), //item 2
+ *      (5, 1), //item 3
+ *      (12, 1) //item 4
+ *    );
+ * }
+ *
+ *  For each couple of numbers, the first will be the number of columns the
+ *  element has to occupy, the second the number of rows.
+ */
+
+@mixin gridLayout($cols...) {
+
+  // IE fallback, CSS GRID not supported
+  $i: 1;
+  @each $col in $cols {
+    > :nth-of-type(#{$i}) {
+      width: calc( #{round-width(nth($col, 1))} - #{$gap-horizontal});
+    }
+    $i: $i + 1;
+  }
+
+  // all other modern browsers, CSS GRID supported
+  @supports(grid-area: auto) {
+    grid-template-columns: repeat($grid-columns, 1fr);
+
+    $i: 1;
+    @each $col in $cols {
+      > :nth-of-type(#{$i}) {
+        grid-column-end: span nth($col, 1);
+        @if length($col) > 1 {
+          grid-row-end: span nth($col,2);
+        }
+      }
+      $i: $i + 1;
+    }
+
+    > :nth-child(n) {
+      width: auto;
+      margin: 0;
+    }
+  }
+}
+
+
+
+ /**
+ * Two-dimensional layout (width+height control)
+ *  with overlapping element support
+ *
+ * Example use:
+ * .grid {
+ *    @include gridAdvanced(
+ *      (1, 8, 1, 3), //item 1
+ *      (1, 8, 3, 5), //item 2
+ *      (5, -1, 2, 4) //item 3
+ *    );
+ * }
+ *
+ *  Arguments:
+ *  The first two are the item’s start and end position within the grid columns.
+ *  The last two are the row start and end position.
+ */
+
+@mixin gridAdvanced($cols...) {
+
+  // IE fallback, CSS GRID not supported
+  $i: 1;
+  $span: 0;
+
+  @each $col in $cols {
+    > :nth-of-type(#{$i}) {
+      @if nth($col, 2) == -1
+      {
+        $span: $grid-columns - nth($col, 2) - nth($col, 1);
+      }
+      @else
+      {
+        $span: nth($col,2) - nth($col,1);
+      }
+
+      width: calc( #{$span}*((100% - #{$gap-horizontal}*#{$grid-columns})/#{$grid-columns}) + (#{nth($col,1)} - 1)*#{$gap-horizontal} - 1px);
+      min-width: 0px;
+    }
+    $i: $i + 1;
+  }
+
+  // all other modern browsers, CSS GRID supported
+  @supports(grid-area: auto) {
+    grid-template-columns: repeat($grid-columns, 1fr);
+
+    $i: 1;
+    @each $col in $cols {
+      > :nth-of-type(#{$i}) {
+        grid-column-start: nth($col,1);
+        grid-column-end: nth($col,2);
+        grid-row-start: nth($col,3);
+        grid-row-end: nth($col,4);
+      }
+      $i: $i + 1;
+    }
+
+    > :nth-child(n) {
+      width: auto;
+      margin: 0;
+    }
+  }
+}
+
+
+// .gallery-grid {
+//   @include grid;
+//   @include gridAdvanced(
+//     (1, 12, 1, 12),
+//     (2, 6, 5, 12),
+//     (4, -1, 1, 12)
+//   );
+
+//   > div {
+//     background: #444;
+//     color: #fff;
+//     font-weight: bold;
+//     font-size: 50px;
+//   }
+// }
