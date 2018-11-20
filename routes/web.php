@@ -13,13 +13,22 @@
 
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
-Route::resource('/booking', 'BookingController');
-// Route::controller('/booking', 'BookingController');
+Route::get('/chart', 'PagesController@chart');
+Route::resource('/search', 'SearchController');
+Route::get('logout', 'LoginController@logout');
 
-// Route::get('/booking', 'PagesController@booking');
-// Route::post('/booking/form', function () {
-//     return "It works";
-// });
 Route::get('/hello', function () {
     return "Hello World!";
 });
+
+Auth::routes(['verify' => true]);
+
+Route::get('/dashboard', 'DashboardController@index');
+
+// Auth::routes();
+
+// Route::get('/dash', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -14,7 +14,11 @@ class PagesController extends Controller
         return view('pages.about');
     }
 
-    public function booking(){
-        return view('pages.booking');
+    public function search(){
+        return view('pages.search');
+    }
+
+    public function chart(){
+        return view('pages.chart');
     }
 }

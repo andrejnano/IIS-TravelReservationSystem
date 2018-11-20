@@ -1,31 +1,64 @@
 @php ($eva_host='/~xmarko15/')
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   {{-- <a class="navbar-brand" href="#">Navbar</a> --}}
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
-      <li class="{{ Request::is('booking') ? 'nav-item active' : 'nav-item' }}">
-        <a class="nav-link" href={{$eva_host."booking"}}>Booking</a>
-      </li>
-      <li class="{{ Request::is('promotional') ? 'nav-item active' : 'nav-item' }}">
-        <a class="nav-link" href="/promotional">Promotional offers</a>
-      </li>
-      <li class="{{ Request::is('timetables') ? 'nav-item active' : 'nav-item' }}">
-        <a class="nav-link" href="/timetables">Timetables</a>
-      </li>
-      <li class="{{ Request::is('prices') ? 'nav-item active' : 'nav-item' }}">
-        <a class="nav-link" href="/prices">Prices and tickets</a>
-      </li>
-      <li class="{{ Request::is('about') ? 'nav-item active' : 'nav-item' }}">
-        <a class="nav-link" href={{$eva_host."about"}}>About</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+  <div class="container">
+    <a class="navbar-brand" href="{{ url('/') }}">
+        {{ config('app.name', 'IIS-projekt') }}
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="{{ Request::is('about') ? 'nav-item active' : 'nav-item' }}">
+          <a class="nav-link" href={{$eva_host."about"}}>About</a>
+        </li>
+      </ul>
+      <div class="pull-right">
+      <ul class="navbar-nav mr-auto">
+          {{-- <li class="{{ Request::is('chart') ? 'nav-item active' : 'nav-item' }}">
+            <a class="nav-link" href={{$eva_host."chart"}}>Chart</a>
+          </li> --}}
+          {{-- <li class="{{ Request::is('login') ? 'nav-item active' : 'nav-item' }}">
+              <a class="nav-link" href={{$eva_host."login"}}>Login</a>
+            </li>
+          <li class="{{ Request::is('register') ? 'nav-item active' : 'nav-item' }}">
+              <a class="nav-link" href={{$eva_host."register"}}>Register</a>
+          </li> --}}
+          <ul class="navbar-nav ml-auto">
+              <!-- Authentication Links -->
+              @guest
+                  <li class="{{ Request::is('login') ? 'nav-item active' : 'nav-item' }}">
+                      <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                  </li>
+                  <li class="{{ Request::is('register') ? 'nav-item active' : 'nav-item' }}">
+                      @if (Route::has('register'))
+                          <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                      @endif
+                  </li>
+              @else
+                  <li class="nav-item dropdown">
+                      <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                          {{ Auth::user()->name }} <span class="caret"></span>
+                      </a>
+
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="{{ route('logout') }}"
+                             onclick="event.preventDefault();
+                                           document.getElementById('logout-form').submit();">
+                              {{ __('Logout') }}
+                          </a>
+
+                          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                              @csrf
+                          </form>
+                      </div>
+                  </li>
+              @endguest
+
+        </ul>
+      </div>
+    </div>
   </div>
 </nav>
   

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.frame')
 
 @section('content')
   <h1>Frontpage</h1>

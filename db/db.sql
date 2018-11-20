@@ -82,7 +82,7 @@
 
 -- DELIMITER ;
   SET FOREIGN_KEY_CHECKS=0;
-  DROP TABLE IF EXISTS customers;
+  DROP TABLE IF EXISTS users;
   DROP TABLE IF EXISTS reservations;
   DROP TABLE IF EXISTS tickets;
   DROP TABLE IF EXISTS flights;
@@ -206,15 +206,19 @@ DELIMITER ;
   DELIMITER ;
 
 
-  CREATE TABLE customers (
+  CREATE TABLE users (
     id               INT PRIMARY KEY AUTO_INCREMENT,
     first_name       VARCHAR(50) NOT NULL,
     last_name        VARCHAR(50) NOT NULL,
     email            VARCHAR(100) NOT NULL,
-    addr_street      VARCHAR(100) NOT NULL,
-    addr_town        VARCHAR(100) NOT NULL,
-    addr_post_code   INT NOT NULL,
-    addr_state       VARCHAR(100) NOT NULL
+    password         VARCHAR(100) NOT NULL,
+    updated_at       TIMESTAMP,
+    remember_token   VARCHAR(100),
+    created_at       TIMESTAMP
+    -- addr_street      VARCHAR(100) NOT NULL,
+    -- addr_town        VARCHAR(100) NOT NULL,
+    -- addr_post_code   INT NOT NULL,
+    -- addr_state       VARCHAR(100) NOT NULL
   );
 
   CREATE TABLE reservations (
@@ -223,7 +227,7 @@ DELIMITER ;
     created_at      DATETIME NOT NULL,
     created_by      INT,
 
-    CONSTRAINT reservation_creator_fk FOREIGN KEY (created_by) REFERENCES customers(id)
+    CONSTRAINT reservation_creator_fk FOREIGN KEY (created_by) REFERENCES users(id)
   );
 
   CREATE TABLE passengers (
@@ -267,7 +271,7 @@ DELIMITER ;
     customer  INT NOT NULL,
     flight    VARCHAR(6) NOT NULL,
 
-    CONSTRAINT searched_by_customer_fk  FOREIGN KEY (customer)  REFERENCES customers(id),
+    CONSTRAINT searched_by_customer_fk  FOREIGN KEY (customer)  REFERENCES users(id),
     CONSTRAINT searched_for_flight_fk   FOREIGN KEY (flight)    REFERENCES flights(flight_number)
   );
 
@@ -431,20 +435,20 @@ VALUES ('Teódor', 'Ladislav');
 
 
 -- generator used: https://names.igopaygo.com/people/fake-person
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Chahaya', 'Miles', 'ch.mile@egl-inc.info', '5542 Thunder Log Trail', 'Quebec City', 7542, 'Canada');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Chahaya', 'Miles', 'ch.mile@egl-inc.info', '');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Ifor', 'Smoak', 'iforsmoa@diaperstack.com', '3909 Tawny View Rise', 'New York', 1237, 'USA');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Ifor', 'Smoak', 'iforsmoa@diaperstack.com', '');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Zelda', 'Reel', 'zelda.reel@autozone-inc.info', '4326 Lazy Sky Via', 'West Virginia', 2649, 'USA');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Zelda', 'Reel', 'zelda.reel@autozone-inc.info', '');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Sherwin', 'Hsu', 'sherwinhsu@diaperstack.com', '9264 Silver Lagoon Concession', 'Maryland', 1922, 'USA');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Sherwin', 'Hsu', 'sherwinhsu@diaperstack.com', '');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Teódor', 'Ladislav', 'teodorL@gmail.com', '4 S. Chalupku', 'Prievidza', 97101, 'Slovakia');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Teódor', 'Ladislav', 'teodorL@gmail.com', '');
 
 
 -- insert flights
