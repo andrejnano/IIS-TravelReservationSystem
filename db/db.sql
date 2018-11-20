@@ -214,7 +214,8 @@ DELIMITER ;
     password         VARCHAR(100) NOT NULL,
     updated_at       TIMESTAMP,
     remember_token   VARCHAR(100),
-    created_at       TIMESTAMP
+    created_at       TIMESTAMP,
+    is_admin         INT DEFAULT 0 -- 0 == not admin, 1 == admin
     -- addr_street      VARCHAR(100) NOT NULL,
     -- addr_town        VARCHAR(100) NOT NULL,
     -- addr_post_code   INT NOT NULL,
@@ -436,19 +437,22 @@ VALUES ('Teódor', 'Ladislav');
 
 -- generator used: https://names.igopaygo.com/people/fake-person
 INSERT INTO users (first_name, last_name, email, password)
-VALUES ('Chahaya', 'Miles', 'ch.mile@egl-inc.info', '');
+VALUES ('Chahaya', 'Miles', 'ch.mile@egl-inc.info', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
 INSERT INTO users (first_name, last_name, email, password)
-VALUES ('Ifor', 'Smoak', 'iforsmoa@diaperstack.com', '');
+VALUES ('Ifor', 'Smoak', 'iforsmoa@diaperstack.com', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
 INSERT INTO users (first_name, last_name, email, password)
-VALUES ('Zelda', 'Reel', 'zelda.reel@autozone-inc.info', '');
+VALUES ('Zelda', 'Reel', 'zelda.reel@autozone-inc.info', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
 INSERT INTO users (first_name, last_name, email, password)
-VALUES ('Sherwin', 'Hsu', 'sherwinhsu@diaperstack.com', '');
+VALUES ('Sherwin', 'Hsu', 'sherwinhsu@diaperstack.com', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
 INSERT INTO users (first_name, last_name, email, password)
-VALUES ('Teódor', 'Ladislav', 'teodorL@gmail.com', '');
+VALUES ('Teódor', 'Ladislav', 'teodorL@gmail.com', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
+
+INSERT INTO users (first_name, last_name, email, password, is_admin)
+VALUES ('Ad', 'Min', 'a@d.min', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa', 1);
 
 
 -- insert flights

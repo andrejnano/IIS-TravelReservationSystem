@@ -50,8 +50,10 @@ class LoginController extends Controller
         // return redirect('dashboard');
     }
 
-    // protected function authenticated(Request $request, $user)
-    // {
-    //     return redirect('/dashboard');
-    // }
+    public function authenticated(Request $request, $user)
+    {
+        $is_admin = $user->isAdmin();
+        
+        return view('/dashboard')->with('is_admin', $is_admin);
+    }
 }

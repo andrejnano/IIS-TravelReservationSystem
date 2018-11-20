@@ -13,6 +13,11 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    {{-- administrator --}}
+                    {{-- todo --}}
+                    @if(isset($is_admin) && $is_admin)
+                        you are admin <br>
+                    @endif
 
                     You are logged in!
                 </div>
