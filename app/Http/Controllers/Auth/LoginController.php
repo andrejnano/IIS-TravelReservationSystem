@@ -50,8 +50,8 @@ class LoginController extends Controller
         // return redirect('dashboard');
     }
 
-    protected function authenticated(Request $request, $user)
-    {
-        return redirect('/dashboard');
-    }
+    // protected function authenticated(Request $request, $user)
+    // {
+    //     return redirect('/dashboard');
+    // }
 }

@@ -4,10 +4,13 @@
     @include('inc.doc_head')
   </head>
   <body class='webpage'>
-    @include('inc.navigation')
+    @include('inc.header')
+    @include('inc.sidebar')
     <main>
       @yield('content')
-    <main>
+    </main>
+    @include('inc.footer')
+
     <script src="{{ asset('js/app.js') }}"></script>
-  </body> 
+  </body>
 </html>
