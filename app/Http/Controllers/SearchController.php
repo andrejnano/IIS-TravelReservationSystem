@@ -16,28 +16,4 @@ class SearchController extends Controller
         return view('pages.search.show_flights')->with('args', $request->all());
         
     }
-    public function store(Request $request)
-    {
-        print_r($request->all());
-        
-        return "origin";
-    }
-    public function getForm()
-    {
-        return "get successful";
-    }
-    public function postProfile()
-    {
-        //
-    }
-
-    public function update($id)
-    {
-        return "updating".$id;
-    }
-    public function anyLogin()
-    {
-        //
-    }
-
 }

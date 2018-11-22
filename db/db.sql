@@ -451,77 +451,80 @@ VALUES ('Sherwin', 'Hsu', 'sherwinhsu@diaperstack.com', '$2y$10$jXm7tEPX3m1YRWkc
 INSERT INTO users (first_name, last_name, email, password)
 VALUES ('Teódor', 'Ladislav', 'teodorL@gmail.com', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('a', 'a', 'a@a.a', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
+
 INSERT INTO users (first_name, last_name, email, password, is_admin)
 VALUES ('Ad', 'Min', 'a@d.min', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa', 1);
 
 
 -- insert flights
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('BA0304', CONVERT_TZ('2018-05-20 07:20:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-20 09:35:00.00', '+01:00', '+00:00'), 9, 'BA', 'LHR', 'CDG');
+VALUES ('BA0304', CONVERT_TZ('2019-05-20 07:20:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 09:35:00.00', '+01:00', '+00:00'), 9, 'BA', 'LHR', 'CDG');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('EK1234', CONVERT_TZ('2018-05-14 11:20:00.00', '+04:00', '+00:00'), CONVERT_TZ('2018-05-14 14:55:00.00', '+03:00', '+00:00'), 2, 'EK', 'DXB', 'IST');
+VALUES ('EK1234', CONVERT_TZ('2019-05-14 11:20:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-14 14:55:00.00', '+03:00', '+00:00'), 2, 'EK', 'DXB', 'IST');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0000', CONVERT_TZ('2018-05-09 16:40:00.00', '+04:00', '+00:00'), CONVERT_TZ('2018-05-09 20:20:00.00', '+03:00', '+00:00'), 3, 'FZ', 'DXB', 'IST');
+VALUES ('AA0000', CONVERT_TZ('2019-05-09 16:40:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-09 20:20:00.00', '+03:00', '+00:00'), 3, 'FZ', 'DXB', 'IST');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0001', CONVERT_TZ('2018-05-11 19:50:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-11 23:30:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
+VALUES ('AA0001', CONVERT_TZ('2019-05-11 19:50:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-11 23:30:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0002', CONVERT_TZ('2018-05-20 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-20 12:10:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
+VALUES ('AA0002', CONVERT_TZ('2019-05-20 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 12:10:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0003', CONVERT_TZ('2018-05-21 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-21 12:10:00.00', '-04:00', '+00:00'), 7, 'AY', 'LHR', 'JFK');
+VALUES ('AA0003', CONVERT_TZ('2019-05-21 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-21 12:10:00.00', '-04:00', '+00:00'), 7, 'AY', 'LHR', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1724', CONVERT_TZ('2018-05-20 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-20 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
+VALUES ('LH1724', CONVERT_TZ('2019-05-20 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-20 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1725', CONVERT_TZ('2018-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-27 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
+VALUES ('LH1725', CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('OS0089', CONVERT_TZ('2018-05-25 10:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-25 13:50:00.00', '-04:00', '+00:00'), 10, 'OS', 'VIE', 'JFK');
+VALUES ('OS0089', CONVERT_TZ('2019-05-25 10:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 13:50:00.00', '-04:00', '+00:00'), 10, 'OS', 'VIE', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1235', CONVERT_TZ('2018-05-25 11:10:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-25 15:45:00.00', '-04:00', '+00:00'), 7, 'LH', 'VIE', 'JFK');
+VALUES ('LH1235', CONVERT_TZ('2019-05-25 11:10:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 15:45:00.00', '-04:00', '+00:00'), 7, 'LH', 'VIE', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AZ2275', CONVERT_TZ('2018-05-30 8:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-30 10:15:00.00', '+01:00', '+00:00'), 2, 'BA', 'LGW', 'VIE');
+VALUES ('AZ2275', CONVERT_TZ('2019-05-30 8:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-30 10:15:00.00', '+01:00', '+00:00'), 2, 'BA', 'LGW', 'VIE');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AB3275', CONVERT_TZ('2018-05-04 08:00:00.00', '+02:00', '+00:00'), CONVERT_TZ('2018-05-04 08:45:00.00', '+00:00', '+00:00'), 5, 'AY', 'HEL', 'LGW');
+VALUES ('AB3275', CONVERT_TZ('2019-05-04 08:00:00.00', '+02:00', '+00:00'), CONVERT_TZ('2019-05-04 08:45:00.00', '+00:00', '+00:00'), 5, 'AY', 'HEL', 'LGW');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AC1275', CONVERT_TZ('2018-05-05 18:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-05 22:50:00.00', '+02:00', '+00:00'), 5, 'AY', 'LGW', 'HEL');
+VALUES ('AC1275', CONVERT_TZ('2019-05-05 18:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-05 22:50:00.00', '+02:00', '+00:00'), 5, 'AY', 'LGW', 'HEL');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('BZ1275', CONVERT_TZ('2018-05-25 04:10:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-25 06:45:00.00', '+01:00', '+00:00'), 6, 'LH', 'LHR', 'FRA');
+VALUES ('BZ1275', CONVERT_TZ('2019-05-25 04:10:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-25 06:45:00.00', '+01:00', '+00:00'), 6, 'LH', 'LHR', 'FRA');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LI1725', CONVERT_TZ('2018-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-27 07:55:00.00', '+00:00', '+00:00'), 10, 'LH', 'TXL', 'LHR');
+VALUES ('LI1725', CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+00:00', '+00:00'), 10, 'LH', 'TXL', 'LHR');
 
 
 
 
 -- insert reservations
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-03-20 02:42:11.00', '1');
+VALUES ('1', '2019-03-20 02:42:11.00', '1');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('0', '2018-03-25 21:12:12.00', '2');
+VALUES ('0', '2019-03-25 21:12:12.00', '2');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-02-01 23:42:12.00', '3');
+VALUES ('1', '2019-02-01 23:42:12.00', '3');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('0', '2018-05-01 23:42:12.00', '4');
+VALUES ('0', '2019-05-01 23:42:12.00', '4');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-05-01 00:42:12.00', '4');
+VALUES ('1', '2019-05-01 00:42:12.00', '4');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-05-03 5:42:12.00', '5');
+VALUES ('1', '2019-05-03 5:42:12.00', '5');
 
 
 -- insert tickets

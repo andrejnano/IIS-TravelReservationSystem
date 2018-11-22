@@ -24,11 +24,13 @@ Route::get('/hello', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/dashboard', 'DashboardController@index');
-
+Route::get('/flight/{flight_number}', function ($flight_number) {
+    return view('pages.search.flight')->with("flight", App\Flight::WHERE('flight_number', $flight_number)->first());
+})->name('flight');
 // Auth::routes();
 
 // Route::get('/dash', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
