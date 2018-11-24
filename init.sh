@@ -4,8 +4,6 @@
 
 my_login=$(pwd | grep -Eoh x[a-z]{5}[0-9]{2} | head -1)
 
-sed -i -e "s/x[a-z]\{5\}[0-9]\{2\}/$my_login/g" .env.example
-
 sed -i -e "s/x[a-z]\{5\}[0-9]\{2\}/$my_login/g" ./public/.htaccess
 
 sed -i -e "s/x[a-z]\{5\}[0-9]\{2\}/$my_login/g" ./resources/views/inc/navigation.blade.php

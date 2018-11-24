@@ -1,7 +1,7 @@
 <header id="app">
   @include('inc.navigation')
   {{-- <span class='text--lg'>header</span><br> --}}
-  {{ Form::open(array('url' => 'search/form', 'method' => 'GET', 'class' => 'form-wrap')) }}
+  {{ Form::open(array('url' => '/api/search/', 'method' => 'GET', 'class' => 'form-wrap')) }}
     <div>
       <div class='text-field text-field--white'>
         <font-awesome-icon icon="plane-departure"></font-awesome-icon>

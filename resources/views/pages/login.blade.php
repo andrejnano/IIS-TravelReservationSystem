@@ -4,7 +4,8 @@
 @section('content')
   <h1>Loginnnnn</h1>
   <?php
-    echo Form::open(array('url' => 'login', 'method' => 'POST'));
+
+    echo Form::open(array('url' => '/api/login', 'method' => 'POST'));
         echo Form::label('email', 'Email Address');
         echo Form::text('email');
         echo Form::label('password', 'Password');

@@ -231,39 +231,33 @@ DELIMITER ;
     CONSTRAINT reservation_creator_fk FOREIGN KEY (created_by) REFERENCES users(id)
   );
 
-  CREATE TABLE passengers (
-    /* Personal ID number */
-    -- id              INT NOT NULL PRIMARY KEY REGEXP_LIKE'[0-9][0-9][0-8][0-9][0-3][0-9][0-9]{3,4}', /* todo triiger */
-    id              INT PRIMARY KEY AUTO_INCREMENT, 
-    first_name      VARCHAR(50) NOT NULL,
-    last_name       VARCHAR(50) NOT NULL
-  );
-
   CREATE TABLE tickets (
     /* Flight Ticket number ; Example : 160-4837291830 */
-    -- ticket_number   VARCHAR(14) NOT NULL PRIMARY KEY REGEXP_LIKE '[0-9]{3}(-)?[0-9]{10}', /* todo triiger */
-    ticket_number   INT PRIMARY KEY AUTO_INCREMENT,
+    -- id   VARCHAR(14) NOT NULL PRIMARY KEY REGEXP_LIKE '[0-9]{3}(-)?[0-9]{10}', /* todo triiger */
+    id              INT PRIMARY KEY AUTO_INCREMENT,
     cost            INT NOT NULL,
-    reservation     INT NOT NULL,
-    passenger       INT NOT NULL,
+    email           VARCHAR(100),
+    first_name      VARCHAR(50),
+    last_name       VARCHAR(50),
+    reservation     INT,
     flight          VARCHAR(6) NOT NULL,
-    seat_number     VARCHAR(3),
+    seat_number     INT NOT NULL,
     seat_class      VARCHAR(1),
+    created_at      TIMESTAMP NOT NULL,
 
     CONSTRAINT ticket_in_reservation_fk   FOREIGN KEY (reservation) REFERENCES reservations(id),
-    CONSTRAINT ticket_for_passenger_fk    FOREIGN KEY (passenger)   REFERENCES passengers(id),
     CONSTRAINT ticket_for_flight_fk       FOREIGN KEY (flight)      REFERENCES flights(flight_number)
   );
 
-  DROP TRIGGER IF EXISTS tickets_trig;
-  DELIMITER $$
+  -- DROP TRIGGER IF EXISTS tickets_trig;
+  -- DELIMITER $$
 
-      CREATE TRIGGER tickets_trig BEFORE INSERT ON tickets
-      FOR EACH ROW BEGIN
-        IF (NOT NEW.seat_number REGEXP '[0-9][0-9][A-K]' OR NOT NEW.seat_class REGEXP '(F|B|E)') THEN
-              SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Wrong expression type at ticket insertion, expected regex  seat_number [0-9][0-9][A-K] and seat_class regex (F|B|E)';
-        END IF;
-      END$$
+  --     CREATE TRIGGER tickets_trig BEFORE INSERT ON tickets
+  --     FOR EACH ROW BEGIN
+  --       IF (NOT NEW.seat_number REGEXP '[0-9][0-9][A-K]' OR NOT NEW.seat_class REGEXP '(F|B|E)') THEN
+  --             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Wrong expression type at ticket insertion, expected regex  seat_number [0-9][0-9][A-K] and seat_class regex (F|B|E)';
+  --       END IF;
+  --     END$$
 
   DELIMITER ;
 
@@ -284,21 +278,56 @@ CREATE TRIGGER tickets_trig BEFORE INSERT ON tickets
         UPDATE flights
         SET fclass_seats_free = fclass_seats_free - 1
         WHERE flights.flight_number = NEW.flight;
+        SET NEW.seat_number = 
+          (SELECT fclass_seats_free
+          FROM flights
+          WHERE flights.flight_number = NEW.flight);
         END IF;
       IF (NEW.seat_class = 'B') THEN
         UPDATE flights
         SET bclass_seats_free = bclass_seats_free - 1
         WHERE flights.flight_number = NEW.flight;
+        SET NEW.seat_number = 
+          (SELECT bclass_seats_free
+          FROM flights
+          WHERE flights.flight_number = NEW.flight);
         END IF;
-      IF (NEW.seat_class = 'B') THEN
+      IF (NEW.seat_class = 'E') THEN
         UPDATE flights
         SET eclass_seats_free = eclass_seats_free - 1
         WHERE flights.flight_number = NEW.flight;
+        SET NEW.seat_number = 
+          (SELECT eclass_seats_free
+          FROM flights
+          WHERE flights.flight_number = NEW.flight);
         END IF;
     END$$ 
 
 DELIMITER ;
 
+
+DROP TRIGGER IF EXISTS tickets_trig_del;
+DELIMITER $$
+CREATE TRIGGER tickets_trig_del BEFORE DELETE ON tickets
+    FOR EACH ROW BEGIN
+      IF (OLD.seat_class = 'F') THEN
+        UPDATE flights
+        SET fclass_seats_free = fclass_seats_free + 1
+        WHERE flights.flight_number = OLD.flight;
+      END IF;
+      IF (OLD.seat_class = 'B') THEN
+        UPDATE flights
+        SET fclass_seats_free = bclass_seats_free + 1
+        WHERE flights.flight_number = OLD.flight;
+      END IF;
+      IF (OLD.seat_class = 'E') THEN
+        UPDATE flights
+        SET fclass_seats_free = eclass_seats_free + 1
+        WHERE flights.flight_number = OLD.flight;
+      END IF;
+    END$$ 
+
+DELIMITER ;
 
 /* ---------------------
   INSERT SAMPLE DATA 
@@ -401,39 +430,6 @@ INSERT INTO airplanes (producer, model, fclass_seats, bclass_seats, eclass_seats
 VALUES ('Boeing', '767-300', '0', '36', '176', 'OS');
 
 
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Andrej', 'Nano');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Peter', 'Marko');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Sherwin', 'Hsu');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Ifor', 'Smoak');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Meno', 'Priezvisko');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Meno', 'Priezvisko');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Meno', 'Priezvisko');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Dalibor', 'Masaryk');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Aurélia', 'Dubovská');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Mohamed', 'Lee');
-
-INSERT INTO passengers (first_name, last_name)
-VALUES ('Teódor', 'Ladislav');
-
 
 -- generator used: https://names.igopaygo.com/people/fake-person
 INSERT INTO users (first_name, last_name, email, password)
@@ -528,32 +524,33 @@ VALUES ('1', '2019-05-03 5:42:12.00', '5');
 
 
 -- insert tickets
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (410, 2, 1, 'BA0304', '12B', 'E');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (410, 2, 'BA0304', 'E', '2019-03-20 02:42:11.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (123, 4, 2, 'EK1234', '03F', 'B');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (123, 4, 'EK1234', 'B', '2019-03-25 21:12:12.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (142, 4, 3, 'LH1724', '01B', 'B');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (142, 4, 'LH1724', 'B', '2019-02-01 23:42:12.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (142, 6, 3, 'LH1725', '01B', 'B');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (142, 6, 'LH1725', 'B', '2019-05-01 23:42:12.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (172, 6, 4, 'LI1725', '01C', 'B');
+-- reservation = NULL == tmp reservation
+INSERT INTO tickets (cost, flight, seat_class, created_at)
+VALUES (172, 'LI1725', 'B', '2018-11-24 02:02:12.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (112, 5, 1, 'AZ2275', '01D', 'E');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (112, 5, 'AZ2275', 'E', '2019-05-03 5:42:12.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (512, 5, 1, 'AA0001', '05D', 'E');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (512, 5, 'AA0001', 'E', '2019-03-20 02:42:11.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (512, 2, 4, 'AA0001', '05D', 'E');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (512, 2, 'AA0001', 'E', '2019-03-25 21:12:12.00');
 
-INSERT INTO tickets (cost, reservation, passenger, flight, seat_number, seat_class)
-VALUES (512, 4, 6, 'AA0001', '05D', 'E');
+INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+VALUES (512, 4, 'AA0001', 'E', '2019-02-01 23:42:12.00');
 
 
 
