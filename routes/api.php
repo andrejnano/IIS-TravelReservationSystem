@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::middleware('api')->get('/search', 'API\SearchController@show');
+
+Route::middleware('api')->get('/flight', 'API\SearchController@ticket_detail');
+
+Route::middleware('api')->post('/reservation', 'API\ReservationController@new_reservation');
+
+Route::middleware('api')->post('/reserve', 'API\ReservationController@reserve');
+
+Route::middleware('api')->post('/delete_reservation', 'API\ReservationController@delete_reservation');
+
