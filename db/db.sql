@@ -81,8 +81,8 @@
 -- END; //
 
 -- DELIMITER ;
-
-  DROP TABLE IF EXISTS customers;
+  SET FOREIGN_KEY_CHECKS=0;
+  DROP TABLE IF EXISTS users;
   DROP TABLE IF EXISTS reservations;
   DROP TABLE IF EXISTS tickets;
   DROP TABLE IF EXISTS flights;
@@ -91,6 +91,7 @@
   DROP TABLE IF EXISTS airlines;
   DROP TABLE IF EXISTS passengers;
   DROP TABLE IF EXISTS search_records;
+  SET FOREIGN_KEY_CHECKS=1;
 
 /* CREATE ALL TABLES */
 
@@ -205,15 +206,20 @@ DELIMITER ;
   DELIMITER ;
 
 
-  CREATE TABLE customers (
+  CREATE TABLE users (
     id               INT PRIMARY KEY AUTO_INCREMENT,
     first_name       VARCHAR(50) NOT NULL,
     last_name        VARCHAR(50) NOT NULL,
     email            VARCHAR(100) NOT NULL,
-    addr_street      VARCHAR(100) NOT NULL,
-    addr_town        VARCHAR(100) NOT NULL,
-    addr_post_code   INT NOT NULL,
-    addr_state       VARCHAR(100) NOT NULL
+    password         VARCHAR(100) NOT NULL,
+    updated_at       TIMESTAMP,
+    remember_token   VARCHAR(100),
+    created_at       TIMESTAMP,
+    is_admin         INT DEFAULT 0 -- 0 == not admin, 1 == admin
+    -- addr_street      VARCHAR(100) NOT NULL,
+    -- addr_town        VARCHAR(100) NOT NULL,
+    -- addr_post_code   INT NOT NULL,
+    -- addr_state       VARCHAR(100) NOT NULL
   );
 
   CREATE TABLE reservations (
@@ -222,7 +228,7 @@ DELIMITER ;
     created_at      DATETIME NOT NULL,
     created_by      INT,
 
-    CONSTRAINT reservation_creator_fk FOREIGN KEY (created_by) REFERENCES customers(id)
+    CONSTRAINT reservation_creator_fk FOREIGN KEY (created_by) REFERENCES users(id)
   );
 
   CREATE TABLE tickets (
@@ -260,15 +266,13 @@ DELIMITER ;
     customer  INT NOT NULL,
     flight    VARCHAR(6) NOT NULL,
 
-    CONSTRAINT searched_by_customer_fk  FOREIGN KEY (customer)  REFERENCES customers(id),
+    CONSTRAINT searched_by_customer_fk  FOREIGN KEY (customer)  REFERENCES users(id),
     CONSTRAINT searched_for_flight_fk   FOREIGN KEY (flight)    REFERENCES flights(flight_number)
   );
 
-DROP TRIGGER IF EXISTS f_tickets_trig;
-DROP TRIGGER IF EXISTS b_tickets_trig;
-DROP TRIGGER IF EXISTS e_tickets_trig;
+DROP TRIGGER IF EXISTS tickets_trig;
 DELIMITER $$
-CREATE TRIGGER f_tickets_trig BEFORE INSERT ON tickets
+CREATE TRIGGER tickets_trig BEFORE INSERT ON tickets
     FOR EACH ROW BEGIN
       IF (NEW.seat_class = 'F') THEN
         UPDATE flights
@@ -279,10 +283,6 @@ CREATE TRIGGER f_tickets_trig BEFORE INSERT ON tickets
           FROM flights
           WHERE flights.flight_number = NEW.flight);
         END IF;
-    END$$
-
-CREATE TRIGGER b_tickets_trig BEFORE INSERT ON tickets
-    FOR EACH ROW BEGIN
       IF (NEW.seat_class = 'B') THEN
         UPDATE flights
         SET bclass_seats_free = bclass_seats_free - 1
@@ -432,89 +432,95 @@ VALUES ('Boeing', '767-300', '0', '36', '176', 'OS');
 
 
 -- generator used: https://names.igopaygo.com/people/fake-person
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Chahaya', 'Miles', 'ch.mile@egl-inc.info', '5542 Thunder Log Trail', 'Quebec City', 7542, 'Canada');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Chahaya', 'Miles', 'ch.mile@egl-inc.info', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Ifor', 'Smoak', 'iforsmoa@diaperstack.com', '3909 Tawny View Rise', 'New York', 1237, 'USA');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Ifor', 'Smoak', 'iforsmoa@diaperstack.com', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Zelda', 'Reel', 'zelda.reel@autozone-inc.info', '4326 Lazy Sky Via', 'West Virginia', 2649, 'USA');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Zelda', 'Reel', 'zelda.reel@autozone-inc.info', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Sherwin', 'Hsu', 'sherwinhsu@diaperstack.com', '9264 Silver Lagoon Concession', 'Maryland', 1922, 'USA');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Sherwin', 'Hsu', 'sherwinhsu@diaperstack.com', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
 
-INSERT INTO customers (first_name, last_name, email, addr_street, addr_town, addr_post_code, addr_state)
-VALUES ('Teódor', 'Ladislav', 'teodorL@gmail.com', '4 S. Chalupku', 'Prievidza', 97101, 'Slovakia');
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('Teódor', 'Ladislav', 'teodorL@gmail.com', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
+
+INSERT INTO users (first_name, last_name, email, password)
+VALUES ('a', 'a', 'a@a.a', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa');
+
+INSERT INTO users (first_name, last_name, email, password, is_admin)
+VALUES ('Ad', 'Min', 'a@d.min', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa', 1);
 
 
 -- insert flights
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('BA0304', CONVERT_TZ('2018-05-20 07:20:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-20 09:35:00.00', '+01:00', '+00:00'), 9, 'BA', 'LHR', 'CDG');
+VALUES ('BA0304', CONVERT_TZ('2019-05-20 07:20:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 09:35:00.00', '+01:00', '+00:00'), 9, 'BA', 'LHR', 'CDG');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('EK1234', CONVERT_TZ('2018-05-14 11:20:00.00', '+04:00', '+00:00'), CONVERT_TZ('2018-05-14 14:55:00.00', '+03:00', '+00:00'), 2, 'EK', 'DXB', 'IST');
+VALUES ('EK1234', CONVERT_TZ('2019-05-14 11:20:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-14 14:55:00.00', '+03:00', '+00:00'), 2, 'EK', 'DXB', 'IST');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0000', CONVERT_TZ('2018-05-09 16:40:00.00', '+04:00', '+00:00'), CONVERT_TZ('2018-05-09 20:20:00.00', '+03:00', '+00:00'), 3, 'FZ', 'DXB', 'IST');
+VALUES ('AA0000', CONVERT_TZ('2019-05-09 16:40:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-09 20:20:00.00', '+03:00', '+00:00'), 3, 'FZ', 'DXB', 'IST');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0001', CONVERT_TZ('2018-05-11 19:50:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-11 23:30:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
+VALUES ('AA0001', CONVERT_TZ('2019-05-11 19:50:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-11 23:30:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0002', CONVERT_TZ('2018-05-20 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-20 12:10:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
+VALUES ('AA0002', CONVERT_TZ('2019-05-20 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 12:10:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0003', CONVERT_TZ('2018-05-21 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-21 12:10:00.00', '-04:00', '+00:00'), 7, 'AY', 'LHR', 'JFK');
+VALUES ('AA0003', CONVERT_TZ('2019-05-21 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-21 12:10:00.00', '-04:00', '+00:00'), 7, 'AY', 'LHR', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1724', CONVERT_TZ('2018-05-20 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-20 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
+VALUES ('LH1724', CONVERT_TZ('2019-05-20 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-20 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1725', CONVERT_TZ('2018-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-27 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
+VALUES ('LH1725', CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('OS0089', CONVERT_TZ('2018-05-25 10:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-25 13:50:00.00', '-04:00', '+00:00'), 10, 'OS', 'VIE', 'JFK');
+VALUES ('OS0089', CONVERT_TZ('2019-05-25 10:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 13:50:00.00', '-04:00', '+00:00'), 10, 'OS', 'VIE', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1235', CONVERT_TZ('2018-05-25 11:10:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-25 15:45:00.00', '-04:00', '+00:00'), 7, 'LH', 'VIE', 'JFK');
+VALUES ('LH1235', CONVERT_TZ('2019-05-25 11:10:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 15:45:00.00', '-04:00', '+00:00'), 7, 'LH', 'VIE', 'JFK');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AZ2275', CONVERT_TZ('2018-05-30 8:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-30 10:15:00.00', '+01:00', '+00:00'), 2, 'BA', 'LGW', 'VIE');
+VALUES ('AZ2275', CONVERT_TZ('2019-05-30 8:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-30 10:15:00.00', '+01:00', '+00:00'), 2, 'BA', 'LGW', 'VIE');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AB3275', CONVERT_TZ('2018-05-04 08:00:00.00', '+02:00', '+00:00'), CONVERT_TZ('2018-05-04 08:45:00.00', '+00:00', '+00:00'), 5, 'AY', 'HEL', 'LGW');
+VALUES ('AB3275', CONVERT_TZ('2019-05-04 08:00:00.00', '+02:00', '+00:00'), CONVERT_TZ('2019-05-04 08:45:00.00', '+00:00', '+00:00'), 5, 'AY', 'HEL', 'LGW');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AC1275', CONVERT_TZ('2018-05-05 18:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-05 22:50:00.00', '+02:00', '+00:00'), 5, 'AY', 'LGW', 'HEL');
+VALUES ('AC1275', CONVERT_TZ('2019-05-05 18:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-05 22:50:00.00', '+02:00', '+00:00'), 5, 'AY', 'LGW', 'HEL');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('BZ1275', CONVERT_TZ('2018-05-25 04:10:00.00', '+00:00', '+00:00'), CONVERT_TZ('2018-05-25 06:45:00.00', '+01:00', '+00:00'), 6, 'LH', 'LHR', 'FRA');
+VALUES ('BZ1275', CONVERT_TZ('2019-05-25 04:10:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-25 06:45:00.00', '+01:00', '+00:00'), 6, 'LH', 'LHR', 'FRA');
 
 INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LI1725', CONVERT_TZ('2018-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2018-05-27 07:55:00.00', '+00:00', '+00:00'), 10, 'LH', 'TXL', 'LHR');
+VALUES ('LI1725', CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+00:00', '+00:00'), 10, 'LH', 'TXL', 'LHR');
 
 
 
 
 -- insert reservations
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-03-20 02:42:11.00', '1');
+VALUES ('1', '2019-03-20 02:42:11.00', '1');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('0', '2018-03-25 21:12:12.00', '2');
+VALUES ('0', '2019-03-25 21:12:12.00', '2');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-02-01 23:42:12.00', '3');
+VALUES ('1', '2019-02-01 23:42:12.00', '3');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('0', '2018-05-01 23:42:12.00', '4');
+VALUES ('0', '2019-05-01 23:42:12.00', '4');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-05-01 00:42:12.00', '4');
+VALUES ('1', '2019-05-01 00:42:12.00', '4');
 
 INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2018-05-03 5:42:12.00', '5');
+VALUES ('1', '2019-05-03 5:42:12.00', '5');
 
 
 -- insert tickets
