@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,8 +14,13 @@
 
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
-Route::resource('/booking', 'BookingController');
-// Route::controller('/booking', 'BookingController');
+Route::get('/chart', 'PagesController@chart');
+
+// try {
+//     Route::get('logout', 'LoginController@logout');
+// } catch (Exception $e) {
+//     abort(404);
+// }
 
 // Route::get('/booking', 'PagesController@booking');
 // Route::post('/booking/form', function () {
