@@ -6,6 +6,10 @@ Projekt z predmetu IIS (Informacne systemy) na FIT VUT Brno. Temou informacneho 
 
 **Project Repository**: https://github.com/andrejnano/IIS-projekt
 
+## Architecture
+
+![/docs/architecture.jpg](/docs/architecture.jpg)
+
 ## Setup guide
 
 **Install prerequisites**:
