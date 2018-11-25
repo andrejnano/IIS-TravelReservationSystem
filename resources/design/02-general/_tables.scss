@@ -3,11 +3,10 @@ table {
     color: $gray-10;
     border: 1px solid $color-border;
     text-align: left;
-    padding: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
   }
 
   tr:nth-child(even) {
-    background:$gray-10;
-    color: $white;
+    background: $gray-1;
   }
 }

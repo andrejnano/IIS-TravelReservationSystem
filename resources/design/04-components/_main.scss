@@ -1,5 +1,5 @@
 // main section styles
-main {
+main.site-main {
    grid-area: main;
   // spacing for different views
   @include for-phone-only {

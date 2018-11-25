@@ -1,9 +1,8 @@
-// sidebar/widget panel styles
-
-aside {
-  background: $color-primary-light;
+// header styles
+header.site-header {
+  background: $color-primary;
   color: $white;
-  grid-area: sidebar;
+  grid-area: header;
     // spacing for different views
   @include for-phone-only {
     padding: var(--space-sm);

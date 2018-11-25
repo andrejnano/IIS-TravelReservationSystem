@@ -11,15 +11,9 @@
 |
 */
 
-Route::get('/', 'PagesController@index');
-Route::get('/about', 'PagesController@about');
-Route::resource('/booking', 'BookingController');
-// Route::controller('/booking', 'BookingController');
 
-// Route::get('/booking', 'PagesController@booking');
-// Route::post('/booking/form', function () {
-//     return "It works";
-// });
-Route::get('/hello', function () {
-    return "Hello World!";
-});
+// Handle routers in Vue router
+Route::get('/{any}', function(){
+  return view('vue-index');
+})->where('any', '.*');
+
