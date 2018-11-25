@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +12,14 @@
 |
 */
 
+// Route::get('/about', 'PagesController@about');
+// Route::get('/chart', 'PagesController@chart');
+
+// try {
+//     Route::get('logout', 'LoginController@logout');
+// } catch (Exception $e) {
+//     abort(404);
+// }
 
 // Handle routers in Vue router
 Route::get('/{any}', function(){
