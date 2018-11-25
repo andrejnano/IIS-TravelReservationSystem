@@ -1,0 +1,34 @@
+// /api/search?origin=United Arab Emirates&tickets=5&class=first
+[
+    {
+        "there": {
+            "flight_number": "EK1234",
+            "departure_time": "2019-05-14 7:20:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "777-300ER",
+                "airline": "EK"
+            },
+            "airline": {
+                "airline": "EK",
+                "full_name": "Emirates",
+                "nationality": "United Arab Emirates",
+                "hub": "DXB"
+            },
+            "flight_time": "4h 35m\n",
+            "price": 1272,
+            "seat_class": "first",
+            "tickets": "5",
+            "origin": {
+                "airport": "DXB",
+                "city": "Dubai",
+                "country": "United Arab Emirates"
+            },
+            "destination": {
+                "airport": "IST",
+                "city": "Istanbul",
+                "country": "Turkey"
+            }
+        }
+    }
+]

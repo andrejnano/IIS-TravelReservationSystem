@@ -1,0 +1,65 @@
+// /api/search?origin=HEL&min_t=1
+[
+    {
+        "there": {
+            "flight_number": "AB3275",
+            "departure_time": "2019-05-04 6:00:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "767-300",
+                "airline": "AY"
+            },
+            "airline": {
+                "airline": "AY",
+                "full_name": "Finnair Oyj",
+                "nationality": "Finland",
+                "hub": "HEL"
+            },
+            "flight_time": "2h 45m\n",
+            "price": 77,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "HEL",
+                "city": "Helsinki",
+                "country": "Finland"
+            },
+            "destination": {
+                "airport": "LGW",
+                "city": "London",
+                "country": "United Kingdom"
+            }
+        },
+        "back": [
+            {
+                "flight_number": "AC1275",
+                "departure_time": "2019-05-05 18:00:00",
+                "airplane": {
+                    "producer": "Boeing",
+                    "model": "767-300",
+                    "airline": "AY"
+                },
+                "airline": {
+                    "airline": "AY",
+                    "full_name": "Finnair Oyj",
+                    "nationality": "Finland",
+                    "hub": "HEL"
+                },
+                "flight_time": "2h 50m\n",
+                "price": 81,
+                "seat_class": "economy",
+                "tickets": 1,
+                "origin": {
+                    "airport": "LGW",
+                    "city": "London",
+                    "country": "United Kingdom"
+                },
+                "destination": {
+                    "airport": "HEL",
+                    "city": "Helsinki",
+                    "country": "Finland"
+                }
+            }
+        ]
+    }
+]

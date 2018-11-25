@@ -24,3 +24,8 @@ Route::middleware('api')->post('/reserve', 'API\ReservationController@reserve');
 
 Route::middleware('api')->post('/delete_reservation', 'API\ReservationController@delete_reservation');
 
+Route::middleware('api')->post('/login', 'API\UserController@login');
+
+Route::middleware('api')->post('/logout', 'API\UserController@logout');
+
+Route::middleware('api')->post('/register', 'API\UserController@register');

@@ -13,13 +13,16 @@ class ReservationController extends Controller
     /**
      * Creates new empty reservation in database
      *
-     * @param Request $request array containing user request
      * @return void
      */
-    public function new_reservation(Request $request) {
+    public function new_reservation() {
+        session_start();
+        if (!isset($_SESSION["user"]) || !isset($_SESSION["uid"])) {
+            abort(403);
+        }
         try {
             $r = DB::table('reservations')->insert(
-                ['created_by' => $request['uid'], 'payment_status' => 0, 'created_at' => Carbon::now()]
+                ['created_by' => $_SESSION["uid"], 'payment_status' => 0, 'created_at' => Carbon::now()]
             );
             return json_encode(['new_reservation_id' => DB::getPdo()->lastInsertId()]);
         } catch (Exception $e) {
@@ -34,9 +37,22 @@ class ReservationController extends Controller
      * @return void
      */
     public function reserve(Request $request) {
+        session_start();
+        // return $_SESSION["uid"];
+        if (!isset($_SESSION["user"]) || !isset($_SESSION["uid"])) {
+            abort(403);
+        }
         try {
             if (isset($request['res_id']) && isset($request['ticket_id']) && 
-                isset($request['email']) && isset($request['first_name']) && isset($request['last_name'])) {
+            isset($request['email']) && isset($request['first_name']) && isset($request['last_name'])) {
+                $reservation = DB::table('reservations')
+                    ->where([
+                    ['id','=', $request['res_id']],
+                    ['created_by','=', $_SESSION["uid"]]
+                    ])->first();
+                // reservation is not mine
+                if (!$reservation)
+                    abort(403);
                 
                 $ticket = DB::table('tickets')
                 ->where('id','=', $request['ticket_id'])->whereNull('reservation')->first();
@@ -70,11 +86,18 @@ class ReservationController extends Controller
      * @return void
      */
     public function delete_reservation(Request $request) {
+        session_start();
+        if (!isset($_SESSION["user"]) || !isset($_SESSION["uid"])) {
+            abort(403);
+        }
         try {
             if (isset($request['res_id'])) {
                 $reservation = DB::table('reservations')
                     ->where('id', $request['res_id'])->first();
 
+                // reservation is not mine
+                if ($reservation->created_by != $_SESSION["uid"])
+                    abort(403);
                 DB::table('tickets')
                 ->where('reservation', '=', $reservation->id)->delete();
             } else {

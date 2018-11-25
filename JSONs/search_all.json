@@ -1,0 +1,468 @@
+// api/search
+[[
+    {
+        "there": {
+            "flight_number": "AA0000",
+            "departure_time": "2019-05-09 12:40:00",
+            "airplane": {
+                "producer": "Airbus",
+                "model": "A330-200",
+                "airline": "AF"
+            },
+            "airline": {
+                "airline": "FZ",
+                "full_name": "flydubai",
+                "nationality": "United Arab Emirates",
+                "hub": "DXB"
+            },
+            "flight_time": "4h 40m\n",
+            "price": 208,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "DXB",
+                "city": "Dubai",
+                "country": "United Arab Emirates"
+            },
+            "destination": {
+                "airport": "IST",
+                "city": "Istanbul",
+                "country": "Turkey"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "EK1234",
+            "departure_time": "2019-05-14 7:20:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "777-300ER",
+                "airline": "EK"
+            },
+            "airline": {
+                "airline": "EK",
+                "full_name": "Emirates",
+                "nationality": "United Arab Emirates",
+                "hub": "DXB"
+            },
+            "flight_time": "4h 35m\n",
+            "price": 201,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "DXB",
+                "city": "Dubai",
+                "country": "United Arab Emirates"
+            },
+            "destination": {
+                "airport": "IST",
+                "city": "Istanbul",
+                "country": "Turkey"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "LH1724",
+            "departure_time": "2019-05-20 5:15:00",
+            "airplane": {
+                "producer": "Airbus",
+                "model": "A330-300",
+                "airline": "LH"
+            },
+            "airline": {
+                "airline": "LH",
+                "full_name": "Lufthansa",
+                "nationality": "Germany",
+                "hub": "FRA"
+            },
+            "flight_time": "1h 40m\n",
+            "price": 32,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "FRA",
+                "city": "Frankfurt",
+                "country": "Germany"
+            },
+            "destination": {
+                "airport": "TXL",
+                "city": "Berlin",
+                "country": "Germany"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "LH1725",
+            "departure_time": "2019-05-27 5:15:00",
+            "airplane": {
+                "producer": "Airbus",
+                "model": "A330-300",
+                "airline": "LH"
+            },
+            "airline": {
+                "airline": "LH",
+                "full_name": "Lufthansa",
+                "nationality": "Germany",
+                "hub": "FRA"
+            },
+            "flight_time": "1h 40m\n",
+            "price": 32,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "FRA",
+                "city": "Frankfurt",
+                "country": "Germany"
+            },
+            "destination": {
+                "airport": "TXL",
+                "city": "Berlin",
+                "country": "Germany"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "AB3275",
+            "departure_time": "2019-05-04 6:00:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "767-300",
+                "airline": "AY"
+            },
+            "airline": {
+                "airline": "AY",
+                "full_name": "Finnair Oyj",
+                "nationality": "Finland",
+                "hub": "HEL"
+            },
+            "flight_time": "2h 45m\n",
+            "price": 77,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "HEL",
+                "city": "Helsinki",
+                "country": "Finland"
+            },
+            "destination": {
+                "airport": "LGW",
+                "city": "London",
+                "country": "United Kingdom"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "AC1275",
+            "departure_time": "2019-05-05 18:00:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "767-300",
+                "airline": "AY"
+            },
+            "airline": {
+                "airline": "AY",
+                "full_name": "Finnair Oyj",
+                "nationality": "Finland",
+                "hub": "HEL"
+            },
+            "flight_time": "2h 50m\n",
+            "price": 81,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "LGW",
+                "city": "London",
+                "country": "United Kingdom"
+            },
+            "destination": {
+                "airport": "HEL",
+                "city": "Helsinki",
+                "country": "Finland"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "AZ2275",
+            "departure_time": "2019-05-30 8:00:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "777-300ER",
+                "airline": "EK"
+            },
+            "airline": {
+                "airline": "BA",
+                "full_name": "British Airways",
+                "nationality": "United Kingdom ",
+                "hub": "LHR"
+            },
+            "flight_time": "1h 15m\n",
+            "price": 20,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "LGW",
+                "city": "London",
+                "country": "United Kingdom"
+            },
+            "destination": {
+                "airport": "VIE",
+                "city": "Vienna",
+                "country": "Austria"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "AA0001",
+            "departure_time": "2019-05-11 19:50:00",
+            "airplane": {
+                "producer": "Airbus",
+                "model": "A380-800",
+                "airline": "EK"
+            },
+            "airline": {
+                "airline": "BA",
+                "full_name": "British Airways",
+                "nationality": "United Kingdom ",
+                "hub": "LHR"
+            },
+            "flight_time": "7h 40m\n",
+            "price": 546,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "LHR",
+                "city": "London",
+                "country": "United Kingdom"
+            },
+            "destination": {
+                "airport": "JFK",
+                "city": "New York",
+                "country": "USA"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "AA0002",
+            "departure_time": "2019-05-20 8:30:00",
+            "airplane": {
+                "producer": "Airbus",
+                "model": "A380-800",
+                "airline": "EK"
+            },
+            "airline": {
+                "airline": "BA",
+                "full_name": "British Airways",
+                "nationality": "United Kingdom ",
+                "hub": "LHR"
+            },
+            "flight_time": "7h 40m\n",
+            "price": 546,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "LHR",
+                "city": "London",
+                "country": "United Kingdom"
+            },
+            "destination": {
+                "airport": "JFK",
+                "city": "New York",
+                "country": "USA"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "AA0003",
+            "departure_time": "2019-05-21 8:30:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "747-400",
+                "airline": "BA"
+            },
+            "airline": {
+                "airline": "AY",
+                "full_name": "Finnair Oyj",
+                "nationality": "Finland",
+                "hub": "HEL"
+            },
+            "flight_time": "7h 40m\n",
+            "price": 547,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "LHR",
+                "city": "London",
+                "country": "United Kingdom"
+            },
+            "destination": {
+                "airport": "JFK",
+                "city": "New York",
+                "country": "USA"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "BA0304",
+            "departure_time": "2019-05-20 7:20:00",
+            "airplane": {
+                "producer": "Airbus",
+                "model": "A330-300",
+                "airline": "LH"
+            },
+            "airline": {
+                "airline": "BA",
+                "full_name": "British Airways",
+                "nationality": "United Kingdom ",
+                "hub": "LHR"
+            },
+            "flight_time": "1h 15m\n",
+            "price": 21,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "LHR",
+                "city": "London",
+                "country": "United Kingdom"
+            },
+            "destination": {
+                "airport": "CDG",
+                "city": "Paris",
+                "country": "France"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "BZ1275",
+            "departure_time": "2019-05-25 4:10:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "767-300",
+                "airline": "AA"
+            },
+            "airline": {
+                "airline": "LH",
+                "full_name": "Lufthansa",
+                "nationality": "Germany",
+                "hub": "FRA"
+            },
+            "flight_time": "1h 35m\n",
+            "price": 30,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "LHR",
+                "city": "London",
+                "country": "United Kingdom"
+            },
+            "destination": {
+                "airport": "FRA",
+                "city": "Frankfurt",
+                "country": "Germany"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "LI1725",
+            "departure_time": "2019-05-27 5:15:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "767-300",
+                "airline": "OS"
+            },
+            "airline": {
+                "airline": "LH",
+                "full_name": "Lufthansa",
+                "nationality": "Germany",
+                "hub": "FRA"
+            },
+            "flight_time": "2h 40m\n",
+            "price": 73,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "TXL",
+                "city": "Berlin",
+                "country": "Germany"
+            },
+            "destination": {
+                "airport": "LHR",
+                "city": "London",
+                "country": "United Kingdom"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "LH1235",
+            "departure_time": "2019-05-25 10:10:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "747-400",
+                "airline": "BA"
+            },
+            "airline": {
+                "airline": "LH",
+                "full_name": "Lufthansa",
+                "nationality": "Germany",
+                "hub": "FRA"
+            },
+            "flight_time": "9h 35m\n",
+            "price": 848,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "VIE",
+                "city": "Vienna",
+                "country": "Austria"
+            },
+            "destination": {
+                "airport": "JFK",
+                "city": "New York",
+                "country": "USA"
+            }
+        }
+    },
+    {
+        "there": {
+            "flight_number": "OS0089",
+            "departure_time": "2019-05-25 9:15:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "767-300",
+                "airline": "OS"
+            },
+            "airline": {
+                "airline": "OS",
+                "full_name": "Austrian",
+                "nationality": "Austria",
+                "hub": "VIE"
+            },
+            "flight_time": "8h 35m\n",
+            "price": 682,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "VIE",
+                "city": "Vienna",
+                "country": "Austria"
+            },
+            "destination": {
+                "airport": "JFK",
+                "city": "New York",
+                "country": "USA"
+            }
+        }
+    }
+]
