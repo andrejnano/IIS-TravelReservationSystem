@@ -76,11 +76,11 @@ class SearchController extends Controller
     protected function class_price($r, $class, $price) {
         switch ($class) {
             case 'economy':
-                return $price + $price / ($r->eclass_seats_free + 1);
+                return $price + ($price / ($r->eclass_seats_free + 1)/2);
             case 'business':
-                return 2 * ($price + $price / ($r->bclass_seats_free + 1));
+                return 2.5 * ($price + ($price / ($r->bclass_seats_free + 1)/2));
             case 'first':
-                return 5 * ($price + $price / ($r->fclass_seats_free + 1));
+                return 6 * ($price + ($price / ($r->fclass_seats_free + 1)/2));
         }
     }
 
@@ -172,11 +172,11 @@ class SearchController extends Controller
                     return $e_free > $number_of_tickets ? 'economy' : '';
             }
         }
-        if ($f_free > $number_of_tickets) {
+        if ($e_free > $number_of_tickets) {
             return 'economy';
         } else if ($b_free > $number_of_tickets) {
             return 'business';
-        } else if ($e_free >$number_of_tickets) {
+        } else if ($f_free >$number_of_tickets) {
             return 'first';
         }
 
@@ -199,7 +199,7 @@ class SearchController extends Controller
         $flight_min = $flight_time % 60;
         $flight_hour = $flight_time / 60;
         $square_cost = 10;
-        $start_price = 0.03;
+        $start_price = 0.025;
         $price = $start_price*200 + $start_price * ($flight_time + $flight_time*$flight_time/$square_cost);
         $flight_time_str = sprintf("%dh %dm\n", $flight_hour, $flight_min);
         // $price /= 30/;
@@ -351,14 +351,14 @@ class SearchController extends Controller
         $seat_class = $this->check_tmp_reservations($f1, $request['tickets'], $class_selected, $request['class']);
         if (!$seat_class)
             return;
-        $tmp_obj = $this->create_object_representation($f1, $request['tickets'], $class_selected, $request['class']);
+        $tmp_obj = $this->create_object_representation($f1, $request['tickets'], $request['class']);
         array_push($return_arr, $tmp_obj);
         if (isset($request['f2'])) {
             $f2 = $this->select_flight($request['f2']);
             $seat_class = $this->check_tmp_reservations($f2, $request['tickets'], $class_selected, $request['class']);
             if (!$seat_class)
                 return;
-            $tmp_obj = $this->create_object_representation($f2, $request['tickets'], $class_selected, $request['class']);
+            $tmp_obj = $this->create_object_representation($f2, $request['tickets'], $request['class']);
             array_push($return_arr, $tmp_obj);
         }
         return $return_arr;
@@ -427,9 +427,16 @@ class SearchController extends Controller
     public function tmp_ticket($flight_arr, $request) {
         try {
             $f2 = DB::getPdo()->lastInsertId();
-            $flight_arr[0]["ticket_ids"] = $this->insert_tickets($flight_arr[0], $request);
-            if (isset($flight_arr[1]))
-                $flight_arr[1]["ticket_ids"] = $this->insert_tickets($flight_arr[1], $request);
+            $tmp_ticket = $this->insert_tickets($flight_arr[0], $request);
+            if (!$tmp_ticket)
+                abort(409);
+            $flight_arr[0]["ticket_ids"] = $tmp_ticket;
+            if (isset($flight_arr[1])) {
+                $tmp_ticket = $this->insert_tickets($flight_arr[1], $request);
+                if (!$tmp_ticket)
+                    abort(409);
+                $flight_arr[1]["ticket_ids"] = $tmp_ticket;
+            }
             return [$flight_arr];
         } catch (Exception $e) {
             abort(500);
@@ -444,6 +451,9 @@ class SearchController extends Controller
      */
     public function ticket_detail(Request $request)
     {
+        if (!isset($request["class"]) || !isset($request["f1"]) || !isset($request["tickets"])) {
+            abort(400);
+        }
         try {
             $return_arr = $this->get_flight($request);
             $return_arr = $this->tmp_ticket($return_arr, $request);

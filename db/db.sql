@@ -212,9 +212,6 @@ DELIMITER ;
     last_name        VARCHAR(50) NOT NULL,
     email            VARCHAR(100) NOT NULL,
     password         VARCHAR(100) NOT NULL,
-    updated_at       TIMESTAMP,
-    remember_token   VARCHAR(100),
-    created_at       TIMESTAMP,
     is_admin         INT DEFAULT 0 -- 0 == not admin, 1 == admin
     -- addr_street      VARCHAR(100) NOT NULL,
     -- addr_town        VARCHAR(100) NOT NULL,

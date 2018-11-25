@@ -1,0 +1,34 @@
+// api/search?origin=HEL
+[
+    {
+        "there": {
+            "flight_number": "AB3275",
+            "departure_time": "2019-05-04 6:00:00",
+            "airplane": {
+                "producer": "Boeing",
+                "model": "767-300",
+                "airline": "AY"
+            },
+            "airline": {
+                "airline": "AY",
+                "full_name": "Finnair Oyj",
+                "nationality": "Finland",
+                "hub": "HEL"
+            },
+            "flight_time": "2h 45m\n",
+            "price": 77,
+            "seat_class": "economy",
+            "tickets": 1,
+            "origin": {
+                "airport": "HEL",
+                "city": "Helsinki",
+                "country": "Finland"
+            },
+            "destination": {
+                "airport": "LGW",
+                "city": "London",
+                "country": "United Kingdom"
+            }
+        }
+    }
+]
