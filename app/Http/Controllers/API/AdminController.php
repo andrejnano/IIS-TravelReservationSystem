@@ -44,6 +44,40 @@ class AdminController extends Controller
         } catch (Exception $e) {
             abort(500, "Error in inserting flight into database.");
         }
-        return 'Flight made >';
+    }
+
+    /**
+     * updates data in users database. Request must be send by admin or updated user.
+     */
+    public function update_user(Request $request)
+    {
+        if(!isset($request['id'])){
+            abort(400, "Missing user id.");
+        }
+        if(!isset($_SESSION["user"])){
+            abort(403, "Permission denied.");          
+        }
+        if($_SESSION["user"] != "admin" || $_SESSION["pid"] != $request['id']){
+            abort(403, "Permission denied.");          
+        }
+        try{
+            if(isset($request['first_name'])){
+                DB::table('users')->where('id', $request['id'])->update(['first_name' => $request['first_name']]);
+            }
+            if(isset($request['last_name'])){
+                DB::table('users')->where('id', $request['id'])->update(['last_name' => $request['last_name']]);
+            }
+            if(isset($request['email'])){
+                DB::table('users')->where('id', $request['id'])->update(['email' => $request['email']]);
+            }
+            if(isset($request['password'])){
+                DB::table('users')->where('id', $request['id'])->update(['password' => $request['password']]);
+            }
+            if(isset($request['is_admin']) && $_SESSION["user"] == "admin"){
+                DB::table('users')->where('id', $request['id'])->update(['is_admin' => $request['is_admin']]);
+            }
+        } catch (Exception $e) {
+            abort(500, "Error in updating users database.");
+        }
     }
 }

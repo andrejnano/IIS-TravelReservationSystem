@@ -31,3 +31,5 @@ Route::middleware('api')->post('/logout', 'API\UserController@logout');
 Route::middleware('api')->post('/register', 'API\UserController@register');
 
 Route::middleware('api')->post('/add_flight', 'API\AdminController@add_flight');
+
+Route::middleware('api')->post('/update_user', 'API\AdminController@update_user');
