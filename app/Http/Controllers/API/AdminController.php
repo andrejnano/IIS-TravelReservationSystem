@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\UserController;
 
 class AdminController extends Controller
 {
@@ -16,9 +17,8 @@ class AdminController extends Controller
      */
     public function add_flight(Request $request)
     {
-        if(!isset($_SESSION["user"])){
-            abort(403, "Permission denied.");          
-        }
+        if (!UserController::logged_in())
+            abort(403, "Permission denied.");
         if($_SESSION["user"] != "admin"){
             abort(403, "Permission denied.");
         }

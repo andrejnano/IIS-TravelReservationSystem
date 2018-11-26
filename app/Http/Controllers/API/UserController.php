@@ -12,8 +12,36 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function login(Request $request) {
+    /**
+     * Determines if user is logged in, if yes it will set new timestamp
+     * If timestamp is older, then 10 minutes client is logged out
+     *
+     * @return boolean true if logged false otherwise
+     */
+    public static function logged_in() {
         session_start();
+        if (!isset($_SESSION['uid']) || !isset($_SESSION['user']))
+            return false;
+        if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 600)) {
+            // last request was more than 10 minutes ago
+            session_unset();     // unset $_SESSION variable for the run-time 
+            session_destroy();   // destroy session data in storage
+        } else if (isset($_SESSION["user"]) && DB::table('users')->where('id', '=', $_SESSION['uid'])->first()) {
+            $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Create new session and set $_SESSION super-global log in variables
+     *
+     * @param Request User request
+     * @return void
+     */
+    public function login(Request $request) {
+        if ($this->logged_in())
+            abort(400);
         if (isset($_SESSION["user"]))
             redirect('/dashboard');
         $user = DB::table('users')->where('email', '=', $request['email'])->first();
@@ -27,22 +55,26 @@ class UserController extends Controller
                 $_SESSION["user"] = "user";
             }
             $_SESSION["uid"] = $user->id;
+            $_SESSION['LAST_ACTIVITY'] = time();
             redirect('/dashboard');
         } else {
             abort(403);
         }
     }
 
+    /**
+     * Creates new user and logs him in
+     *
+     * @param Request User authentication information
+     * @return void
+     */
     public function register(Request $request) {
-        // session_start();
-        session_start();
-        if (isset($_SESSION["user"]))
+        if ($this->logged_in())
             redirect('/dashboard');
         if (!isset($request['first_name']) || !isset($request['last_name']) ||
             !isset($request['email']) || !isset($request['password'])) {
             
-                echo ("abort 400");
-            // abort(400);
+            abort(400);
         }
         $user = DB::table('users')->where('email', '=', $request['email'])->first();
         if ($user) {
@@ -58,15 +90,25 @@ class UserController extends Controller
                     ]);
                 $_SESSION["user"] = "user";
                 $_SESSION["uid"] = DB::getPdo()->lastInsertId();
+                $_SESSION['LAST_ACTIVITY'] = time();
                 redirect('/dashboard');
             } catch (Exception $e) {
                 abort(500);
             }
         }
     }
-    public function logout(Request $request) {
-        session_start();
-        session_destroy();
-        // redirect('/login');
+
+    /**
+     * Logs active user out
+     *
+     * @return void
+     */
+    public function logout() {
+        if ($this->logged_in()) {
+            session_unset();     // unset $_SESSION variable for the run-time 
+            session_destroy();   // destroy session data in storage
+        } else {
+            abort(400);
+        }
     }
 }
