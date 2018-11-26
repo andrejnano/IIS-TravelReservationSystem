@@ -29,3 +29,5 @@ Route::middleware('api')->post('/login', 'API\UserController@login');
 Route::middleware('api')->post('/logout', 'API\UserController@logout');
 
 Route::middleware('api')->post('/register', 'API\UserController@register');
+
+Route::middleware('api')->post('/add_flight', 'API\AdminController@add_flight');
