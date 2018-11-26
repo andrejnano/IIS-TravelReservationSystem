@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\UserController;
 
 class ReservationController extends Controller
 {
@@ -16,8 +17,7 @@ class ReservationController extends Controller
      * @return void
      */
     public function new_reservation() {
-        session_start();
-        if (!isset($_SESSION["user"]) || !isset($_SESSION["uid"])) {
+        if (!UserController::logged_in()) {
             abort(403);
         }
         try {
@@ -37,9 +37,7 @@ class ReservationController extends Controller
      * @return void
      */
     public function reserve(Request $request) {
-        session_start();
-        // return $_SESSION["uid"];
-        if (!isset($_SESSION["user"]) || !isset($_SESSION["uid"])) {
+        if (!UserController::logged_in()) {
             abort(403);
         }
         try {
@@ -86,9 +84,9 @@ class ReservationController extends Controller
      * @return void
      */
     public function delete_reservation(Request $request) {
-        session_start();
-        if (!isset($_SESSION["user"]) || !isset($_SESSION["uid"])) {
-            abort(403);
+        if (!UserController::logged_in()) {
+            return "not logged";
+            // abort(403);
         }
         try {
             if (isset($request['res_id'])) {
