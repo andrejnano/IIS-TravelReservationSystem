@@ -51,5 +51,15 @@ Priradí dočasnú letenku (ticket) k rezervácii. To znamená, že sa letenka r
 - **last_name** Priezvisko pasažiera, pre ktorého je letenka určená.
 ### Logout
 Bez parametrov, zruší súčasnú session. Odhlási užívateľa.
+### Add_flight
+Vytvori novy let v databazi v tabulce flights. Request musi provadet admin.
+#### Vysvetlenie argumentov
+- **flight_number** unikatni retezec oznacujici cislo letu
+- **departure_time** datum a cas odletu (ve formatu "2019-03-23 09:42:00.00")
+- **arrival-time** datum a cas priletu (ve formatu "2019-03-23 09:42:00.00")
+- **airplane** id letadla, odkaz do tabulky airplanes
+- **airline** kod letecke spolecnosti (napr. "AF")
+- **origin** startovni letiste (napr. "LHR")
+- **destination** cilove letiste (napr. "LHR")
 
 ## V adresári sa nachádzajú vzorové súbory json s príkladmi použitia
