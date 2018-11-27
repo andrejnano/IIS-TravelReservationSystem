@@ -45785,7 +45785,7 @@ var render = function() {
             [
               _c(
                 "b-col",
-                { attrs: { cols: "12", sm: "12", md: "4", lg: "4" } },
+                { attrs: { cols: "12", sm: "12", md: "6", lg: "4" } },
                 [
                   _c(
                     "aside",
@@ -45808,7 +45808,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "b-col",
-                { attrs: { cols: "12", sm: "12", md: "8", lg: "8" } },
+                { attrs: { cols: "12", sm: "12", md: "6", lg: "8" } },
                 [
                   _c("main", { staticClass: "main", attrs: { role: "main" } }, [
                     _c("h1", [_vm._v("Frontpage Headline")]),

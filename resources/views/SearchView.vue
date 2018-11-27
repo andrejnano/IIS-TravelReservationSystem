@@ -5,14 +5,14 @@
     <b-container id="content" fluid>
       <b-row>
 
-        <b-col cols="12" sm="12" md="4" lg="4">
+        <b-col cols="12" sm="12" md="6" lg="4">
           <aside class='side-bar'>
             <flight-search-form v-bind="formValuesToPass">
             </flight-search-form>
           </aside>
         </b-col>
 
-        <b-col cols="12" sm="12" md="8" lg="8">
+        <b-col cols="12" sm="12" md="6" lg="8">
           <main role='main' class='main'>
             <h1>Frontpage Headline</h1>
             <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum? Sit sequi commodi culpa autem eum ad omnis.</p>
