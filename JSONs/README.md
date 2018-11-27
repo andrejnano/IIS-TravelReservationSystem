@@ -73,5 +73,7 @@ uzivatel, ktereho se zmena tyka. Pouze admin muze navic provest zmenu parametru 
 - **email** emailova adresa uzivatele
 - **password** hashovane heslo
 - **is_admin** bool hodnota (1 je admin, 0 neni admin), zmenu muze provest pouze admin
+### Delete_user
+Odstrani uzivatele se zadanym id z databaze. Opravneni ma pouze admin.
 
 ## V adresári sa nachádzajú vzorové súbory json s príkladmi použitia

@@ -54,10 +54,10 @@ class AdminController extends Controller
         if(!isset($request['id'])){
             abort(400, "Missing user id.");
         }
-        if(!isset($_SESSION["user"])){
+        if(!UserController::logged_in()){
             abort(403, "Permission denied.");          
         }
-        if($_SESSION["user"] != "admin" || $_SESSION["pid"] != $request['id']){
+        if($_SESSION["user"] != "admin" && $_SESSION["uid"] != $request['id']){
             abort(403, "Permission denied.");          
         }
         try{
@@ -79,5 +79,27 @@ class AdminController extends Controller
         } catch (Exception $e) {
             abort(500, "Error in updating users database.");
         }
+    }
+
+    /**
+     * Deletes user from database. Must be send by admin.
+     */
+    public function delete_user(Request $request)
+    {
+        if(!isset($request['id'])){
+            abort(400, "Missing user id.");
+        }
+        if(!UserController::logged_in()){
+            abort(403, "Permission denied.");          
+        }
+        if($_SESSION["user"] != "admin"){
+            abort(403, "Permission denied.");          
+        }
+        try {
+            DB::table('users')->where('id', $request['id'])->delete();
+        } catch (Exception $e) {
+            abort(500, "Error in deleting user from database.");
+        }
+        return "deleted";
     }
 }
