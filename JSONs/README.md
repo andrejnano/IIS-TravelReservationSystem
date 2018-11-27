@@ -10,7 +10,8 @@ Všetky argumenty GET requestu sú voliteľné, pokiaľ užívateľ nezadá ani 
 - **tickets** Definuje počet lístkov, ktoré používateľ potrebuje. Celé číslo vačšie ako 0. Default 1.
 - **min_t** Určuje minimálny čas, ktorý chce užívateľ stráviť v destinácii. Hodnota je v **dňoch** celé nezáporné číslo. Default 0.
 - **max_t** Určuje maximálny čas, ktorý chce užívateľ stráviť v destinácii. Hodnota je v **dňoch** celé nezáporné číslo. Default, podmienka je vynechaná.
-- **class** Trieda sedadla, let musí mať definovaný počet voľných sedadiel v tejto triede. Tri možnosti hodnoty argumentu triedy: **first, business, economy**. Default postupuje sa od najlacnejšej k najdrahšej a zisťuje sa či je dosť miest v tejto triede. To znamená že pokiaľ si užívateľ zadal že chce viac lístkov, tak všetky budú v jednej triede. Nikdy nerozdelí skupinu do viacerých tried.
+- **class** Trieda sedadla, let musí mať definovaný počet voľných sedadiel v tejto triede. Tri
+možnosti hodnoty argumentu triedy: **first, business, economy**. Default postupuje sa od najlacnejšej k najdrahšej a zisťuje sa či je dosť miest v tejto triede. To znamená že pokiaľ si užívateľ zadal že chce viac lístkov, tak všetky budú v jednej triede. Nikdy nerozdelí skupinu do viacerých tried.
 
 
 ### Flight
@@ -51,5 +52,26 @@ Priradí dočasnú letenku (ticket) k rezervácii. To znamená, že sa letenka r
 - **last_name** Priezvisko pasažiera, pre ktorého je letenka určená.
 ### Logout
 Bez parametrov, zruší súčasnú session. Odhlási užívateľa.
+### Add_flight
+Vytvori novy let v databazi v tabulce flights. Request musi provadet admin.
+#### Vysvetlenie argumentov
+- **flight_number** unikatni retezec oznacujici cislo letu
+- **departure_time** datum a cas odletu (ve formatu "2019-03-23 09:42:00.00")
+- **arrival-time** datum a cas priletu (ve formatu "2019-03-23 09:42:00.00")
+- **airplane** id letadla, odkaz do tabulky airplanes
+- **airline** kod letecke spolecnosti (napr. "AF")
+- **origin** startovni letiste (napr. "LHR")
+- **destination** cilove letiste (napr. "LHR")
+### Update_user
+Upravi data ulozene u uzivatele. Jediny povinny parametr je id. Sloupce, ktere nemaji
+zadanou novou hodnotu jsou ponechany beze zmeny. Upravu muze provadet admin nebo samotny
+uzivatel, ktereho se zmena tyka. Pouze admin muze navic provest zmenu parametru is_admin
+#### Vysvetlenie argumentov
+- **id** unikatni cislo uzivatele, jediny povinny parametr
+- **first_name** krestni jmeno uzivatele
+- **last_name** prijmeni uzivatele
+- **email** emailova adresa uzivatele
+- **password** hashovane heslo
+- **is_admin** bool hodnota (1 je admin, 0 neni admin), zmenu muze provest pouze admin
 
 ## V adresári sa nachádzajú vzorové súbory json s príkladmi použitia
