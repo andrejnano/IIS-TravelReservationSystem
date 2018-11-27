@@ -47,6 +47,60 @@ class AdminController extends Controller
     }
 
     /**
+     * adds new airline into airlines table. User must be admin
+     */
+    public function add_airline(Request $request)
+    {
+        if (!UserController::logged_in())
+            abort(403, "Permission denied.");
+        if($_SESSION["user"] != "admin"){
+            abort(403, "Permission denied.");
+        }
+        if(!isset($request['airline']) ||
+            !isset($request['full_name']) ||
+            !isset($request['nationality']) ||
+            !isset($request['hub']) ) {
+            abort(400, "Missing argument. Can not add this airline.");
+        }
+        try {
+            DB::table('airlines')->insert(
+                ["airline" => $request['airline'],
+                "full_name" => $request['full_name'],
+                "nationality" => $request['nationality'],
+                "hub" => $request['hub']]
+            );
+        } catch (Exception $e) {
+            abort(500, "Error in inserting airline into database.");
+        }
+    }
+
+    /**
+     * adds new airport into airports table. User must be admin
+     */
+    public function add_airport(Request $request)
+    {
+        if (!UserController::logged_in())
+            abort(403, "Permission denied.");
+        if($_SESSION["user"] != "admin"){
+            abort(403, "Permission denied.");
+        }
+        if(!isset($request['airport_code']) ||
+            !isset($request['city']) ||
+            !isset($request['country']) ) {
+            abort(400, "Missing argument. Can not add this airline.");
+        }
+        try {
+            DB::table('airports')->insert(
+                ["airport_code" => $request['airport_code'],
+                "city" => $request['city'],
+                "country" => $request['country']]
+            );
+        } catch (Exception $e) {
+            abort(500, "Error in inserting airport into database.");
+        }
+    }
+
+    /**
      * updates data in users database. Request must be send by admin or updated user.
      */
     public function update_user(Request $request)

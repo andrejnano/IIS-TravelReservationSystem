@@ -55,13 +55,26 @@ Bez parametrov, zruší súčasnú session. Odhlási užívateľa.
 ### Add_flight
 Vytvori novy let v databazi v tabulce flights. Request musi provadet admin.
 #### Vysvetlenie argumentov
-- **flight_number** unikatni retezec oznacujici cislo letu
+- **flight_number** unikatni retezec oznacujici cislo letu (napr. LH1724)
 - **departure_time** datum a cas odletu (ve formatu "2019-03-23 09:42:00.00")
 - **arrival-time** datum a cas priletu (ve formatu "2019-03-23 09:42:00.00")
 - **airplane** id letadla, odkaz do tabulky airplanes
 - **airline** kod letecke spolecnosti (napr. "AF")
-- **origin** startovni letiste (napr. "LHR")
-- **destination** cilove letiste (napr. "LHR")
+- **origin** startovni letiste (odkazujici do tabulky airports, napr. "LHR")
+- **destination** cilove letiste (odkazujici do tabulky airports, napr. "LHR")
+### Add_airline
+Vytvori novou aerolinku v databazi v tabulce airlines. Request musi provadet admin.
+#### Vysvetlenie argumentov
+- **airline** unikatni retezec oznacujici aerolinku (napr. "AF")
+- **full_name** retezec obsahujici cely nazev spolecnosti
+- **nationality** retezec obsahujici cely nazev statu ze ktereho spolecnost pochazi
+- **hub** rezezec oznacujici domovske letiste (odkazujici do tabulky airports, napr. "LHR")
+### Add_airport
+Vytvori nove letiste v databazi v tabulce airports. Request musi provadet admin.
+#### Vysvetlenie argumentov
+- **airport_code** unikatni retezec oznacujici letiste (napr. "LHR")
+- **city** retezec obsahujici cely nazev mesta
+- **country** retezec obsahujici cely nazev statu
 ### Update_user
 Upravi data ulozene u uzivatele. Jediny povinny parametr je id. Sloupce, ktere nemaji
 zadanou novou hodnotu jsou ponechany beze zmeny. Upravu muze provadet admin nebo samotny
