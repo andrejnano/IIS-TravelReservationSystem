@@ -31,6 +31,7 @@
         "i": "^0.3.6",
         "npm": "^6.4.1",
         "vue-loading-overlay": "^3.1.0",
+        "vue-resource": "^1.5.1",
         "vue-router": "^3.0.1",
         "vue-search-select": "^2.7.0",
         "vue-slider-component": "^2.8.2",

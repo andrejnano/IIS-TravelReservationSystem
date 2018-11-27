@@ -7,14 +7,21 @@ Vue.config.performance = true;
 // Setup Vue Router
 import VueRouter from 'vue-router';
 import BootstrapVue from 'bootstrap-vue'
+import VueResource from 'vue-resource';
+
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
+Vue.use(VueResource);
+
 
 import App from './App.vue';
 
-import SearchView from './views/SearchView.vue';
-import ResultsView from './views/ResultsView.vue';
+import Search from './views/Search.vue';
+import Results from './views/Results.vue';
+import Login from './views/Login.vue';
+import Register from './views/Register.vue';
+
 
 import Help from './views/Help.vue';
 import FAQ from './views/FAQ.vue';
@@ -32,7 +39,7 @@ const router = new VueRouter({
   routes: [{
       path: '/',
       name: 'landing',
-      component: SearchView
+      component: Search
     },
     {
       path: '/help',
@@ -52,7 +59,17 @@ const router = new VueRouter({
     {
       path: '/searched',
       name: 'results',
-      component: ResultsView,
+      component: Results,
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register,
     }
   ],
 })

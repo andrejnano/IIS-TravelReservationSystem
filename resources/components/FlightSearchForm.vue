@@ -12,7 +12,7 @@
         <div class='flight-search-form__input-text'>
           <label class='flight-search-form__input-text-label' for="origin">Origin:</label>
           <!-- <input class='flight-search-form__input-text-field' id="origin" v-model="origin" placeholder="From where?"> -->
-          <model-list-select class='flight-search-form__input-text-field'
+          <model-list-select
             :list="destinations"
             option-value="code"
             option-text="full"
@@ -25,7 +25,7 @@
         <div class='flight-search-form__input-text'>
           <label class='flight-search-form__input-text-label' for="destination">Destination:</label>
           <!-- <input class='flight-search-form__input-text-field' v-model="destination" placeholder="To where?"> -->
-          <model-list-select class='flight-search-form__input-text-field'
+          <model-list-select
             :list="destinations"
             option-value="code"
             option-text="full"
@@ -78,17 +78,6 @@
       <button class='flight-search-form__input-btn btn' @click="searchSubmit">Search</button>
     </form>
 
-
-  <!-- <debug-box
-      :input='[
-      {name: "Round trip", value: FORMisRoundTrip},
-      {name: "One Way", value: FORMisOneWay},
-      {name: "Origin", value: FORMorigin.code},
-      {name: "Destination", value: FORMdestination.code},
-      {name: "Min. price", value: priceSlider.value[0]},
-      {name: "Max. price", value: priceSlider.value[1]}]'>
-    </debug-box> -->
-
   </div>
 </template>
 
@@ -123,16 +112,16 @@ let searchExport = [];
 
 export default {
   name: 'FlightSearchForm',
-  props: [
-    'isRoundTrip',
-    'isOneWay',
-    'origin',
-    'destination',
-    'departureDate',
-    'arrivalDate',
-    'priceMin',
-    'priceMax'
-  ],
+  props: {
+    isRoundTrip: Boolean,
+    isOneWay: Boolean,
+    origin: Object,
+    destination: Object,
+    departureDate: Date,
+    arrivalDate: Date,
+    priceMin: Number,
+    priceMax: Number,
+  },
   data() {
     return {
       FORMisRoundTrip: this.isRoundTrip,
@@ -141,17 +130,13 @@ export default {
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate,
       FORMarrivalDate: this.arrivalDate,
-      destinationsFromApi: [
-        { code: 'VIE', full: 'Vienna' },
-        { code: 'JFK', full: 'New York' },
-        { code: 'CDG', full: 'Paris' },
-        { code: 'PRG', full: 'Prague' },
-      ],
       destinations: [
         { code: 'VIE', full: 'Vienna' },
         { code: 'JFK', full: 'New York' },
         { code: 'CDG', full: 'Paris' },
         { code: 'PRG', full: 'Prague' },
+        { code: 'HEL', full: 'Helsinki'},
+        { code: 'LGW', full: 'London'},
       ],
       searchText: '',
       priceSlider: {
@@ -201,7 +186,7 @@ export default {
     searchDestination (searchText) {
       this.searchText = searchText;
       // TODO: add query to API
-      this.destinations = this.destinationsFromApi;
+      // this.destinations = this.destinationsFromApi;
     },
     searchSubmit() {
       this.$emit('searchSubmited', {
@@ -209,8 +194,8 @@ export default {
         isOneWay: this.FORMisOneWay,
         origin: {code: this.FORMorigin.code, full: this.FORMorigin.full},
         destination: {code: this.FORMdestination.code, full: this.FORMdestination.full},
-        departureDate: Date.parse(this.FORMdepartureDate),
-        arrivalDate: Date.parse(this.FORMarrivalDate),
+        departureDate: this.FORMdepartureDate.getTime(),
+        arrivalDate: this.FORMarrivalDate.getTime(),
         priceMin: this.priceSlider.value[0],
         priceMax: this.priceSlider.value[1],
       });
@@ -225,8 +210,8 @@ export default {
           originFull: this.FORMorigin.full,
           destinationCode: this.FORMdestination.code,
           destinationFull: this.FORMdestination.full,
-          departureDate: Date.parse(this.FORMdepartureDate),
-          arrivalDate: Date.parse(this.FORMarrivalDate),
+          departureDate: this.FORMdepartureDate.getTime(),
+          arrivalDate: this.FORMarrivalDate.getTime(),
           priceMin: this.priceSlider.value[0],
           priceMax: this.priceSlider.value[1],
         },
