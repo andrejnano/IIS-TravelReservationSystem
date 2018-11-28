@@ -69,6 +69,7 @@ Vytvori novou aerolinku v databazi v tabulce airlines. Request musi provadet adm
 - **full_name** retezec obsahujici cely nazev spolecnosti
 - **nationality** retezec obsahujici cely nazev statu ze ktereho spolecnost pochazi
 - **hub** rezezec oznacujici domovske letiste (odkazujici do tabulky airports, napr. "LHR")
+- **id_logo** rezezec obsahujici kod shodny s oznacenim loga (napr. "AFR")
 ### Add_airport
 Vytvori nove letiste v databazi v tabulce airports. Request musi provadet admin.
 #### Vysvetlenie argumentov

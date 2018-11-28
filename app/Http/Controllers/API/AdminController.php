@@ -69,6 +69,9 @@ class AdminController extends Controller
                 "nationality" => $request->input('nationality'),
                 "hub" => $request->input('hub')]
             );
+            if($request->input('id_logo')){
+                DB::table('airlines')->where('airline', $request->input('airline'))->update(['id_logo' => $request->input('id_logo')]);
+            }
         } catch (Exception $e) {
             abort(500, "Error in inserting airline into database.");
         }
