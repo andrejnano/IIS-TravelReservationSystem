@@ -33,7 +33,7 @@ export default {
     },
 
     logo: function() {
-      return `../images/${this.result.airline.airline}.png`;
+      return `../images/${this.result.airline.id_logo}.png`;
     }
 
   }

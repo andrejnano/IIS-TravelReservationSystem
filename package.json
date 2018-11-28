@@ -31,6 +31,7 @@
         "bootstrap-vue": "^2.0.0-rc.11",
         "i": "^0.3.6",
         "material-design-icons-iconfont": "^4.0.2",
+        "moment": "^2.22.2",
         "npm": "^6.4.1",
         "vue-loading-overlay": "^3.1.0",
         "vue-resource": "^1.5.1",

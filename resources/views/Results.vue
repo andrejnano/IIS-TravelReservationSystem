@@ -100,10 +100,10 @@ export default {
       formValuesToPass: {
         isRoundTrip: JSON.parse(this.$route.query.isRoundTrip),
         isOneWay: JSON.parse(this.$route.query.isOneWay),
-        origin: {code: this.$route.query.originCode, full: this.$route.query.originFull},
-        destination: {code: this.$route.query.destinationCode, full: this.$route.query.destinationFull},
-        departureDate: new Date(JSON.parse(this.$route.query.departureDate)),
-        arrivalDate: new Date(JSON.parse(this.$route.query.arrivalDate)),
+        origin: {airport_code: this.$route.query.originCode, city: this.$route.query.originFull},
+        destination: {airport_code: this.$route.query.destinationCode, city: this.$route.query.destinationFull},
+        departureDate: new Date(this.$route.query.departureDate),
+        arrivalDate: new Date(this.$route.query.arrivalDate),
         priceMin: JSON.parse(this.$route.query.priceMin),
         priceMax: JSON.parse(this.$route.query.priceMax),
       },
@@ -132,7 +132,7 @@ export default {
       //localhost:8080/api/search?origin=VIE&destination=CDG
 
       // prepare the query from form data
-      let query = `/api/search?origin=${formValues.origin.code}&destination=${formValues.destination.code}`;
+      let query = `/api/search?origin=${formValues.origin.airport_code}&destination=${formValues.destination.airport_code}`;
 
       // perform the query
       axios.get(query).then((response) => {
@@ -179,7 +179,7 @@ export default {
 <style lang="scss">
 
   // global stylesheet
-  @import '../design/style';
+  // @import '../design/style';
 
   #loading {
     position: fixed;

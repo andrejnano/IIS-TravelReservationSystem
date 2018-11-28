@@ -20,8 +20,6 @@
 </template>
 
 <script>
-  import 'bootstrap/dist/css/bootstrap.css';
-  import 'bootstrap-vue/dist/bootstrap-vue.css';
 
   import Loading from 'vue-loading-overlay';
   import 'vue-loading-overlay/dist/vue-loading.css';
@@ -113,7 +111,7 @@
 
 <style lang="scss">
   // global stylesheet
-  @import '../design/style';
+  // @import '../design/style';
 
   #loading {
     position: fixed;
