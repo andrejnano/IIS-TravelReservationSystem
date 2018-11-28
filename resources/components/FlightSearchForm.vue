@@ -1,9 +1,12 @@
 <template>
   <v-card class="layout column" light>
+
+      <!-- TOOLBAR -->
       <v-toolbar card prominent color="info" dark>
         <v-toolbar-title><v-icon>search</v-icon>Search for flights</v-toolbar-title>
       </v-toolbar>
-      <v-divider></v-divider>
+
+      <!-- ROUNDTRIP/ONEWAY TOGGLE -->
       <v-card-text class="text-xs-center">
         <v-btn-toggle v-model="toggleRoundTrip">
           <v-btn flat @click="setRoundTrip">
@@ -14,180 +17,110 @@
           </v-btn>
         </v-btn-toggle>
       </v-card-text>
+
       <v-divider></v-divider>
+
+      <!-- ORIGIN AUTOCOMPLETE -->
       <v-card-text>
         <v-autocomplete
-          v-model="FORMorigin"
-          :items="destinations"
-          :loading="isLoading"
-          :search-input.sync="searchDestination"
-          color="white"
-          hide-no-data
-          hide-selected
-          item-text="full"
-          item-value="code"
-          label="Origin"
-          placeholder="From where?"
-          prepend-icon="mdi-flight-takeoff"
-          return-object
-        ></v-autocomplete>
+        v-model="FORMorigin"
+        :items="items"
+        :search-input.sync="searchOriginAirport"
+        :loading="originLoading"
+        item-text="city"
+        item-value="airport_code"
+        label="Origin"
+        hint="Select a city"
+        persistent-hint
+        hide-no-data
+        hide-selected
+        return-object
+        prepend-icon="mdi-airplane-takeoff"
+        >
+        </v-autocomplete>
       </v-card-text>
-      <v-divider></v-divider>
-      <v-expand-transition>
-        <v-list v-if="model" class="blue lighten-3">
-          <v-list-tile
-            v-for="(field, i) in fields"
-            :key="i"
-          >
-            <v-list-tile-content>
-              <v-list-tile-title v-text="field.value"></v-list-tile-title>
-              <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-expand-transition>
 
+      <!-- DESTINATION AUTOCOMPLETE -->
       <v-card-text>
         <v-autocomplete
         v-model="FORMdestination"
-        :items="destinations"
-        :loading="isLoading"
-        :search-input.sync="searchDestination"
-        color="white"
+        :items="items"
+        :search-input.sync="searchDestinationAirport"
+        :loading="destinationLoading"
+        item-text="city"
+        item-value="airport_code"
+        label="Destination"
+        hint="Select a city"
+        persistent-hint
         hide-no-data
         hide-selected
-        item-text="full"
-        item-value="code"
-        label="Origin"
-        placeholder="To where?"
-        prepend-icon="mdi-flight-landing"
         return-object
-        ></v-autocomplete>
+        prepend-icon="mdi-airplane-landing"
+        >
+        </v-autocomplete>
       </v-card-text>
+
       <v-divider></v-divider>
-      <v-expand-transition>
-        <v-list v-if="model" class="blue lighten-3">
-          <v-list-tile
-            v-for="(field, i) in fields"
-            :key="i"
-          >
-            <v-list-tile-content>
-              <v-list-tile-title v-text="field.value"></v-list-tile-title>
-              <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-expand-transition>
 
       <!-- calendars -->
-
       <v-card-text>
-        <v-container fluid>
-          <v-layout row>
-            <v-flex xs6>
-              <v-menu
-                :close-on-content-click="false"
-                v-model="departureDateMenu"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="FORMdepartureDate"
-                  label="Departure date"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
-
-                <v-date-picker v-model="FORMdepartureDate" @input="menu2 = false"></v-date-picker>
-              </v-menu>
-            </v-flex>
-            <v-flex xs6>
-              <v-menu
-                :close-on-content-click="false"
-                v-model="departureDateMenu"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="FORMdepartureDate"
-                  label="Departure date"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
-
-                <v-date-picker v-model="FORMdepartureDate" @input="menu2 = false"></v-date-picker>
-              </v-menu>
-            </v-flex>
-          </v-layout>
-        </v-container>
-    </v-card-text>
-
-    <v-card-text>
-      <v-layout row wrap>
-        <v-flex xs12>
-          <v-subheader class="pl-0">Max: </v-subheader>
-          <v-slider
-            v-model="slider"
-            always-dirty
-            hint="Set the maximum price, you are willing to pay"
-            persistent-hint
-            thumb-label="always"
-            :max="sliderMax"
-            :min="sliderMin"
-          ></v-slider>
-        </v-flex>
-      </v-layout>
-    </v-card-text>
-
-      <!-- <div class='flight-search-form__group'>
-        <div class='flight-search-form__input-select'>
-          <label class='flight-search-form__input-select-label' for="departure-date">Departure date:</label>
-          <datepicker :value="departureDate"
-            :monday-first="true"
-            :input-class="calendar.inputClass"
-            :calendar-class="calendar.calendarClass"
-            id='departure-date'
-            class='flight-search-form__input-select-field'
+        <v-menu
+          v-model="departureDateMenu"
+          :close-on-content-click="false"
+          full-width
+          max-width="290"
+        >
+          <v-text-field
+            slot="activator"
+            :value="computedDepartureDateFormatted"
+            clearable
+            label="Date of departure"
+            readonly
+          ></v-text-field>
+          <v-date-picker
             v-model="FORMdepartureDate"
-            name="departureDate">
-          </datepicker>
-        </div> -->
-
-          <!-- <div class='flight-search-form__input-select'>
-            <transition name="fade">
-              <label v-if="FORMisRoundTrip" class='flight-search-form__input-select-label' for="arrival-date" >
-                Arrival date:
-              </label>
-            </transition>
-            <transition name="fade">
-              <datepicker  v-if="FORMisRoundTrip"
-                :monday-first="true"
-                :value="arrivalDate"
-                id='arrival-date'
-                :input-class="calendar.inputClass"
-                :calendar-class="calendar.calendarClass"
-                class='flight-search-form__input-select-field'
-                v-model="FORMarrivalDate"
-                name="arrivalDate">
-              </datepicker>
-            </transition>
-          </div> -->
-
-      <div class='flight-search-form__group'>
-        <vue-slider v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
-      </div>
+            @change="departureDateMenu = false"
+          ></v-date-picker>
+        </v-menu>
+      </v-card-text>
 
       <v-card-text>
+        <v-menu
+          v-model="arrivalDateMenu"
+          :close-on-content-click="false"
+          full-width
+          max-width="290"
+        >
+          <v-text-field
+            slot="activator"
+            :value="computedArrivalDateFormatted"
+            clearable
+            label="Date of arrival"
+            readonly
+          ></v-text-field>
+          <v-date-picker
+            v-model="FORMarrivalDate"
+            @change="arrivalDateMenu = false"
+          ></v-date-picker>
+        </v-menu>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-text>
+        <div class='flight-search-form__group'>
+          <vue-slider v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
+        </div>
+        <div class='caption'>Set the price interval</div>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+
+
+
+      <!-- SUBMIT BUTTON  -->
+      <v-card-text class="text-xs-center">
         <v-btn
           :loading="loadingSubmit"
           :disabled="loadingSubmit"
@@ -201,6 +134,7 @@
           </span>
         </v-btn>
       </v-card-text>
+
   </v-card>
 </template>
 
@@ -212,7 +146,8 @@ Date.prototype.addDays = function(days) {
   date.setDate(date.getDate() + days);
   return date;
 }
-import '@mdi/font/css/materialdesignicons.css'
+import '@mdi/font/css/materialdesignicons.css';
+import moment from 'moment';
 
 import DebugBox from './DebugBox.vue';
 import { ModelListSelect } from 'vue-search-select';
@@ -255,8 +190,8 @@ export default {
       FORMisOneWay: this.isOneWay,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
-      FORMdepartureDate: this.departureDate,
-      FORMarrivalDate: this.arrivalDate,
+      FORMdepartureDate: this.departureDate.toISOString().substr(0,10),
+      FORMarrivalDate: this.arrivalDate.toISOString().substr(0,10),
       destinations: [
         { code: 'VIE', full: 'Vienna' },
         { code: 'JFK', full: 'New York' },
@@ -302,64 +237,70 @@ export default {
         inputClass: 'flight-search-form__input-calendar-field',
         calendarClass: 'flight-search-form__input-calendar-day-selected'
       },
-      model: null,
-      search: null,
-      isLoading: false,
-      entries: []
+      // Destination picking autocomplete MODEL + Logic setup
+      airports: [],
+
+      // experiment
+      originLoading: false,
+      destinationLoading: false,
+      airportEntries: [],
+      searchOriginAirport: null,
+      searchDestinationAirport: null,
     }
   },
   computed: {
-    fields() {
-      if (!this.model) return []
-
-      return Object.keys(this.model).map(key => {
-        return {
-          key,
-          value: this.model[key] || 'n/a'
-        }
-      })
+    computedDepartureDateFormatted () {
+      return this.FORMdepartureDate ? moment(this.FORMdepartureDate).format('dddd, MMMM Do YYYY') : '';
+    },
+    computedArrivalDateFormatted () {
+      return this.FORMarrivalDate ? moment(this.FORMarrivalDate).format('dddd, MMMM Do YYYY') : '';
     },
     items () {
-      return this.entries.map(entry => {
-          const Description = entry.Description.length > this.descriptionLimit
-            ? entry.Description.slice(0, this.descriptionLimit) + '...'
-            : entry.Description
-
-          return Object.assign({}, entry, { Description })
-      })
-    },
+      return this.airportEntries;
+    }
+  },
+  created () {
+      axios.get('/api/airports').then(res => {
+        this.airports = res.data;
+      });
   },
   watch: {
-    search (val) {
-      // Items have already been loaded
-        if (this.items.length > 0) return;
-        // Items have already been requested
-        if (this.isLoading) return;
-
-        this.isLoading = true;
-
-        // Lazily load input items
-        axios.get('/airports')
-          .then(res => {
-            const { count, entries } = res.data
-            this.count = count
-            this.entries = entries
-          })
-          .catch(err => {
-            console.log(err)
-          })
-          .finally(() => (this.isLoading = false))
+    searchOriginAirport (val) {
+      if(this.items.length > 0) return;
+      if(this.originLoading) return;
+      this.originLoading = true;
+      setTimeout(() => {
+          this.airportEntries = this.airports;
+          this.originLoading = false;
+      }, 500);
+    },
+    searchDestinationAirport (val) {
+      if(this.items.length > 0) return;
+      if(this.destinationLoading) return;
+      this.destinationLoading = true;
+      setTimeout(() => {
+          this.airportEntries = this.airports;
+          this.destinationLoading = false;
+      }, 500);
     },
     loader () {
       const l = this.loader;
       this[l] = !this[l]
-
       setTimeout(( () => (this[l] = false), 3000));
-
       this.loader = null;
     }
   },
   methods: {
+    querySelections (v) {
+        this.loadingOrigin = true
+        // Simulated ajax query
+        setTimeout(() => {
+          this.originItems = this.airports.filter(e => {
+            return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+          })
+          this.loadingOrigin = false
+        }, 500)
+      },
     setRoundTrip() {
       this.FORMisRoundTrip = true;
       this.FORMisOneWay = false;
@@ -368,19 +309,19 @@ export default {
       this.FORMisRoundTrip = false;
       this.FORMisOneWay = true;
     },
-    searchDestination (searchText) {
-      this.searchText = searchText;
-      // TODO: add query to API
-      // this.destinations = this.destinationsFromApi;
-    },
+    // searchDestination (searchText) {
+    //   this.searchText = searchText;
+    //   // TODO: add query to API
+    //   // this.destinations = this.destinationsFromApi;
+    // },
     searchSubmit() {
       this.$emit('searchSubmited', {
         isRoundTrip: this.FORMisRoundTrip,
         isOneWay: this.FORMisOneWay,
-        origin: {code: this.FORMorigin.code, full: this.FORMorigin.full},
-        destination: {code: this.FORMdestination.code, full: this.FORMdestination.full},
-        departureDate: this.FORMdepartureDate.getTime(),
-        arrivalDate: this.FORMarrivalDate.getTime(),
+        origin: {airport_code: this.FORMorigin.airport_code, city: this.FORMorigin.city, country: this.FORMorigin.country},
+        destination: {airport_code: this.FORMdestination.airport_code, city: this.FORMdestination.city, country: this.FORMdestination.country},
+        departureDate: this.FORMdepartureDate,
+        arrivalDate: this.FORMarrivalDate,
         priceMin: this.priceSlider.value[0],
         priceMax: this.priceSlider.value[1],
       });
@@ -391,12 +332,12 @@ export default {
         query: {
           isRoundTrip: this.FORMisRoundTrip,
           isOneWay: this.FORMisOneWay,
-          originCode: this.FORMorigin.code,
-          originFull: this.FORMorigin.full,
-          destinationCode: this.FORMdestination.code,
-          destinationFull: this.FORMdestination.full,
-          departureDate: this.FORMdepartureDate.getTime(),
-          arrivalDate: this.FORMarrivalDate.getTime(),
+          originCode: this.FORMorigin.airport_code,
+          originFull: this.FORMorigin.city,
+          destinationCode: this.FORMdestination.airport_code,
+          destinationFull: this.FORMdestination.city,
+          departureDate: this.FORMdepartureDate,
+          arrivalDate: this.FORMarrivalDate,
           priceMin: this.priceSlider.value[0],
           priceMax: this.priceSlider.value[1],
         },
@@ -417,7 +358,7 @@ export default {
 <style lang="scss">
 
 // global stylesheet
-@import '../design/style';
+// @import '../design/style';
 
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */

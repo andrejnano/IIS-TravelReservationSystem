@@ -1,4 +1,8 @@
 <script>
+/*
+ THIS IS THE ROOT COMPONENT OF THE WHOLE CLIENT SIDE APP
+*/
+
 import Navigation from './components/Navigation.vue';
 import WebFontLoader from 'webfontloader'; // for asynchronous font loading
 
