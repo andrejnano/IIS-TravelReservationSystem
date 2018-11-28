@@ -3,7 +3,9 @@
       <v-toolbar card prominent color="info" dark>
         <v-toolbar-title><v-icon>search</v-icon>Search for flights</v-toolbar-title>
       </v-toolbar>
+
       <v-divider></v-divider>
+
       <v-card-text class="text-xs-center">
         <v-btn-toggle v-model="toggleRoundTrip">
           <v-btn flat @click="setRoundTrip">
@@ -14,70 +16,44 @@
           </v-btn>
         </v-btn-toggle>
       </v-card-text>
+
       <v-divider></v-divider>
-      <v-card-text>
-        <v-autocomplete
-          v-model="FORMorigin"
-          :items="destinations"
-          :loading="isLoading"
-          :search-input.sync="searchDestination"
-          color="white"
-          hide-no-data
-          hide-selected
-          item-text="full"
-          item-value="code"
-          label="Origin"
-          placeholder="From where?"
-          prepend-icon="mdi-flight-takeoff"
-          return-object
-        ></v-autocomplete>
-      </v-card-text>
-      <v-divider></v-divider>
-      <v-expand-transition>
-        <v-list v-if="model" class="blue lighten-3">
-          <v-list-tile
-            v-for="(field, i) in fields"
-            :key="i"
-          >
-            <v-list-tile-content>
-              <v-list-tile-title v-text="field.value"></v-list-tile-title>
-              <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-expand-transition>
 
       <v-card-text>
         <v-autocomplete
-        v-model="FORMdestination"
-        :items="destinations"
-        :loading="isLoading"
-        :search-input.sync="searchDestination"
-        color="white"
-        hide-no-data
-        hide-selected
-        item-text="full"
-        item-value="code"
-        label="Origin"
-        placeholder="To where?"
-        prepend-icon="mdi-flight-landing"
-        return-object
+          :loading="isOriginLoading"
+          :items="items"
+          :search-input.sync="searchForOrigin"
+          v-model="FORMorigin"
+          cache-items
+          class="mx-3"
+          flat
+          hide-no-data
+          hide-details
+          label="From where?"
+          solo-inverted
         ></v-autocomplete>
       </v-card-text>
+
       <v-divider></v-divider>
-      <v-expand-transition>
-        <v-list v-if="model" class="blue lighten-3">
-          <v-list-tile
-            v-for="(field, i) in fields"
-            :key="i"
-          >
-            <v-list-tile-content>
-              <v-list-tile-title v-text="field.value"></v-list-tile-title>
-              <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-expand-transition>
+
+      <v-card-text>
+        <v-autocomplete
+          :loading="isDestinationLoading"
+          :items="items"
+          :search-input.sync="searchForDestination"
+          v-model="FORMdestination"
+          cache-items
+          class="mx-3"
+          flat
+          hide-no-data
+          hide-details
+          label="To where?"
+          solo-inverted
+        ></v-autocomplete>
+      </v-card-text>
+
+      <v-divider></v-divider>
 
       <!-- calendars -->
 
@@ -302,64 +278,46 @@ export default {
         inputClass: 'flight-search-form__input-calendar-field',
         calendarClass: 'flight-search-form__input-calendar-day-selected'
       },
-      model: null,
-      search: null,
-      isLoading: false,
+      descriptionLimit: 60,
+      searchForOrigin: null,
+      searchForDestination: null,
+      isOriginLoading: false,
+      isDestinationLoading: false,
       entries: []
     }
   },
-  computed: {
-    fields() {
-      if (!this.model) return []
-
-      return Object.keys(this.model).map(key => {
-        return {
-          key,
-          value: this.model[key] || 'n/a'
-        }
-      })
-    },
     items () {
-      return this.entries.map(entry => {
-          const Description = entry.Description.length > this.descriptionLimit
-            ? entry.Description.slice(0, this.descriptionLimit) + '...'
-            : entry.Description
+      return this.entries.map((entry) => {
+        const Description = entry.Description.length > this.descriptionLimit
+          ? entry.Description.slice(0, this.descriptionLimit) + '...'
+          : entry.Description
 
-          return Object.assign({}, entry, { Description })
-      })
-    },
+        return Object.assign({}, entry, { Description })
+      });
   },
   watch: {
-    search (val) {
-      // Items have already been loaded
-        if (this.items.length > 0) return;
-        // Items have already been requested
-        if (this.isLoading) return;
-
-        this.isLoading = true;
-
-        // Lazily load input items
-        axios.get('/airports')
-          .then(res => {
-            const { count, entries } = res.data
-            this.count = count
-            this.entries = entries
-          })
-          .catch(err => {
-            console.log(err)
-          })
-          .finally(() => (this.isLoading = false))
+    searchForOrigin (val) {
+        val && val !== this.select && this.querySelections(val)
     },
+
     loader () {
       const l = this.loader;
       this[l] = !this[l]
-
       setTimeout(( () => (this[l] = false), 3000));
-
       this.loader = null;
     }
   },
   methods: {
+    querySelections (v) {
+        this.loadingDestination = true
+        // Simulated ajax query
+        setTimeout(() => {
+          this.destinations = this.destinationsFromApi.filter(e => {
+            return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+          })
+          this.loadingDestination = false
+        }, 500)
+      },
     setRoundTrip() {
       this.FORMisRoundTrip = true;
       this.FORMisOneWay = false;
@@ -368,11 +326,11 @@ export default {
       this.FORMisRoundTrip = false;
       this.FORMisOneWay = true;
     },
-    searchDestination (searchText) {
-      this.searchText = searchText;
-      // TODO: add query to API
-      // this.destinations = this.destinationsFromApi;
-    },
+    // searchDestination (searchText) {
+    //   this.searchText = searchText;
+    //   // TODO: add query to API
+    //   // this.destinations = this.destinationsFromApi;
+    // },
     searchSubmit() {
       this.$emit('searchSubmited', {
         isRoundTrip: this.FORMisRoundTrip,
