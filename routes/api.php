@@ -36,6 +36,8 @@ Route::middleware('api')->post('/add_airline', 'API\AdminController@add_airline'
 
 Route::middleware('api')->post('/add_airport', 'API\AdminController@add_airport');
 
+Route::middleware('api')->post('/add_airplane', 'API\AdminController@add_airplane');
+
 Route::middleware('api')->post('/update_user', 'API\AdminController@update_user');
 
 Route::middleware('api')->post('/delete_user', 'API\AdminController@delete_user');
