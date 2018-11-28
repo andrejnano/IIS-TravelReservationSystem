@@ -136,6 +136,38 @@ class AdminController extends Controller
     }
 
     /**
+     * updates data in airlines database. Request must be send by admin.
+     */
+    public function update_airline(Request $request)
+    {
+        if(!$request->input('airline')){
+            abort(400, "Missing airline identification.");
+        }
+        if(!UserController::logged_in()){
+            abort(403, "Permission denied.");          
+        }
+        if($_SESSION["user"] != "admin"){
+            abort(403, "Permission denied.");          
+        }
+        try{
+            if($request->input('full_name')){
+                DB::table('airlines')->where('airline', $request->input('airline'))->update(['full_name' => $request->input('full_name')]);
+            }
+            if($request->input('nationality')){
+                DB::table('airlines')->where('airline', $request->input('airline'))->update(['nationality' => $request->input('nationality')]);
+            }
+            if($request->input('hub')){
+                DB::table('airlines')->where('airline', $request->input('airline'))->update(['hub' => $request->input('hub')]);
+            }
+            if($request->input('id_logo')){
+                DB::table('airlines')->where('airline', $request->input('airline'))->update(['id_logo' => $request->input('id_logo')]);
+            }
+        } catch (Exception $e) {
+            abort(500, "Error in updating airlines database.");
+        }
+    }
+
+    /**
      * updates data in users database. Request must be send by admin or updated user.
      */
     public function update_user(Request $request)

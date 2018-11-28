@@ -85,6 +85,16 @@ Vytvori nove letadlo v databazi v tabulce airplanes. Request musi provadet admin
 - **bclass_seats** cislo udavajici pocet sedadel business tridy
 - **eclass_seats** cislo udavajici pocet sedadel economy tridy
 - **airline** retezec oznacujici aerolinku (odkazujici do tabulky airlines, napr. "AF")
+### Update_airline
+Upravi udaje o aerolince v databazi v tabulce airlines. Jediny povinny parametr je airline.
+Sloupce, ktere nemaji zadanou novou hodnotu jsou ponechany beze zmeny.
+Request musi provadet admin.
+#### Vysvetlenie argumentov
+- **airline** unikatni retezec oznacujici aerolinku (napr. "AF")
+- **full_name** retezec obsahujici cely nazev spolecnosti
+- **nationality** retezec obsahujici cely nazev statu ze ktereho spolecnost pochazi
+- **hub** rezezec oznacujici domovske letiste (odkazujici do tabulky airports, napr. "LHR")
+- **id_logo** rezezec obsahujici kod shodny s oznacenim loga (napr. "AFR")
 ### Update_user
 Upravi data ulozene u uzivatele. Jediny povinny parametr je id. Sloupce, ktere nemaji
 zadanou novou hodnotu jsou ponechany beze zmeny. Upravu muze provadet admin nebo samotny
