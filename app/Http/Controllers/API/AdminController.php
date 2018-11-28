@@ -12,16 +12,20 @@ use App\Http\Controllers\API\UserController;
 
 class AdminController extends Controller
 {
+    protected function abort_if_no_admin() {
+        $no_permission_msg = "Permission denied.";
+        if (!UserController::logged_in())
+            abort(403, $no_permission_msg);
+        if($_SESSION["user"] != "admin"){
+            abort(403, $no_permission_msg);
+        }
+    }
     /**
      * adds new flight into flight table. User must be admin
      */
     public function add_flight(Request $request)
     {
-        if (!UserController::logged_in())
-            abort(403, "Permission denied.");
-        if($_SESSION["user"] != "admin"){
-            abort(403, "Permission denied.");
-        }
+        $this->abort_if_no_admin();
         if(!$request->input('flight_number') ||
             !$request->input('airplane') ||
             !$request->input('airline') ||
@@ -51,11 +55,7 @@ class AdminController extends Controller
      */
     public function add_airline(Request $request)
     {
-        if (!UserController::logged_in())
-            abort(403, "Permission denied.");
-        if($_SESSION["user"] != "admin"){
-            abort(403, "Permission denied.");
-        }
+        $this->abort_if_no_admin();
         if(!$request->input('airline') ||
             !$request->input('full_name') ||
             !$request->input('nationality') ||
@@ -82,11 +82,7 @@ class AdminController extends Controller
      */
     public function add_airport(Request $request)
     {
-        if (!UserController::logged_in())
-            abort(403, "Permission denied.");
-        if($_SESSION["user"] != "admin"){
-            abort(403, "Permission denied.");
-        }
+        $this->abort_if_no_admin();
         if(!$request->input('airport_code') ||
             !$request->input('city') ||
             !$request->input('country') ) {
@@ -108,11 +104,7 @@ class AdminController extends Controller
      */
     public function add_airplane(Request $request)
     {
-        if (!UserController::logged_in())
-            abort(403, "Permission denied.");
-        if($_SESSION["user"] != "admin"){
-            abort(403, "Permission denied.");
-        }
+        $this->abort_if_no_admin();
         if(!$request->input('producer') ||
             !$request->input('model') ||
             !$request->input('fclass_seats') ||
@@ -143,12 +135,7 @@ class AdminController extends Controller
         if(!$request->input('airline')){
             abort(400, "Missing airline identification.");
         }
-        if(!UserController::logged_in()){
-            abort(403, "Permission denied.");          
-        }
-        if($_SESSION["user"] != "admin"){
-            abort(403, "Permission denied.");          
-        }
+        $this->abort_if_no_admin();
         try{
             if($request->input('full_name')){
                 DB::table('airlines')->where('airline', $request->input('airline'))->update(['full_name' => $request->input('full_name')]);
@@ -224,16 +211,87 @@ class AdminController extends Controller
         return "deleted";
     }
 
-    // todo
-    /* public function delete_airline(Request $request) {
+    /**
+     * Removes flight and all its dependencies from database
+     */
+    protected function delete_flight($flight_number) {
+        DB::table('tickets')->where('flight', $flight_number)->delete();
+        $deleted = DB::table('flights')->where('flight_number', $flight_number)->delete();
+        if (!$deleted) {
+            abort(400, 'Not found rows for delete in table flights');
+        }
+    }
+
+
+    /**
+     * Parses input parameters and checks if admin logged, then remove flight from DB
+     */
+    public function user_delete_flight(Request $request) {
+        $this->abort_if_no_admin();
+        if(!$request->input('flight_number'))
+            abort(400, "Missing flight id.");
+        $this->delete_flight($request->input('flight_number'));
+    }
+    
+    /**
+     * Removes airplane from DB and all it's dependencies
+     */
+    protected function delete_airplane($airplane_id) {
+        $flights = DB::table('flights')->where('airplane', '=', $airplane_id)->get();
+        foreach($flights as $flight) {
+            $this->delete_flight($flight->flight_number);
+        }
+        $deleted = DB::table('airplanes')->where('id', $airplane_id)->delete();
+        if (!$deleted)
+            abort(400, 'Not found rows for delete in table airplanes');
+    }
+
+    /**
+     * Parses input parameters and checks if admin logged, then remove airplane from DB
+     */
+    public function user_delete_airplane(Request $request) {
+        $this->abort_if_no_admin();
+        if(!$request->input('airplane'))
+            abort(400, "Missing airplane id.");
+        
+        $this->delete_airplane($request->input('airplane'));
+    }
+
+    /**
+     * Parses input parameters and checks if admin logged, then remove flight from DB and also remove all it's dependencies
+     */
+    public function user_delete_airline(Request $request) {
+        $this->abort_if_no_admin();
+
+        if(!$request->input('airline'))
+            abort(400, "Missing airline id.");
+        $airplanes = DB::table('airplanes')->where('airline', '=', $request->input('airline'))->get();
+        foreach($airplanes as $airplane) {
+            $this->delete_airplane($airplane->id);
+        }
+        $flights = DB::table('flights')->where('airline', '=', $request->input('airline'))->get();
+        foreach($flights as $flight) {
+            $this->delete_flight($flight->flight_number);
+        }
+        $deleted = DB::table('airlines')->where('airline', $request->input('airline'))->delete();
+        if (!$deleted)
+            abort(400, 'Not found rows for delete in table airlines');
+    }
+
+    /**
+     * Returns JSON containing information about all users in DB
+     */
+    public function get_users () {
+        $this->abort_if_no_admin();
+        $users = DB::table('users')->get();
+
+        $user_arr = array();
+        foreach ($users as $user) {
+            array_push($user_arr, $user);
+        }
+        return json_encode($user_arr);
 
     }
 
-    public function delete_airplane(Request $request) {
 
-    }
-
-    public function delete_flight(Request $request) {
-
-    } */
 }

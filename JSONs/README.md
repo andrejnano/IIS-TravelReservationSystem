@@ -23,6 +23,23 @@ Všetky jedine argument **f2** GET requestu je voliteľný. Ostatné sú povinn�
 - **tickets** Povinný argument. Definuje počet lístkov, ktoré používateľ potrebuje. Celé číslo vačšie ako 0.
 - **class** Povinný argument. Trieda sedadla, let musí mať definovaný počet voľných sedadiel v tejto triede. Inak sa vráti error 409 niekto si zarezervoval sedadlo a už nieje dosť voľných.
 
+### airports
+Bez parametra. Vráti obsah tabuľky airports v podobe JSON
+
+### flights
+Bez parametra. Vráti obsah tabuľky flights v podobe JSON
+
+### airplanes
+Bez parametra. Vráti obsah tabuľky airplanes v podobe JSON
+
+### airlines
+Bez parametra. Vráti obsah tabuľky airlines v podobe JSON
+
+### users
+Bez parametra. Vráti obsah tabuľky users v podobe JSON. **Túto operáciu môže spustiť iba prihlásený administrátor.**
+
+
+
 ## POST requests
 ### Login
 Prihlásenie užívateľa
@@ -109,4 +126,26 @@ uzivatel, ktereho se zmena tyka. Pouze admin muze navic provest zmenu parametru 
 ### Delete_user
 Odstrani uzivatele se zadanym id z databaze. Opravneni ma pouze admin.
 
+### my_reservations
+Bez parametra. Iba pre prihláseného užívateľa. Vráti rezervácie daného užívateľa.
+### reservation_tickets
+Iba pre prihláseného užívateľa. Vráti obsah rezervácie to znamená všetky lístky, ktoré patria k rezervácii.
+#### parameter
+- **res_id** Číslo rezervácie, ktorú chce užívateľ zobraziť.
+### return_ticket
+Iba pre prihláseného užívateľa. Odstráni rezervovanú letenku z databázy.
+#### parameter
+- **ticket_id** Číslo letenky, ktorú chce užívateľ vrátiť.
+### delete_flight
+Iba pre admina. Odstráni let a všetky jeho závislosti z databázy.
+#### parameter
+- **flight_number** Identifikátor letu
+### delete_airplane
+Iba pre admina. odstráni lietadlo a všetky jeho závislosti z databázy.
+#### parameter
+- **airplane** Identifikátor lietadla
+### delete_airline
+Iba pre admina. Odstráni leteckú spoločnosť a všetky jej závislosti z databázy.
+#### parameter
+- **airline** Identifikátor leteckej spoločnosti vo formáte AA.
 ## V adresári sa nachádzajú vzorové súbory json s príkladmi použitia
