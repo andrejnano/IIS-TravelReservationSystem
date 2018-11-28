@@ -43,3 +43,9 @@ Route::middleware('api')->post('/update_user', 'API\AdminController@update_user'
 Route::middleware('api')->post('/delete_user', 'API\AdminController@delete_user');
 
 Route::middleware('api')->get('/airports', 'API\AirportController@get_airports');
+
+Route::middleware('api')->post('/my_reservations', 'API\ReservationController@my_reservations');
+
+Route::middleware('api')->post('/reservation_tickets', 'API\ReservationController@reservation_tickets');
+
+Route::middleware('api')->post('/return_ticket', 'API\ReservationController@return_ticket');

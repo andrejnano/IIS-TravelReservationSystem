@@ -22,24 +22,24 @@ class AdminController extends Controller
         if($_SESSION["user"] != "admin"){
             abort(403, "Permission denied.");
         }
-        if(!isset($request['flight_number']) ||
-            !isset($request['airplane']) ||
-            !isset($request['airline']) ||
-            !isset($request['departure_time']) ||
-            !isset($request['arrival_time']) ||
-            !isset($request['origin']) ||
-            !isset($request['destination']) ) {
+        if(!$request->input('flight_number') ||
+            !$request->input('airplane') ||
+            !$request->input('airline') ||
+            !$request->input('departure_time') ||
+            !$request->input('arrival_time') ||
+            !$request->input('origin') ||
+            !$request->input('destination') ) {
             abort(400, "Missing argument. Can not add this flight.");
         }
         try {
             DB::table('flights')->insert(
-                ['flight_number' => $request['flight_number'],
-                "departure_time" => $request['departure_time'],
-                "arrival_time" => $request['arrival_time'],
-                "airplane" => $request['airplane'],
-                "airline" => $request['airline'],
-                "origin" => $request['origin'],
-                "destination" => $request['destination']]
+                ['flight_number' => $request->input('flight_number'),
+                "departure_time" => $request->input('departure_time'),
+                "arrival_time" => $request->input('arrival_time'),
+                "airplane" => $request->input('airplane'),
+                "airline" => $request->input('airline'),
+                "origin" => $request->input('origin'),
+                "destination" => $request->input('destination')]
             );
         } catch (Exception $e) {
             abort(500, "Error in inserting flight into database.");
@@ -56,18 +56,18 @@ class AdminController extends Controller
         if($_SESSION["user"] != "admin"){
             abort(403, "Permission denied.");
         }
-        if(!isset($request['airline']) ||
-            !isset($request['full_name']) ||
-            !isset($request['nationality']) ||
-            !isset($request['hub']) ) {
+        if(!$request->input('airline') ||
+            !$request->input('full_name') ||
+            !$request->input('nationality') ||
+            !$request->input('hub') ) {
             abort(400, "Missing argument. Can not add this airline.");
         }
         try {
             DB::table('airlines')->insert(
-                ["airline" => $request['airline'],
-                "full_name" => $request['full_name'],
-                "nationality" => $request['nationality'],
-                "hub" => $request['hub']]
+                ["airline" => $request->input('airline'),
+                "full_name" => $request->input('full_name'),
+                "nationality" => $request->input('nationality'),
+                "hub" => $request->input('hub')]
             );
         } catch (Exception $e) {
             abort(500, "Error in inserting airline into database.");
@@ -84,16 +84,16 @@ class AdminController extends Controller
         if($_SESSION["user"] != "admin"){
             abort(403, "Permission denied.");
         }
-        if(!isset($request['airport_code']) ||
-            !isset($request['city']) ||
-            !isset($request['country']) ) {
+        if(!$request->input('airport_code') ||
+            !$request->input('city') ||
+            !$request->input('country') ) {
             abort(400, "Missing argument. Can not add this airline.");
         }
         try {
             DB::table('airports')->insert(
-                ["airport_code" => $request['airport_code'],
-                "city" => $request['city'],
-                "country" => $request['country']]
+                ["airport_code" => $request->input('airport_code'),
+                "city" => $request->input('city'),
+                "country" => $request->input('country')]
             );
         } catch (Exception $e) {
             abort(500, "Error in inserting airport into database.");
@@ -110,22 +110,22 @@ class AdminController extends Controller
         if($_SESSION["user"] != "admin"){
             abort(403, "Permission denied.");
         }
-        if(!isset($request['producer']) ||
-            !isset($request['model']) ||
-            !isset($request['fclass_seats']) ||
-            !isset($request['bclass_seats']) ||
-            !isset($request['eclass_seats']) ||
-            !isset($request['airline']) ) {
+        if(!$request->input('producer') ||
+            !$request->input('model') ||
+            !$request->input('fclass_seats') ||
+            !$request->input('bclass_seats') ||
+            !$request->input('eclass_seats') ||
+            !$request->input('airline') ) {
             abort(400, "Missing argument. Can not add this airplane.");
         }
         try {
             DB::table('airplanes')->insert(
-                ["producer" => $request['producer'],
-                "model" => $request['model'],
-                "fclass_seats" => $request['fclass_seats'],
-                "bclass_seats" => $request['bclass_seats'],
-                "eclass_seats" => $request['eclass_seats'],
-                "airline" => $request['airline']]
+                ["producer" => $request->input('producer'),
+                "model" => $request->input('model'),
+                "fclass_seats" => $request->input('fclass_seats'),
+                "bclass_seats" => $request->input('bclass_seats'),
+                "eclass_seats" => $request->input('eclass_seats'),
+                "airline" => $request->input('airline')]
             );
         } catch (Exception $e) {
             abort(500, "Error in inserting airplane into database.");
@@ -137,30 +137,30 @@ class AdminController extends Controller
      */
     public function update_user(Request $request)
     {
-        if(!isset($request['id'])){
+        if(!$request->input('id')){
             abort(400, "Missing user id.");
         }
         if(!UserController::logged_in()){
             abort(403, "Permission denied.");          
         }
-        if($_SESSION["user"] != "admin" && $_SESSION["uid"] != $request['id']){
+        if($_SESSION["user"] != "admin" && $_SESSION["uid"] != $request->input('id')){
             abort(403, "Permission denied.");          
         }
         try{
-            if(isset($request['first_name'])){
-                DB::table('users')->where('id', $request['id'])->update(['first_name' => $request['first_name']]);
+            if($request->input('first_name')){
+                DB::table('users')->where('id', $request->input('id'))->update(['first_name' => $request->input('first_name')]);
             }
-            if(isset($request['last_name'])){
-                DB::table('users')->where('id', $request['id'])->update(['last_name' => $request['last_name']]);
+            if($request->input('last_name')){
+                DB::table('users')->where('id', $request->input('id'))->update(['last_name' => $request->input('last_name')]);
             }
-            if(isset($request['email'])){
-                DB::table('users')->where('id', $request['id'])->update(['email' => $request['email']]);
+            if($request->input('email')){
+                DB::table('users')->where('id', $request->input('id'))->update(['email' => $request->input('email')]);
             }
-            if(isset($request['password'])){
-                DB::table('users')->where('id', $request['id'])->update(['password' => $request['password']]);
+            if($request->input('password')){
+                DB::table('users')->where('id', $request->input('id'))->update(['password' => $request->input('password')]);
             }
-            if(isset($request['is_admin']) && $_SESSION["user"] == "admin"){
-                DB::table('users')->where('id', $request['id'])->update(['is_admin' => $request['is_admin']]);
+            if($request->input('is_admin') && $_SESSION["user"] == "admin"){
+                DB::table('users')->where('id', $request->input('id'))->update(['is_admin' => $request->input('is_admin')]);
             }
         } catch (Exception $e) {
             abort(500, "Error in updating users database.");
@@ -172,7 +172,7 @@ class AdminController extends Controller
      */
     public function delete_user(Request $request)
     {
-        if(!isset($request['id'])){
+        if(!$request->input('id')){
             abort(400, "Missing user id.");
         }
         if(!UserController::logged_in()){
@@ -182,10 +182,23 @@ class AdminController extends Controller
             abort(403, "Permission denied.");          
         }
         try {
-            DB::table('users')->where('id', $request['id'])->delete();
+            DB::table('users')->where('id', $request->input('id'))->delete();
         } catch (Exception $e) {
             abort(500, "Error in deleting user from database.");
         }
         return "deleted";
     }
+
+    // todo
+    /* public function delete_airline(Request $request) {
+
+    }
+
+    public function delete_airplane(Request $request) {
+
+    }
+
+    public function delete_flight(Request $request) {
+
+    } */
 }
