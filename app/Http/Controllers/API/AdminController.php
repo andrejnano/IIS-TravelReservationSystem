@@ -101,6 +101,38 @@ class AdminController extends Controller
     }
 
     /**
+     * adds new airplane into airplanes table. User must be admin
+     */
+    public function add_airplane(Request $request)
+    {
+        if (!UserController::logged_in())
+            abort(403, "Permission denied.");
+        if($_SESSION["user"] != "admin"){
+            abort(403, "Permission denied.");
+        }
+        if(!isset($request['producer']) ||
+            !isset($request['model']) ||
+            !isset($request['fclass_seats']) ||
+            !isset($request['bclass_seats']) ||
+            !isset($request['eclass_seats']) ||
+            !isset($request['airline']) ) {
+            abort(400, "Missing argument. Can not add this airplane.");
+        }
+        try {
+            DB::table('airplanes')->insert(
+                ["producer" => $request['producer'],
+                "model" => $request['model'],
+                "fclass_seats" => $request['fclass_seats'],
+                "bclass_seats" => $request['bclass_seats'],
+                "eclass_seats" => $request['eclass_seats'],
+                "airline" => $request['airline']]
+            );
+        } catch (Exception $e) {
+            abort(500, "Error in inserting airplane into database.");
+        }
+    }
+
+    /**
      * updates data in users database. Request must be send by admin or updated user.
      */
     public function update_user(Request $request)
