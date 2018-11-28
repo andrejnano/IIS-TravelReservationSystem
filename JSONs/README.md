@@ -75,6 +75,15 @@ Vytvori nove letiste v databazi v tabulce airports. Request musi provadet admin.
 - **airport_code** unikatni retezec oznacujici letiste (napr. "LHR")
 - **city** retezec obsahujici cely nazev mesta
 - **country** retezec obsahujici cely nazev statu
+### Add_airplane
+Vytvori nove letadlo v databazi v tabulce airplanes. Request musi provadet admin.
+#### Vysvetlenie argumentov
+- **producer** retezec oznacujici vyrobce letadla
+- **model** retezec oznacujici model letadla
+- **fclass_seats** cislo udavajici pocet sedadel prvni tridy
+- **bclass_seats** cislo udavajici pocet sedadel business tridy
+- **eclass_seats** cislo udavajici pocet sedadel economy tridy
+- **airline** retezec oznacujici aerolinku (odkazujici do tabulky airlines, napr. "AF")
 ### Update_user
 Upravi data ulozene u uzivatele. Jediny povinny parametr je id. Sloupce, ktere nemaji
 zadanou novou hodnotu jsou ponechany beze zmeny. Upravu muze provadet admin nebo samotny

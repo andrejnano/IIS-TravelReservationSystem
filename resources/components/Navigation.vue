@@ -1,24 +1,21 @@
 <template>
-  <b-navbar toggleable="md" class="navbar-expand-lg navbar-light bg-light">
-
-    <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-    <b-navbar-brand :to="{name: 'landing'}" exact active class="d-inline-block align-top">
-      Home
-    </b-navbar-brand>
-
-    <b-collapse is-nav id="nav_collapse">
-      <b-navbar-nav>
-        <b-nav-item :to="{name: 'login'}">Login</b-nav-item>
-        <b-nav-item :to="{name: 'register'}">Register</b-nav-item>
-      </b-navbar-nav>
-
-      <b-navbar-nav class="ml-auto">
-        <b-nav-item :to="{name: 'help'}">How to search for flights?</b-nav-item>
-        <b-nav-item :to="{name: 'faq'}">FAQ</b-nav-item>
-        <b-nav-item :to="{name: 'contact'}">Contact</b-nav-item>
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
+  <v-toolbar app dark color="primary">
+    <v-toolbar-items>
+      <v-btn flat to="/">
+        <v-icon>airplanemode_active</v-icon>
+      </v-btn>
+    </v-toolbar-items>
+    <v-spacer></v-spacer>
+    <v-toolbar-items>
+      <v-btn flat to="/about">About</v-btn>
+      <v-btn flat to="/contact">Contact</v-btn>
+    </v-toolbar-items>
+    <v-spacer></v-spacer>
+    <v-toolbar-items>
+      <v-btn to="/login" flat>Sign In</v-btn>
+      <v-btn to="/register" flat color='accent'>Register</v-btn>
+    </v-toolbar-items>
+  </v-toolbar>
 </template>
 
 <script>
