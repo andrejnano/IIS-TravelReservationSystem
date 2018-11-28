@@ -6,12 +6,17 @@ Vue.config.performance = true;
 
 // Setup Vue Router
 import VueRouter from 'vue-router';
-import BootstrapVue from 'bootstrap-vue'
 import VueResource from 'vue-resource';
-
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+import '@mdi/font/css/materialdesignicons.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 Vue.use(VueRouter);
-Vue.use(BootstrapVue);
+Vue.use(Vuetify, {
+  iconfont: 'mdi'
+});
+
 Vue.use(VueResource);
 
 
@@ -22,9 +27,7 @@ import Results from './views/Results.vue';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
 
-
-import Help from './views/Help.vue';
-import FAQ from './views/FAQ.vue';
+import About from './views/About.vue';
 import Contact from './views/Contact.vue';
 
 // create new Router, handling SPA routes
@@ -42,14 +45,9 @@ const router = new VueRouter({
       component: Search
     },
     {
-      path: '/help',
-      name: 'help',
-      component: Help
-    },
-    {
-      path: '/faq',
-      name: 'faq',
-      component: FAQ
+      path: '/about',
+      name: 'about',
+      component: About
     },
     {
       path: '/contact',

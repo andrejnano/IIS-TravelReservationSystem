@@ -1,32 +1,56 @@
 <template>
-  <div id="results-view">
+  <v-content>
     <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
-
-    <b-container id="content" fluid>
-      <b-row>
-
-        <b-col cols="12" sm="12" md="4" lg="4">
-          <aside class='side-container'>
-            <flight-search-form
+    <v-container fluid>
+      <v-layout ma-2 row align-start fill-height>
+        <v-flex ma-2 xs12 sm5 md4 lg4>
+          <v-container fluid>
+              <flight-search-form
               v-bind="formValuesToPass"
               @searchSubmited="search">
             </flight-search-form>
-          </aside>
-        </b-col>
+          </v-container>
+        </v-flex>
 
-        <b-col cols="12" sm="12" md="8" lg="8">
-          <main role='main' class='main'>
-            <flight-result-component
-              v-for="result in results"
-              v-bind="result"
-              :key="result.price">
-            </flight-result-component>
-          </main>
-        </b-col>
+        <v-flex ma-2 xs12 sm6 md7 lg4>
+          <v-container fluid>
+            <v-layout row>
+              <v-flex xs12>
+                <v-card class="layout column">
+                  <v-toolbar card prominent color="info" dark>
+                    <v-toolbar-title>Found these results:</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-tooltip top>
+                      <v-btn slot="activator" icon><v-icon>monetization_on</v-icon></v-btn>
+                      <span>Sort by price</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <v-btn slot="activator" icon><v-icon>access_time</v-icon></v-btn>
+                      <span>Sort by flight time</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <v-btn slot="activator" icon><v-icon>local_airport</v-icon></v-btn>
+                      <span>Sort by number of changes</span>
+                    </v-tooltip>
+                  </v-toolbar>
 
-      </b-row>
-    </b-container>
-  </div>
+                  <v-divider></v-divider>
+
+                  <v-list two-line>
+                    <flight-result-component
+                      v-for="result in sortedByPrice"
+                      v-bind="result"
+                      :key="result.price">
+                    </flight-result-component>
+                  </v-list>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-content>
 </template>
 
 <script>
@@ -40,22 +64,6 @@ Date.prototype.addDays = function(days) {
   date.setDate(date.getDate() + days);
   return date;
 }
-
-// function FlightResult({ airline: {airline, full_name, nationality, hub},
-//                         airplane: {airline, model, producer},
-//                         departure_time,
-//                         destination: {airport, city, country},
-//                         flight_number,
-//                         flight_time,
-//                         origin: {airport, city, country},
-//                         price,
-//                         seat_class,
-//                         tickets
-// }) {
-//   this.origin = origin;
-//   this.destination = destination;
-//   this.price = price;
-// }
 
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
@@ -87,6 +95,7 @@ export default {
     return {
       isLoading: false,
       fullPage: true,
+      sortByPrice: true,
       results: [],
       formValuesToPass: {
         isRoundTrip: JSON.parse(this.$route.query.isRoundTrip),
@@ -99,6 +108,17 @@ export default {
         priceMax: JSON.parse(this.$route.query.priceMax),
       },
     }
+  },
+  computed: {
+    sortedByPrice: function() {
+      function comparePrice(a,b) {
+        if (a.result.price < b.result.price) { return -1; }
+        else if (a.result.price > b.result.price) { return 1; }
+        else return 0;
+      }
+      console.log(this.results.sort(comparePrice));
+      return this.results.sort(comparePrice); // return sorted by price
+    },
   },
   methods: {
     search(formValues) {
@@ -160,14 +180,6 @@ export default {
 
   // global stylesheet
   @import '../design/style';
-
-  aside.side-bar {
-
-  }
-
-  main.main {
-
-  }
 
   #loading {
     position: fixed;

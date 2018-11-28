@@ -1,42 +1,155 @@
 <template>
-  <div class='flight-search-wrap'>
-    <form v-on:submit.prevent class='flight-search-form'>
-      <h2 class='flight-search-form__heading'>Flight Search</h2>
+  <v-card class="layout column" light>
+      <v-toolbar card prominent color="info" dark>
+        <v-toolbar-title><v-icon>search</v-icon>Search for flights</v-toolbar-title>
+      </v-toolbar>
+      <v-divider></v-divider>
+      <v-card-text class="text-xs-center">
+        <v-btn-toggle v-model="toggleRoundTrip">
+          <v-btn flat @click="setRoundTrip">
+            Round trip
+          </v-btn>
+          <v-btn flat @click="setOneWay">
+            One way
+          </v-btn>
+        </v-btn-toggle>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-card-text>
+        <v-autocomplete
+          v-model="FORMorigin"
+          :items="destinations"
+          :loading="isLoading"
+          :search-input.sync="searchDestination"
+          color="white"
+          hide-no-data
+          hide-selected
+          item-text="full"
+          item-value="code"
+          label="Origin"
+          placeholder="From where?"
+          prepend-icon="mdi-flight-takeoff"
+          return-object
+        ></v-autocomplete>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-expand-transition>
+        <v-list v-if="model" class="blue lighten-3">
+          <v-list-tile
+            v-for="(field, i) in fields"
+            :key="i"
+          >
+            <v-list-tile-content>
+              <v-list-tile-title v-text="field.value"></v-list-tile-title>
+              <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-expand-transition>
 
-      <div class='flight-search-form__group'>
-        <button @click="setRoundTrip" class="flight-search-form__input-option" v-bind:class="{ selected: FORMisRoundTrip }">Round Trip</button>
-        <button @click="setOneWay" class='flight-search-form__input-option' v-bind:class="{ selected: FORMisOneWay }">One way</button>
-      </div>
+      <v-card-text>
+        <v-autocomplete
+        v-model="FORMdestination"
+        :items="destinations"
+        :loading="isLoading"
+        :search-input.sync="searchDestination"
+        color="white"
+        hide-no-data
+        hide-selected
+        item-text="full"
+        item-value="code"
+        label="Origin"
+        placeholder="To where?"
+        prepend-icon="mdi-flight-landing"
+        return-object
+        ></v-autocomplete>
+      </v-card-text>
+      <v-divider></v-divider>
+      <v-expand-transition>
+        <v-list v-if="model" class="blue lighten-3">
+          <v-list-tile
+            v-for="(field, i) in fields"
+            :key="i"
+          >
+            <v-list-tile-content>
+              <v-list-tile-title v-text="field.value"></v-list-tile-title>
+              <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-expand-transition>
 
-      <div class='flight-search-form__group'>
-        <div class='flight-search-form__input-text'>
-          <label class='flight-search-form__input-text-label' for="origin">Origin:</label>
-          <!-- <input class='flight-search-form__input-text-field' id="origin" v-model="origin" placeholder="From where?"> -->
-          <model-list-select
-            :list="destinations"
-            option-value="code"
-            option-text="full"
-            v-model="FORMorigin"
-            placeholder="From where?"
-            @searchchange="searchDestination">
-          </model-list-select>
-        </div>
+      <!-- calendars -->
 
-        <div class='flight-search-form__input-text'>
-          <label class='flight-search-form__input-text-label' for="destination">Destination:</label>
-          <!-- <input class='flight-search-form__input-text-field' v-model="destination" placeholder="To where?"> -->
-          <model-list-select
-            :list="destinations"
-            option-value="code"
-            option-text="full"
-            v-model="FORMdestination"
-            placeholder="To where?"
-            @searchchange="searchDestination">
-          </model-list-select>
-        </div>
-      </div>
+      <v-card-text>
+        <v-container fluid>
+          <v-layout row>
+            <v-flex xs6>
+              <v-menu
+                :close-on-content-click="false"
+                v-model="departureDateMenu"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="FORMdepartureDate"
+                  label="Departure date"
+                  prepend-icon="event"
+                  readonly
+                ></v-text-field>
 
-      <div class='flight-search-form__group'>
+                <v-date-picker v-model="FORMdepartureDate" @input="menu2 = false"></v-date-picker>
+              </v-menu>
+            </v-flex>
+            <v-flex xs6>
+              <v-menu
+                :close-on-content-click="false"
+                v-model="departureDateMenu"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  v-model="FORMdepartureDate"
+                  label="Departure date"
+                  prepend-icon="event"
+                  readonly
+                ></v-text-field>
+
+                <v-date-picker v-model="FORMdepartureDate" @input="menu2 = false"></v-date-picker>
+              </v-menu>
+            </v-flex>
+          </v-layout>
+        </v-container>
+    </v-card-text>
+
+    <v-card-text>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-subheader class="pl-0">Max: </v-subheader>
+          <v-slider
+            v-model="slider"
+            always-dirty
+            hint="Set the maximum price, you are willing to pay"
+            persistent-hint
+            thumb-label="always"
+            :max="sliderMax"
+            :min="sliderMin"
+          ></v-slider>
+        </v-flex>
+      </v-layout>
+    </v-card-text>
+
+      <!-- <div class='flight-search-form__group'>
         <div class='flight-search-form__input-select'>
           <label class='flight-search-form__input-select-label' for="departure-date">Departure date:</label>
           <datepicker :value="departureDate"
@@ -48,9 +161,9 @@
             v-model="FORMdepartureDate"
             name="departureDate">
           </datepicker>
-        </div>
+        </div> -->
 
-          <div class='flight-search-form__input-select'>
+          <!-- <div class='flight-search-form__input-select'>
             <transition name="fade">
               <label v-if="FORMisRoundTrip" class='flight-search-form__input-select-label' for="arrival-date" >
                 Arrival date:
@@ -68,17 +181,27 @@
                 name="arrivalDate">
               </datepicker>
             </transition>
-          </div>
-      </div>
+          </div> -->
 
       <div class='flight-search-form__group'>
         <vue-slider v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
       </div>
 
-      <button class='flight-search-form__input-btn btn' @click="searchSubmit">Search</button>
-    </form>
-
-  </div>
+      <v-card-text>
+        <v-btn
+          :loading="loadingSubmit"
+          :disabled="loadingSubmit"
+          color="info"
+          @click="searchSubmit"
+          large
+        >
+          Search
+          <span slot="submitLoader" class="custom-loader">
+            <v-icon light>cached</v-icon>
+          </span>
+        </v-btn>
+      </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -89,9 +212,7 @@ Date.prototype.addDays = function(days) {
   date.setDate(date.getDate() + days);
   return date;
 }
-
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import '@mdi/font/css/materialdesignicons.css'
 
 import DebugBox from './DebugBox.vue';
 import { ModelListSelect } from 'vue-search-select';
@@ -108,7 +229,8 @@ import {
 library.add(faPlaneDeparture)
 library.add(faPlaneArrival)
 
-let searchExport = [];
+
+import axios from 'axios'
 
 export default {
   name: 'FlightSearchForm',
@@ -124,6 +246,11 @@ export default {
   },
   data() {
     return {
+      submitLoader: null,
+      loadingSubmit: false,
+      departureDateMenu: false,
+      arrivalDateMenu: false,
+      toggleRoundTrip: 1,
       FORMisRoundTrip: this.isRoundTrip,
       FORMisOneWay: this.isOneWay,
       FORMorigin: this.origin,
@@ -139,6 +266,9 @@ export default {
         { code: 'LGW', full: 'London'},
       ],
       searchText: '',
+      slider: 450,
+      sliderMin: 1,
+      sliderMax: 3000,
       priceSlider: {
         value: [
           this.priceMin,
@@ -171,7 +301,62 @@ export default {
       calendar: {
         inputClass: 'flight-search-form__input-calendar-field',
         calendarClass: 'flight-search-form__input-calendar-day-selected'
-      }
+      },
+      model: null,
+      search: null,
+      isLoading: false,
+      entries: []
+    }
+  },
+  computed: {
+    fields() {
+      if (!this.model) return []
+
+      return Object.keys(this.model).map(key => {
+        return {
+          key,
+          value: this.model[key] || 'n/a'
+        }
+      })
+    },
+    items () {
+      return this.entries.map(entry => {
+          const Description = entry.Description.length > this.descriptionLimit
+            ? entry.Description.slice(0, this.descriptionLimit) + '...'
+            : entry.Description
+
+          return Object.assign({}, entry, { Description })
+      })
+    },
+  },
+  watch: {
+    search (val) {
+      // Items have already been loaded
+        if (this.items.length > 0) return;
+        // Items have already been requested
+        if (this.isLoading) return;
+
+        this.isLoading = true;
+
+        // Lazily load input items
+        axios.get('/airports')
+          .then(res => {
+            const { count, entries } = res.data
+            this.count = count
+            this.entries = entries
+          })
+          .catch(err => {
+            console.log(err)
+          })
+          .finally(() => (this.isLoading = false))
+    },
+    loader () {
+      const l = this.loader;
+      this[l] = !this[l]
+
+      setTimeout(( () => (this[l] = false), 3000));
+
+      this.loader = null;
     }
   },
   methods: {
@@ -234,116 +419,6 @@ export default {
 // global stylesheet
 @import '../design/style';
 
-.flight-search-wrap {
-  position: relative;
-  margin: var(--space-md);
-  padding: var(--space-md);
-  background: #fff;
-  border: 1px solid $color-border;
-  border-radius: 5px;
-
-  .flight-search-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
-
-    .flight-search-form__heading {
-      text-align: center;
-      color: $color-text-subtle;
-    }
-
-    .flight-search-form__group {
-      position: relative;
-      margin: var(--space-md) 0;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .flight-search-form__input-text {
-      cursor: pointer;
-      position: relative;
-      flex: 1;
-      width: 170px;
-      margin: var(--space-sm);
-      text-align: left;
-
-      .flight-search-form__input-text-field {
-        cursor: pointer;
-        display: block;
-        border: 1px solid $color-border;
-        outline: none;
-        background: transparent;
-        appearance: none;
-        padding: var(--space-xs);
-        min-width: 100%;
-      }
-      .flight-search-form__input-text-label {
-        display: block;
-        font-weight: bold;
-        font-size: var(--text-sm);
-      }
-    }
-    .flight-search-form__input-option {
-      cursor: pointer;
-      outline: none;
-      appearance: none;
-      flex-grow: 1;
-      padding: var(--space-xxs);
-      border: 1px solid $color-border;
-      background-color: $gray-1;
-    }
-
-    .flight-search-form__input-option.selected {
-      background-color: $white;
-      color: $primary;
-      font-weight: bold;
-      @include materialShadow--1;
-    }
-
-    .flight-search-form__input-select {
-      position: relative;
-      flex: 1;
-      width: 170px;
-      margin: var(--space-sm);
-      text-align: left;
-
-      .flight-search-form__input-calendar-field {
-        cursor: pointer;
-        display: block;
-        border: 1px solid $color-border;
-        border-radius: 5px;
-        outline: none;
-        background: transparent;
-        appearance: none;
-        padding: var(--space-xs);
-        width: 170px;
-      }
-
-      .flight-search-form__input-calendar-day-selected {
-        .selected {
-          background: $color-primary;
-          color: $white;
-          font-weight: bold;
-          border-radius: 100%;
-        }
-      }
-
-      .flight-search-form__input-select-label {
-        display: block;
-        font-weight: bold;
-        font-size: var(--text-sm);
-      }
-    }
-    .flight-search-form__input-btn {
-        margin: var(--space-md);
-        position: relative;
-    }
-  }
-}
-
-
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .slide-fade-enter-active {
@@ -357,4 +432,41 @@ export default {
   transform: translateX(10px);
   opacity: 0;
 }
+
+.custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

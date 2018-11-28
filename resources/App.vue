@@ -1,15 +1,29 @@
 <script>
 import Navigation from './components/Navigation.vue';
+import WebFontLoader from 'webfontloader'; // for asynchronous font loading
 
 export default {
   components: {
     'navigation': Navigation
+  },
+  mounted () {
+    WebFontLoader.load({
+      google: {
+        families: ['Ubuntu:300,400,700']
+      },
+      active: this.setFontLoaded
+    })
+  },
+  methods: {
+    setFontLoaded () {
+      this.$emit('font-loaded')
+    }
   }
 }
 </script>
 
 <template>
-  <div id="app">
+  <v-app id="app">
 
     <navigation></navigation>
 
@@ -17,7 +31,16 @@ export default {
       <router-view></router-view>
     </transition>
 
-  </div>
+    <v-footer color="primary darken-2">
+      <v-container fluid pa-1>
+        <v-layout row justify-start>
+          <v-flex xs6 class="text-white">
+            &copy; {{ new Date().getFullYear() }} —  <strong> &nbsp; Flight Reservation System</strong>&nbsp; @ FIT VUT, Brno
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-footer>
+  </v-app>
 </template>
 
 
