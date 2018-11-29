@@ -41,11 +41,11 @@ class ReservationController extends Controller
             abort(403);
         }
         try {
-            if (isset($request['res_id']) && isset($request['ticket_id']) && 
-            isset($request['email']) && isset($request['first_name']) && isset($request['last_name'])) {
+            if ($request->input('res_id') && $request->input('ticket_id') && 
+            $request->input('email') && $request->input('first_name') && $request->input('last_name')) {
                 $reservation = DB::table('reservations')
                     ->where([
-                    ['id','=', $request['res_id']],
+                    ['id','=', $request->input('res_id')],
                     ['created_by','=', $_SESSION["uid"]]
                     ])->first();
                 // reservation is not mine
@@ -53,7 +53,7 @@ class ReservationController extends Controller
                     abort(403);
                 
                 $ticket = DB::table('tickets')
-                ->where('id','=', $request['ticket_id'])->whereNull('reservation')->first();
+                ->where('id','=', $request->input('ticket_id'))->whereNull('reservation')->first();
                 if (!$ticket) {
                     abort(404);
                 }
@@ -62,12 +62,12 @@ class ReservationController extends Controller
                     abort(408);
                 }
                 DB::table('tickets')
-                ->where('id', $request['ticket_id'])
+                ->where('id', $request->input('ticket_id'))
                 ->update([
-                    'reservation' => $request['res_id'],
-                    'email' => $request['email'],
-                    'first_name' => $request['first_name'],
-                    'last_name' => $request['last_name']]);
+                    'reservation' => $request->input('res_id'),
+                    'email' => $request->input('email'),
+                    'first_name' => $request->input('first_name'),
+                    'last_name' => $request->input('last_name')]);
             } else {
                 abort(400);
             }
@@ -85,19 +85,20 @@ class ReservationController extends Controller
      */
     public function delete_reservation(Request $request) {
         if (!UserController::logged_in()) {
-            return "not logged";
-            // abort(403);
+            abort(403);
         }
         try {
-            if (isset($request['res_id'])) {
+            if ($request->input('res_id')) {
                 $reservation = DB::table('reservations')
-                    ->where('id', $request['res_id'])->first();
+                    ->where('id', $request->input('res_id'))->first();
 
                 // reservation is not mine
                 if ($reservation->created_by != $_SESSION["uid"])
                     abort(403);
                 DB::table('tickets')
                 ->where('reservation', '=', $reservation->id)->delete();
+                DB::table('reservations')
+                    ->where('id', $request->input('res_id'))->delete();
             } else {
                 abort(400);
             }
@@ -106,4 +107,111 @@ class ReservationController extends Controller
         }
             
     }
+
+
+    /**
+     * Returns all actual reservations created by current user
+     */
+    public function my_reservations() {
+        if (!UserController::logged_in()) {
+            abort(403);
+        }
+        try {
+            // $reservations = DB::table('reservations')
+            //     ->where([['created_by', '=', $_SESSION["uid"]], ['created_at', '>', time()]])->get();
+            $uid = DB::connection()->getPdo()->quote($_SESSION["uid"]);
+            // $time = Carbon::now();
+            $time = time();
+
+            $reservations = DB::select("
+            SELECT reservations.id, payment_status, reservations.created_at, MIN(flights.departure_time) as min_d, 
+                COUNT(*) as count, SUM(cost) as total_cost
+            FROM reservations, tickets, flights
+            WHERE reservations.created_by = $uid && tickets.reservation = reservations.id
+                && tickets.flight = flights.flight_number
+            GROUP BY reservations.id
+            HAVING MIN(flights.departure_time) > $time
+            ");
+            $reservation_arr_filled = array();
+            foreach ($reservations as $reservation) {
+                array_push($reservation_arr_filled, $reservation);
+            }
+            $empty = DB::select("
+            SELECT reservations.id, reservations.created_at
+            FROM reservations
+            WHERE reservations.created_by = $uid && NOT EXISTS (
+                SELECT null
+                FROM tickets
+                WHERE tickets.reservation = reservations.id
+            )
+            ");
+            $reservation_arr_empty = array();
+            foreach ($empty as $empty_r) {
+                array_push($reservation_arr_empty, $empty_r);
+            }
+
+            $dict['filled'] = $reservation_arr_filled;
+            $dict['empty'] = $reservation_arr_empty;
+            return json_encode($dict);
+        } catch (Exception $e) {
+            abort(500);
+        }   
+    }
+
+
+    /**
+     * Show tickets contained within reservation
+     *
+     * @param Request $request Request from frontend
+     * @return void
+     */
+    public function reservation_tickets (Request $request) {
+        if (!UserController::logged_in()) {
+            abort(403);
+        }
+        try {
+            if ($request->input('res_id')) {
+                $tickets = DB::table('tickets')->where('reservation', '=', $request->input('res_id'))->get();
+                $ticket_arr = array();
+                foreach ($tickets as $ticket) {
+                    array_push($ticket_arr, $ticket);
+                }
+                return json_encode($ticket_arr);
+            } else {
+                abort(400);
+            }
+        } catch (Exception $e) {
+            abort(500);
+        }   
+    }
+
+    /**
+     * Delete ticket and set seat as free
+     *
+     * @param Request $request Request from frontend
+     * @return void
+     */
+    public function return_ticket (Request $request) {
+        if (!UserController::logged_in()) {
+            abort(403);
+        }
+        try {
+            if ($request->input('ticket_id')) {
+                $ticket = DB::table('tickets')
+                    ->where('id', '=', $request->input('ticket_id'))->first();
+                // cannot delete someone's else ticket
+                if (DB::table('reservations')->where('id', '=', $ticket->reservation)->first()->created_by != $_SESSION['uid'])
+                    abort(403);
+                $deleted = DB::table('tickets')
+                    ->where('id', $request->input('ticket_id'))->delete();
+                if (!$deleted)
+                    abort(400);
+            } else {
+                abort(400);
+            }
+        } catch (Exception $e) {
+            abort(500);
+        }   
+    }
+
 }

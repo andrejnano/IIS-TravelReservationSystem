@@ -265,14 +265,14 @@ DELIMITER ;
 
   DELIMITER ;
 
-  CREATE TABLE search_records (
-    id        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    customer  INT NOT NULL,
-    flight    VARCHAR(6) NOT NULL,
+  -- CREATE TABLE search_records (
+  --   id        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  --   customer  INT NOT NULL,
+  --   flight    VARCHAR(6) NOT NULL,
 
-    CONSTRAINT searched_by_customer_fk  FOREIGN KEY (customer)  REFERENCES users(id),
-    CONSTRAINT searched_for_flight_fk   FOREIGN KEY (flight)    REFERENCES flights(flight_number)
-  );
+  --   CONSTRAINT searched_by_customer_fk  FOREIGN KEY (customer)  REFERENCES users(id),
+  --   CONSTRAINT searched_for_flight_fk   FOREIGN KEY (flight)    REFERENCES flights(flight_number)
+  -- );
 
 DROP TRIGGER IF EXISTS tickets_trig;
 DELIMITER $$
@@ -955,11 +955,11 @@ VALUES (512, 4, 'AA0001', 'E', '2019-02-01 23:42:12.00');
 
 
 -- insert search records
-INSERT INTO search_records (customer, flight)
-VALUES (1, 'BA0304');
+-- INSERT INTO search_records (customer, flight)
+-- VALUES (1, 'BA0304');
 
-INSERT INTO search_records (customer, flight)
-VALUES (1, 'LH1724');
+-- INSERT INTO search_records (customer, flight)
+-- VALUES (1, 'LH1724');
 
-INSERT INTO search_records (customer, flight)
-VALUES (1, 'EK1234');
+-- INSERT INTO search_records (customer, flight)
+-- VALUES (1, 'EK1234');

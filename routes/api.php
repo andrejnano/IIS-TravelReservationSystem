@@ -38,8 +38,30 @@ Route::middleware('api')->post('/add_airport', 'API\AdminController@add_airport'
 
 Route::middleware('api')->post('/add_airplane', 'API\AdminController@add_airplane');
 
+Route::middleware('api')->post('/update_airline', 'API\AdminController@update_airline');
+
 Route::middleware('api')->post('/update_user', 'API\AdminController@update_user');
 
 Route::middleware('api')->post('/delete_user', 'API\AdminController@delete_user');
 
-Route::middleware('api')->get('/airports', 'API\AirportController@get_airports');
+Route::middleware('api')->post('/my_reservations', 'API\ReservationController@my_reservations');
+
+Route::middleware('api')->post('/reservation_tickets', 'API\ReservationController@reservation_tickets');
+
+Route::middleware('api')->post('/return_ticket', 'API\ReservationController@return_ticket');
+
+Route::middleware('api')->post('/delete_flight', 'API\AdminController@user_delete_flight');
+
+Route::middleware('api')->post('/delete_airplane', 'API\AdminController@user_delete_airplane');
+
+Route::middleware('api')->post('/delete_airline', 'API\AdminController@user_delete_airline');
+
+Route::middleware('api')->get('/airports', 'API\GetTableController@get_airports');
+
+Route::middleware('api')->get('/flights', 'API\GetTableController@get_flights');
+
+Route::middleware('api')->get('/airplanes', 'API\GetTableController@get_airplanes');
+
+Route::middleware('api')->get('/airlines', 'API\GetTableController@get_airlines');
+
+Route::middleware('api')->get('/users', 'API\AdminController@get_users');

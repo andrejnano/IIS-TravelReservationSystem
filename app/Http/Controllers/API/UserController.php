@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     /**
      * Determines if user is logged in, if yes it will set new timestamp
-     * If timestamp is older, then 10 minutes client is logged out
+     * If timestamp is older, then 30 minutes client is logged out
      *
      * @return boolean true if logged false otherwise
      */
@@ -22,8 +22,8 @@ class UserController extends Controller
         session_start();
         if (!isset($_SESSION['uid']) || !isset($_SESSION['user']))
             return false;
-        if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 600)) {
-            // last request was more than 10 minutes ago
+        if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
+            // last request was more than 30 minutes ago
             session_unset();     // unset $_SESSION variable for the run-time 
             session_destroy();   // destroy session data in storage
         } else if (isset($_SESSION["user"]) && DB::table('users')->where('id', '=', $_SESSION['uid'])->first()) {
@@ -44,11 +44,11 @@ class UserController extends Controller
             abort(400);
         if (isset($_SESSION["user"]))
             redirect('/dashboard');
-        $user = DB::table('users')->where('email', '=', $request['email'])->first();
+        $user = DB::table('users')->where('email', '=', $request->input('email'))->first();
         if (!$user) {
             abort(403);
         }
-        else if (Hash::check($request['password'], $user->password)) {
+        else if (Hash::check($request->input('password'), $user->password)) {
             if ($user->is_admin) {
                 $_SESSION["user"] = "admin";
             } else {
@@ -70,23 +70,22 @@ class UserController extends Controller
      */
     public function register(Request $request) {
         if ($this->logged_in())
-            redirect('/dashboard');
-        if (!isset($request['first_name']) || !isset($request['last_name']) ||
-            !isset($request['email']) || !isset($request['password'])) {
-            
-            abort(400);
+        redirect('/dashboard');
+        if (!$request->input('first_name') || !$request->input('last_name') ||
+        !$request->input('email') || !$request->input('password')) {
+            abort(400, 'Parameter from first_name, last_name, email, password is missing');
         }
-        $user = DB::table('users')->where('email', '=', $request['email'])->first();
+        $user = DB::table('users')->where('email', '=', $request->input('email'))->first();
         if ($user) {
-            abort(409);
+            abort(409, 'User already registered');
         }
         else {
             try {
                 DB::table('users')->insert([
-                    "first_name" => $request["first_name"],
-                    "last_name" => $request["last_name"],
-                    "email" => $request["email"],
-                    "password" => Hash::make($request["password"])
+                    "first_name" => $request->input("first_name"),
+                    "last_name" => $request->input("last_name"),
+                    "email" => $request->input("email"),
+                    "password" => Hash::make($request->input("password"))
                     ]);
                 $_SESSION["user"] = "user";
                 $_SESSION["uid"] = DB::getPdo()->lastInsertId();
