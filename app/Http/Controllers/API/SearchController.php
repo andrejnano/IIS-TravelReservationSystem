@@ -382,15 +382,15 @@ class SearchController extends Controller
         return $return_arr;
     }
 
-    // public function show(Request $request)
-    // {
-    //     try {
-    //         $return_arr = $this->search_flights($request);
-    //         return json_encode($return_arr);
-    //     } catch (Exception $e) {
-    //         abort(400);
-    //     }
-    // }
+    public function show(Request $request)
+    {
+        try {
+            $return_arr = $this->search_flights($request);
+            return json_encode($return_arr);
+        } catch (Exception $e) {
+            abort(400);
+        }
+    }
 
     /**
      * Convert long name of class to short
