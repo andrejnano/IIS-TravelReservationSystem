@@ -11,20 +11,50 @@
       <v-btn flat to="/contact">Contact</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
-    <v-toolbar-items>
-      <v-btn to="/login" flat>Sign In</v-btn>
-      <v-btn to="/register" flat color='accent'>Register</v-btn>
-    </v-toolbar-items>
+    <template>
+      <v-toolbar-items v-if="isLoggedIn">
+        <v-btn @click="logout" flat>Log out</v-btn>
+      </v-toolbar-items>
+      <v-toolbar-items v-else>
+        <v-btn to="/login" flat>Sign In</v-btn>
+        <v-btn to="/register" flat color='accent'>Register</v-btn>
+      </v-toolbar-items>
+    </template>
   </v-toolbar>
 </template>
 
 <script>
 
-  import 'bootstrap/dist/css/bootstrap.css';
-  import 'bootstrap-vue/dist/bootstrap-vue.css';
+import axios from 'axios';
 
 export default {
+  data() {
+    return {
+      isLoggedIn: true,
+    }
+  },
+  updated() {
+    axios.get('/api/session').then((response) => {
 
+      if (response.status.code == 200)
+      {
+        this.isLoggedIn = true;
+      }
+      else
+      {
+        this.isLoggedIn = false;
+      }
+
+    });
+  },
+  methods: {
+    logout() {
+      axios.post('/api/logout').then((response) => {
+        console.log(response);
+        this.isLoggedIn = false;
+      });
+    }
+  }
 }
 </script>
 

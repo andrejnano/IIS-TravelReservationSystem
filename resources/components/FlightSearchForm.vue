@@ -25,7 +25,7 @@
         <v-autocomplete
         v-model="FORMorigin"
         :items="items"
-        :value="FORMorigin"
+        :menu-props="FORMorigin"
         :search-input.sync="searchOriginAirport"
         :loading="originLoading"
         item-text="city"
@@ -46,7 +46,7 @@
         <v-autocomplete
         v-model="FORMdestination"
         :items="items"
-        :value="FORMdestination"
+        :menu-props="FORMdestination"
         :search-input.sync="searchDestinationAirport"
         :loading="destinationLoading"
         item-text="city"
@@ -119,8 +119,6 @@
       </v-card-text>
 
       <v-divider></v-divider>
-
-
 
 
       <!-- SUBMIT BUTTON  -->
@@ -196,14 +194,14 @@ export default {
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate.toISOString().substr(0,10),
       FORMarrivalDate: this.arrivalDate.toISOString().substr(0,10),
-      destinations: [
-        { code: 'VIE', full: 'Vienna' },
-        { code: 'JFK', full: 'New York' },
-        { code: 'CDG', full: 'Paris' },
-        { code: 'PRG', full: 'Prague' },
-        { code: 'HEL', full: 'Helsinki'},
-        { code: 'LGW', full: 'London'},
-      ],
+      // destinations: [
+      //   { code: 'VIE', full: 'Vienna' },
+      //   { code: 'JFK', full: 'New York' },
+      //   { code: 'CDG', full: 'Paris' },
+      //   { code: 'PRG', full: 'Prague' },
+      //   { code: 'HEL', full: 'Helsinki'},
+      //   { code: 'LGW', full: 'London'},
+      // ],
       searchText: '',
       slider: 450,
       sliderMin: 1,

@@ -2,7 +2,7 @@
   <v-content>
     <v-container fluid>
       <v-layout row justify-center>
-        <v-flex xs4 pa-4 ma-4>
+        <v-flex xs10 sm8 md6 lg4 pa-4 ma-4>
           <v-card class="elevation-2">
             <v-card-title class="headline">Sign up!</v-card-title>
             <v-card-text>
@@ -42,8 +42,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 
+import axios from 'axios'
+axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
 export default {
     data: () => ({
@@ -65,11 +66,18 @@ export default {
       submit () {
         if (this.$refs.form.validate()) {
           // Native form submission is not yet supported
-
           axios.post('/api/login', {
             email: this.email,
             password: this.password,
-          })
+          }).then((response) => {
+
+            if (response.status == 200) {
+              console.log("LOGIN OK! : 200");
+
+            } else {
+              console.log("LOGIN FAILED! : " + response.status);
+            }
+          });
         }
       },
       clear () {

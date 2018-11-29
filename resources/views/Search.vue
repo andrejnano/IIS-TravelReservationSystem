@@ -67,17 +67,17 @@
     }
   }
 
-
+  // default form values
   const initialFormValues = {
     isRoundTrip: true,
     isOneWay: false,
     origin: {
-      code: 'VIE',
-      full: 'Vienna'
+      airport_code: 'VIE',
+      city: 'Vienna'
     },
     destination: {
-      code: '',
-      full: ''
+      airport_code: '',
+      city: ''
     },
     departureDate: new Date(),
     arrivalDate: new Date(),

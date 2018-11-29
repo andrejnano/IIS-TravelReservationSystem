@@ -126,12 +126,7 @@ export default {
       this.isLoading = true;
       this.results = [];  // reset the results
 
-
       // TODO: prepare query string
-      //localhost:8080/api/search?origin={origin.code}&destination={destination.code}
-      //localhost:8080/api/search?origin=VIE&destination=CDG
-
-      // prepare the query from form data
       let query = `/api/search?origin=${formValues.origin.airport_code}&destination=${formValues.destination.airport_code}`;
 
       // perform the query
@@ -148,9 +143,9 @@ export default {
         let responseResults = response.data;
 
         responseResults.forEach(flightResult => {
-
           // TODO: check if result returned correctly
           console.log(flightResult.there);
+          console.log(flightResult.back);
 
           // add result to the view model
           this.results.push( { result: flightResult.there } );
