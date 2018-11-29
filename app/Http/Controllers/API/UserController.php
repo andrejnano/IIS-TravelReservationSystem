@@ -120,6 +120,8 @@ class UserController extends Controller
             }
             return json_encode($user_arr[0]);
         }
-        abort(401, "User not logged");
+        else{
+            abort(401, "User not logged");
+        }
     }
 }
