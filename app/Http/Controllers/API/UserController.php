@@ -110,4 +110,16 @@ class UserController extends Controller
             abort(400);
         }
     }
+
+    public function session() {
+        if($this->logged_in()){
+            $user = DB::table('users')->select('first_name', 'last_name')->where('id', $_SESSION["uid"])->get();
+            $user_arr = array();
+            foreach ($user as $u) {
+                array_push($user_arr, $u);
+            }
+            return json_encode($user_arr[0]);
+        }
+        abort(401, "User not logged");
+    }
 }
