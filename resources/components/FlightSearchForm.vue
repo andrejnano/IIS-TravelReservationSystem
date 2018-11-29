@@ -25,6 +25,7 @@
         <v-autocomplete
         v-model="FORMorigin"
         :items="items"
+        :value="FORMorigin"
         :search-input.sync="searchOriginAirport"
         :loading="originLoading"
         item-text="city"
@@ -45,6 +46,7 @@
         <v-autocomplete
         v-model="FORMdestination"
         :items="items"
+        :value="FORMdestination"
         :search-input.sync="searchDestinationAirport"
         :loading="destinationLoading"
         item-text="city"
@@ -75,6 +77,7 @@
             :value="computedDepartureDateFormatted"
             clearable
             label="Date of departure"
+            prepend-icon="mdi-calendar"
             readonly
           ></v-text-field>
           <v-date-picker
@@ -96,6 +99,7 @@
             :value="computedArrivalDateFormatted"
             clearable
             label="Date of arrival"
+            prepend-icon="mdi-calendar"
             readonly
           ></v-text-field>
           <v-date-picker

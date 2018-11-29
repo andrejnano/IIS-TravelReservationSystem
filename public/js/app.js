@@ -46772,6 +46772,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 // custom mutation of date class
@@ -53120,6 +53124,7 @@ var render = function() {
           _c("v-autocomplete", {
             attrs: {
               items: _vm.items,
+              value: _vm.FORMorigin,
               "search-input": _vm.searchOriginAirport,
               loading: _vm.originLoading,
               "item-text": "city",
@@ -53155,6 +53160,7 @@ var render = function() {
           _c("v-autocomplete", {
             attrs: {
               items: _vm.items,
+              value: _vm.FORMdestination,
               "search-input": _vm.searchDestinationAirport,
               loading: _vm.destinationLoading,
               "item-text": "city",
@@ -53212,6 +53218,7 @@ var render = function() {
                   value: _vm.computedDepartureDateFormatted,
                   clearable: "",
                   label: "Date of departure",
+                  "prepend-icon": "mdi-calendar",
                   readonly: ""
                 },
                 slot: "activator"
@@ -53264,6 +53271,7 @@ var render = function() {
                   value: _vm.computedArrivalDateFormatted,
                   clearable: "",
                   label: "Date of arrival",
+                  "prepend-icon": "mdi-calendar",
                   readonly: ""
                 },
                 slot: "activator"
