@@ -144,54 +144,59 @@ class SearchController extends Controller
      * @param stdClass $r One row of flight from select
      * @return int number of all free seats
      */
-    protected function get_free_seats($r) {
-        return [
-            $r->fclass_seats_free - $this->count_full_class($r, "F"),
-            $r->bclass_seats_free - $this->count_full_class($r, "B"),
-            $r->eclass_seats_free - $this->count_full_class($r, "E")
-        ];
-    }
+    // protected function get_free_seats($r, $price) {
+    //     return [
+    //         [$r->fclass_seats_free - $this->count_full_class($r, "F"), class_price($r, 'first', $price)],
+    //         [$r->bclass_seats_free - $this->count_full_class($r, "B"), class_price($r, 'business', $price)],
+    //         [$r->eclass_seats_free - $this->count_full_class($r, "E"), class_price($r, 'economy', $price)]
+    //     ];
+    // }
     /**
      * Checks if enough seats free in specified class, if no class selected cheapest possible returned
-     *
-     * @param int number of tickets requested
-     * @param int $number_of_tickets number of tickets requested by user
-     * @param boolean $class_selected did user select class
-     * @param string $seat_class  'first', 'business', 'economy'
      * @return string '' if not enough empty seats, or class selected
      */
-    protected function check_tmp_reservations($r, $number_of_tickets, $class_selected, $seat_class) {
-        [$f_free, $b_free, $e_free] = $this->get_free_seats($r);
+    protected function check_tmp_reservations($r, Request $request, $price) {
+        $number_of_tickets = 1;
+        $class_selected = false;
+        if ($request['tickets']) {
+            $number_of_tickets = $request['tickets'];
+        }
+        if ($request['class']) {
+            $class_selected = true;
+            $seat_class = $request['class'];
+        }
+        $price_f = ($r->fclass_seats_free - $this->count_full_class($r, "F")) > $number_of_tickets ? $this->class_price($r, 'first', $price) : -1;
+        $price_b = ($r->bclass_seats_free - $this->count_full_class($r, "B")) > $number_of_tickets ? $this->class_price($r, 'business', $price) : -1;
+        $price_e = ($r->eclass_seats_free - $this->count_full_class($r, "E")) > $number_of_tickets ? $this->class_price($r, 'economy', $price) : -1;
+        // [$f_free, $b_free, $e_free] = $this->get_free_seats($r, $price);
         if ($class_selected) {
             switch ($seat_class) {
                 case 'first':
-                    return $f_free > $number_of_tickets ? 'first' : '';
+                    return [$price_f > 0 ? '' : $price_f, $price_f];
                 case 'business':
-                    return $b_free > $number_of_tickets ? 'business' : '';
+                    return [$price_b > 0 ? '' : $price_b, $price_b];
                 case 'economy':
-                    return $e_free > $number_of_tickets ? 'economy' : '';
+                    return [$price_e > 0 ? '' : $price_e, $price_e];
             }
         }
-        if ($e_free > $number_of_tickets) {
-            return 'economy';
-        } else if ($b_free > $number_of_tickets) {
-            return 'business';
-        } else if ($f_free >$number_of_tickets) {
-            return 'first';
+        if ($price_e > 0 && ($request['min_price'] ? ((float)$request['min_price'] <= $price_e) : 1) && ($request['max_price'] ? ($price_e <= (float)$request['max_price']) : 1)) {
+            return ['economy', $price_e];
+        } else if ($price_b > 0 && ($request['min_price'] ? ((float)$request['min_price'] <= $price_b) : 1) && ($request['max_price'] ? ($price_b <= (float)$request['max_price']) : 1)) {
+            return ['business', $price_b];
+        } else if ($price_f > 0 && ($request['min_price'] ? ((float)$request['min_price'] <= $price_f) : 1) && ($request['max_price'] ? ($price_f <= (float)$request['max_price']) : 1)) {
+            return ['first', $price_f];
         }
 
-        return '';
+        return ["first", -1];
     }
 
     /**
      * Creates obj representation of row from sql flight table, plus some additional data from other tables
      *
      * @param stdClass $r One row of flight from select
-     * @param int number of tickets requested
-     * @param string $seat_class 'first', 'business', 'economy'
      * @return array object_representation
      */
-    protected function create_object_representation($r, $tickets, $seat_class) {
+    protected function create_object_representation($r, Request $request) {
         $row_array["flight_number"] = $r->flight_number;
         $row_array["departure_time"] = date('Y-m-d G:i:s', strtotime($r->departure_time));
         
@@ -201,14 +206,24 @@ class SearchController extends Controller
         $square_cost = 10;
         $start_price = 0.025;
         $price = $start_price*200 + $start_price * ($flight_time + $flight_time*$flight_time/$square_cost);
+        [$seat_class, $price] = $this->check_tmp_reservations($r, $request, $price);
+        // class_price($r, $seat_class, $price);
+        if (!$seat_class || $price < 0)
+            return NULL;
+
+        if ($request['min_price'] && $price < $request['min_price']) {
+            return NULL;
+        }
+        if ($request['max_price'] && $price > $request['max_price']) {
+            return NULL;
+        }
         $flight_time_str = sprintf("%dh %dm\n", $flight_hour, $flight_min);
-        // $price /= 30/;
         $row_array['airplane'] = DB::table('airplanes')->select('producer','model', 'airline')->WHERE('id','=', $r->airplane)->first();
         $row_array['airline'] = DB::table('airlines')->WHERE('airline','=', $r->airline)->first();
         $row_array["flight_time"] = $flight_time_str;
-        $row_array["price"] = (int)$this->class_price($r, $seat_class, $price);
+        $row_array["price"] = (int)$price;
         $row_array["seat_class"] = $seat_class;
-        $row_array["tickets"] = $tickets;
+        $row_array["tickets"] = $request['tickets'];
         $row_array["origin"] = 
             array("airport" => $r->o_airport,
                 "city" => $r->o_city,
@@ -250,11 +265,18 @@ class SearchController extends Controller
         if ($request_arr['destination']) {
             $select_query .= $this->set_location("d", $destination);
         }
-        if ($request_arr['depart_before']) {
-            $select_query .= " departure_time < $departure_before AND ";
-        }
-        if ($request_arr['depart_after']) {
-            $select_query .= " departure_time > $departure_after AND ";
+        if ($request_arr['departure_date']) {
+            $departure_after = strtotime($request_arr['departure_date']);
+            $departure_before = strtotime("+1 day", $departure_after);
+            $select_query .= " UNIX_TIMESTAMP(departure_time) < $departure_before AND ";
+            $select_query .= " UNIX_TIMESTAMP(departure_time) > $departure_after AND ";
+        } else {
+            if ($request_arr['depart_before']) {
+                $select_query .= " departure_time < $departure_before AND ";
+            }
+            if ($request_arr['depart_after']) {
+                $select_query .= " departure_time > $departure_after AND ";
+            }
         }
         
         [$out_query, $class_selected] = $this->select_class($seat_class, $number_of_tickets);
@@ -270,28 +292,30 @@ class SearchController extends Controller
 
         $return_arr = array();
         foreach($results as $r){
-            // will return seat class if enough space or "" otherwise
-            $seat_class = $this->check_tmp_reservations($r, $number_of_tickets, $class_selected, $seat_class);
-            if (!$seat_class)
-                continue;
-            $row_array['there'] = $this->create_object_representation($r, $request_arr['tickets'], $seat_class);
+            $row_array['there'] = $this->create_object_representation($r, $request_arr);
 
-            if (isset($request_arr['min_t']) || isset($request_arr['max_t'])) {
+            if (isset($request_arr['min_t']) || isset($request_arr['max_t']) || $request_arr['arrival_date']) {
                 
                 $return_query = $this->get_flight_query();
                 $return_query .= "o.airport_code = ".$pdo->quote($r->d_airport)." AND ";
                 $return_query .= "d.airport_code = ".$pdo->quote($r->o_airport)." AND ";
                 $arrive_ts = strtotime($r->arrival_time);
-                
-                if (isset($request_arr['min_t'])) {
-                    $min_t = (int)$request_arr['min_t'];
+                if ($request_arr['arrival_date']) {
+                    $arrive_after = strtotime($request_arr['arrival_date']);
+                    $arrive_before = strtotime("+1 days", $arrive_after);
+                    $return_query .= " UNIX_TIMESTAMP(arrival_time) < ".$pdo->quote($arrive_before)." AND ";
+                    $return_query .= " UNIX_TIMESTAMP(arrival_time) > ".$pdo->quote($arrive_after)." AND ";
                 } else {
-                    $min_t = 0;    
-                } 
-                $return_query .= " UNIX_TIMESTAMP(departure_time) > ".$pdo->quote(strtotime("+$min_t days", $arrive_ts))." AND ";
-                if (isset($request_arr['max_t'])) {
-                    $max_t = (int)$request_arr['max_t'];
-                    $return_query .= " UNIX_TIMESTAMP(departure_time) < ".$pdo->quote(strtotime("+$max_t days", $arrive_ts))." AND ";
+                    if (isset($request_arr['min_t'])) {
+                        $min_t = (int)$request_arr['min_t'];
+                    } else {
+                        $min_t = 0;    
+                    } 
+                    $return_query .= " UNIX_TIMESTAMP(departure_time) > ".$pdo->quote(strtotime("+$min_t days", $arrive_ts))." AND ";
+                    if (isset($request_arr['max_t'])) {
+                        $max_t = (int)$request_arr['max_t'];
+                        $return_query .= " UNIX_TIMESTAMP(departure_time) < ".$pdo->quote(strtotime("+$max_t days", $arrive_ts))." AND ";
+                    }
                 }
                 [$out_query, $rev_class] = $this->select_class($seat_class, $number_of_tickets);
                 $return_query .= $out_query;
@@ -305,15 +329,15 @@ class SearchController extends Controller
 
                 $return_flight_arr = array();
                 foreach($returns as $ret) {
-                    $seat_class = $this->check_tmp_reservations($ret, $number_of_tickets, $class_selected, $seat_class);
-                    if (!$seat_class)
-                        continue;
-                    array_push($return_flight_arr,$this->create_object_representation($ret, $request_arr['tickets'], $seat_class));
+                    $back_flight = $this->create_object_representation($ret, $request_arr);
+                    if ($back_flight) {
+                        array_push($return_flight_arr, $back_flight);
+                    }
                 }
                 $row_array['back'] = $return_flight_arr;
-                if (!empty($return_flight_arr))
+                if (!empty($return_flight_arr) && $row_array['there'] && $row_array['back'])
                     array_push($return_arr,$row_array);
-            } else {
+            } else if ($row_array['there']) {
                 array_push($return_arr,$row_array);
             }
         }
@@ -348,31 +372,25 @@ class SearchController extends Controller
         }
 
         $return_arr = array();
-        $seat_class = $this->check_tmp_reservations($f1, $request['tickets'], $class_selected, $request['class']);
-        if (!$seat_class)
-            return;
-        $tmp_obj = $this->create_object_representation($f1, $request['tickets'], $request['class']);
+        $tmp_obj = $this->create_object_representation($f1, $request);
         array_push($return_arr, $tmp_obj);
         if (isset($request['f2'])) {
             $f2 = $this->select_flight($request['f2']);
-            $seat_class = $this->check_tmp_reservations($f2, $request['tickets'], $class_selected, $request['class']);
-            if (!$seat_class)
-                return;
-            $tmp_obj = $this->create_object_representation($f2, $request['tickets'], $request['class']);
+            $tmp_obj = $this->create_object_representation($f2, $request);
             array_push($return_arr, $tmp_obj);
         }
         return $return_arr;
     }
 
-    public function show(Request $request)
-    {
-        try {
-            $return_arr = $this->search_flights($request);
-            return json_encode($return_arr);
-        } catch (Exception $e) {
-            abort(400);
-        }
-    }
+    // public function show(Request $request)
+    // {
+    //     try {
+    //         $return_arr = $this->search_flights($request);
+    //         return json_encode($return_arr);
+    //     } catch (Exception $e) {
+    //         abort(400);
+    //     }
+    // }
 
     /**
      * Convert long name of class to short
