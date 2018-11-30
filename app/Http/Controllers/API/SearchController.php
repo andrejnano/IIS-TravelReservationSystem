@@ -190,19 +190,20 @@ class SearchController extends Controller
         return ["first", -1];
     }
 
-    /**
-     * Creates obj representation of row from sql flight table, plus some additional data from other tables
-     *
-     * @param stdClass $r One row of flight from select
-     * @return array object_representation
-     */
-    protected function create_object_representation($r, Request $request) {
-        $row_array["flight_number"] = $r->flight_number;
-        $row_array["departure_time"] = date('Y-m-d G:i:s', strtotime($r->departure_time));
-        
-        $flight_time = (strtotime($r->arrival_time) - strtotime($r->departure_time)) / 60;
+    protected function get_flight_time($first, $last) {
+        $flight_time = (strtotime($first) - strtotime($last)) / 60;
         $flight_min = $flight_time % 60;
         $flight_hour = $flight_time / 60;
+        $flight_time_str = sprintf("%dh %dm\n", $flight_hour, $flight_min);
+        return [$flight_time, $flight_time_str];
+    }
+
+    protected function obj_rep_flight($r, Request $request, $curr_price) {
+        $row_array["flight_number"] = $r->flight_number;
+        $row_array["departure_time"] = date('Y-m-d G:i:s', strtotime($r->departure_time));
+        $row_array["arrival_time"] = date('Y-m-d G:i:s', strtotime($r->arrival_time));
+        
+        [$flight_time, $flight_time_str] = $this->get_flight_time($r->arrival_time, $r->departure_time);
         $square_cost = 10;
         $start_price = 0.025;
         $price = $start_price*200 + $start_price * ($flight_time + $flight_time*$flight_time/$square_cost);
@@ -211,13 +212,12 @@ class SearchController extends Controller
         if (!$seat_class || $price < 0)
             return NULL;
 
-        if ($request['min_price'] && $price < $request['min_price']) {
+        if ($request['min_price'] && $price + $curr_price < $request['min_price']) {
             return NULL;
         }
-        if ($request['max_price'] && $price > $request['max_price']) {
+        if ($request['max_price'] && $price + $curr_price > $request['max_price']) {
             return NULL;
         }
-        $flight_time_str = sprintf("%dh %dm\n", $flight_hour, $flight_min);
         $row_array['airplane'] = DB::table('airplanes')->select('producer','model', 'airline')->WHERE('id','=', $r->airplane)->first();
         $row_array['airline'] = DB::table('airlines')->WHERE('airline','=', $r->airline)->first();
         $row_array["flight_time"] = $flight_time_str;
@@ -236,14 +236,33 @@ class SearchController extends Controller
             );
         return $row_array;
     }
-
     /**
-     * Searches flights in SQL database, which satisfies specified condition
+     * Creates obj representation of row from sql flight table, plus some additional data from other tables
      *
-     * @param Request $request_arr Array containing specified search condition from user
-     * @return array containing object representation of selected flights
+     * @param stdClass $r One row of flight from select
+     * @return array object_representation
      */
-    protected function search_flights($request_arr) {
+    protected function create_object_representation($r, Request $request) {
+        $all = array(); 
+        $curr_price = 0;
+        foreach($r as $flight) {
+            $obj = $this->obj_rep_flight($flight, $request, $curr_price);
+            if ($obj) {
+                $curr_price += $obj['price'];
+                array_push($all, $obj);
+            }
+        }
+        if ($curr_price <= 0)
+            return NULL;
+            // dd($all);
+        $all['total_time'] = $this->get_flight_time(end($all)['arrival_time'], $all[0]['departure_time'])[1];
+        $all['total_price'] = $curr_price;
+        return $all;        
+    }
+
+
+    protected function select_flights_there(Request $request_arr) {
+
         $pdo = DB::connection()->getPdo();
         $origin = $pdo->quote($request_arr['origin']);
         $destination = $pdo->quote($request_arr['destination']);
@@ -257,6 +276,7 @@ class SearchController extends Controller
 
         if (!$departure_after)
             $departure_after = Carbon::now();
+
 
         $select_query= $this->get_flight_query();
         if ($request_arr['origin']) {
@@ -285,64 +305,192 @@ class SearchController extends Controller
         $select_query .= $this->get_db_cross_cond();
         
         try {
-            $results  = DB::select($select_query);
+            return DB::select($select_query);
         } catch (Exception $e) {
             abort(500);
         }
+    }
 
+    // direction 0 there 1 back
+    protected function select_flights_direct(Request $request_arr, $dest_airport, $origin_airport, $direction) {
+        $pdo = DB::connection()->getPdo();
+        $origin = $pdo->quote($request_arr['origin']);
+        $destination = $pdo->quote($request_arr['destination']);
+        $query = $this->get_flight_query();
+        
+        if (!isset($request_arr['tickets'])) {
+            $request_arr['tickets'] = 1;
+        }
+        $number_of_tickets = $pdo->quote($request_arr['tickets']);
+        if ($dest_airport) {
+            if ($request_arr['destination'])
+            $query .= "d.airport_code = $destination AND ";
+        } else {
+            if ($request_arr['destination'])
+            $query .= $this->set_location("d", $destination);
+        }
+        if ($origin_airport) {
+            // $request_arr['origin'] by mal byt vzdy zadany
+            if ($request_arr['origin'])
+            $query .= "o.airport_code = $origin AND ";
+        } else {
+            if ($request_arr['origin'])
+            $query .= $this->set_location("o", $origin);
+        }
+        if ($direction) {
+            if ($request_arr['arrival_date']) {
+                $arrive_after = strtotime($request_arr['arrival_date']);
+                $arrive_before = strtotime("+1 days", $arrive_after);
+                $query .= " UNIX_TIMESTAMP(arrival_time) < ".$pdo->quote($arrive_before)." AND ";
+                $query .= " UNIX_TIMESTAMP(arrival_time) > ".$pdo->quote($arrive_after)." AND ";
+            } else {
+                $arrive_ts = strtotime($request_arr['arrival_time']);
+                if (isset($request_arr['min_t'])) {
+                    $min_t = (int)$request_arr['min_t'];
+                } else {
+                    $min_t = 0;
+                }
+                $query .= " UNIX_TIMESTAMP(departure_time) > ".$pdo->quote(strtotime("+$min_t days", $arrive_ts))." AND ";
+                if (isset($request_arr['max_t']) && !is_null($request_arr['max_t']) /* !$dest_airport */) {
+                    $max_t = (int)$request_arr['max_t'];
+                    $query .= " UNIX_TIMESTAMP(departure_time) < ".$pdo->quote(strtotime("+$max_t days", $arrive_ts))." AND ";
+                }
+            }
+        } else {
+            $departure_before = $pdo->quote($request_arr['depart_before']);
+            $departure_after = $pdo->quote($request_arr['depart_after']);
+            if (!$departure_after)
+            $departure_after = Carbon::now();
+            if ($request_arr['departure_date']) {
+                $departure_after = strtotime($request_arr['departure_date']);
+                $departure_before = strtotime("+1 day", $departure_after);
+                $query .= " UNIX_TIMESTAMP(departure_time) < $departure_before AND ";
+                $query .= " UNIX_TIMESTAMP(departure_time) > $departure_after AND ";
+            } else {
+                if ($request_arr['depart_before']) {
+                    $query .= " departure_time < $departure_before AND ";
+                }
+                if ($request_arr['depart_after']) {
+                    $query .= " departure_time > $departure_after AND ";
+                }
+            }
+        }
+        [$out_query, $rev_class] = $this->select_class($request_arr['class'], $number_of_tickets);
+        $query .= $out_query;
+        $query .= $this->get_db_cross_cond();
+
+        try {
+            $selected = DB::select($query);
+            return $selected;
+        } catch (Exception $e) {
+            abort(500);
+        }        
+    }
+
+    protected function select_flights(Request $request_arr, $dest_airport, $origin_airport, $direction) {
+        $selected = $this->select_flights_direct($request_arr, $dest_airport, $origin_airport, $direction);
+        $i = 0;
+        foreach($selected as $s) {
+            $selected[$i] = array($s);
+            $i++;
+        }
+        if ($i <= 10) {
+            $first = $request_arr;
+            $dest = $first['destination'];
+            $first['destination'] = NULL;
+            $first_r = $this->select_flights_direct($first, false, $origin_airport, $direction);
+            // dd($first_r);
+            foreach($first_r as $fr) {
+                $second = Request();//$request_arr;
+                $second['origin'] = $fr->d_airport;
+                if ($dest)
+                    $second['destination'] = $dest;
+                $second['min_t'] = '0';
+                $second['max_t'] = '2';
+                $second['arrival_time'] = $fr->arrival_time;
+                $second_r = $this->select_flights_direct($second, $dest_airport, false, true);
+                if ($second_r) {
+                    array_push($selected, array($fr, $second_r[0]));
+                }
+            }
+        }
+        return $selected;
+    }
+
+    /**
+     * Searches flights in SQL database, which satisfies specified condition
+     *
+     * @param Request $request_arr Array containing specified search condition from user
+     * @return array containing object representation of selected flights
+     */
+    protected function search_flights($request_arr) {
+        $min_t = NULL;
+        $max_t = NULL;
+        $arrival_date = NULL;
+
+        if ($request_arr['min_t'] || $request_arr['min_t'] === '0')
+            $min_t = $request_arr['min_t'];
+        if ($request_arr['max_t'] || $request_arr['max_t'] === '0')
+            $max_t = $request_arr['max_t'];
+        if ($request_arr['arrival_date'] || $request_arr['arrival_date'] === '0')
+            $arrival_date = $request_arr['arrival_date'];
+        
+        $results = $this->select_flights($request_arr, false, false, false);
+        
         $return_arr = array();
         foreach($results as $r){
             $row_array['there'] = $this->create_object_representation($r, $request_arr);
+            
+            
+            
 
-            if (isset($request_arr['min_t']) || isset($request_arr['max_t']) || $request_arr['arrival_date']) {
+            if (!is_null($min_t) || !is_null($max_t) || !is_null($arrival_date)) {
+                $back_request = $request_arr;
+                $back_request['min_t'] = $min_t;
+                $back_request['max_t'] = $max_t;
+                $back_request['arrival_date'] = $arrival_date;
+                $back_request['origin'] = end($r)->d_airport;
+                $back_request['destination'] = $r[0]->o_airport;
+                $back_request['arrival_time'] = end($r)->arrival_time;
+                // $back_request['']
+
+                $returns = $this->select_flights($back_request, true, true, true);
+                // dd($returns);
                 
-                $return_query = $this->get_flight_query();
-                $return_query .= "o.airport_code = ".$pdo->quote($r->d_airport)." AND ";
-                $return_query .= "d.airport_code = ".$pdo->quote($r->o_airport)." AND ";
-                $arrive_ts = strtotime($r->arrival_time);
-                if ($request_arr['arrival_date']) {
-                    $arrive_after = strtotime($request_arr['arrival_date']);
-                    $arrive_before = strtotime("+1 days", $arrive_after);
-                    $return_query .= " UNIX_TIMESTAMP(arrival_time) < ".$pdo->quote($arrive_before)." AND ";
-                    $return_query .= " UNIX_TIMESTAMP(arrival_time) > ".$pdo->quote($arrive_after)." AND ";
-                } else {
-                    if (isset($request_arr['min_t'])) {
-                        $min_t = (int)$request_arr['min_t'];
-                    } else {
-                        $min_t = 0;    
-                    } 
-                    $return_query .= " UNIX_TIMESTAMP(departure_time) > ".$pdo->quote(strtotime("+$min_t days", $arrive_ts))." AND ";
-                    if (isset($request_arr['max_t'])) {
-                        $max_t = (int)$request_arr['max_t'];
-                        $return_query .= " UNIX_TIMESTAMP(departure_time) < ".$pdo->quote(strtotime("+$max_t days", $arrive_ts))." AND ";
-                    }
-                }
-                [$out_query, $rev_class] = $this->select_class($seat_class, $number_of_tickets);
-                $return_query .= $out_query;
-                $return_query .= $this->get_db_cross_cond();
-
-                try {
-                    $returns  = DB::select($return_query);
-                } catch (Exception $e) {
-                    abort(500);
-                }
-
                 $return_flight_arr = array();
+                
                 foreach($returns as $ret) {
                     $back_flight = $this->create_object_representation($ret, $request_arr);
                     if ($back_flight) {
                         array_push($return_flight_arr, $back_flight);
                     }
+                    break;
                 }
                 $row_array['back'] = $return_flight_arr;
                 if (!empty($return_flight_arr) && $row_array['there'] && $row_array['back'])
                     array_push($return_arr,$row_array);
-            } else if ($row_array['there']) {
+            } else if ($row_array['there'] && (is_null($min_t) && is_null($max_t) && is_null($arrival_date))) { 
                 array_push($return_arr,$row_array);
             }
         }
         return $return_arr;
     }
+
+    public function show(Request $request)
+    {
+        try {
+            $return_arr = $this->search_flights($request);
+
+            // if (count($return_arr) < 10) {
+            //     $return_arr = $this->search_not_direct_flights($request);
+            //     // todo search for not direct flights
+            // }
+            return json_encode($return_arr);
+        } catch (Exception $e) {
+            abort(400);
+        }
+    }
+
 
     /**
      * Inserts into db query specific flight number condition
@@ -380,16 +528,6 @@ class SearchController extends Controller
             array_push($return_arr, $tmp_obj);
         }
         return $return_arr;
-    }
-
-    public function show(Request $request)
-    {
-        try {
-            $return_arr = $this->search_flights($request);
-            return json_encode($return_arr);
-        } catch (Exception $e) {
-            abort(400);
-        }
     }
 
     /**

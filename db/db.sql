@@ -80,6 +80,7 @@
 
 -- END; //
 
+
 -- DELIMITER ;
   SET FOREIGN_KEY_CHECKS=0;
   DROP TABLE IF EXISTS users;
@@ -157,7 +158,8 @@ DELIMITER ;
 /* Reservation system */
   CREATE TABLE flights (
     /* Flight Number in IATA official format; Example: BA026 */
-    flight_number     VARCHAR(6) NOT NULL PRIMARY KEY,
+    id                INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    flight_number     VARCHAR(6) NOT NULL,
     departure_time    DATETIME NOT NULL,
     arrival_time      DATETIME NOT NULL,
     airplane          INT,
@@ -178,12 +180,17 @@ DELIMITER ;
   );
 
 
+
   DROP TRIGGER IF EXISTS flights_trig;
+  SET @start = 1000;
 
   DELIMITER $$
-
       CREATE TRIGGER flights_trig BEFORE INSERT ON flights
       FOR EACH ROW BEGIN
+        SET NEW.flight_number = concat(
+              'AA',
+              CAST(( @start := @start + 1) AS CHAR(4))
+             );
         IF (NOT NEW.flight_number REGEXP '[0-9a-zA-Z]{2}[0-9]{4}') THEN
               SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Wrong expression type at flight insertion, expected regex [0-9a-zA-Z]{2}[0-9]{4}';
         END IF;
@@ -249,8 +256,7 @@ DELIMITER ;
     seat_class      VARCHAR(1),
     created_at      TIMESTAMP NOT NULL,
 
-    CONSTRAINT ticket_in_reservation_fk   FOREIGN KEY (reservation) REFERENCES reservations(id),
-    CONSTRAINT ticket_for_flight_fk       FOREIGN KEY (flight)      REFERENCES flights(flight_number)
+    CONSTRAINT ticket_in_reservation_fk   FOREIGN KEY (reservation) REFERENCES reservations(id)
   );
 
   -- DROP TRIGGER IF EXISTS tickets_trig;
@@ -526,432 +532,259 @@ VALUES ('a', 'a', 'a@a.a', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43e
 INSERT INTO users (first_name, last_name, email, password, is_admin)
 VALUES ('Ad', 'Min', 'a@d.min', '$2y$10$jXm7tEPX3m1YRWkcQDtzz.z3NnUQM1JdNhnYmNS2XP43eM2MD3TEa', 1);
 
+DROP PROCEDURE IF EXISTS insert_many_flights;
+DELIMITER $$
+
+CREATE PROCEDURE insert_many_flights (IN start_time_o TIMESTAMP, IN start_time_d TIMESTAMP, IN max INT, IN diff_hours INT, IN airplane INT, IN airline VARCHAR(2), IN origin VARCHAR(3), IN destination VARCHAR(3))
+BEGIN
+
+    DECLARE v1 INT DEFAULT 0;
+
+    WHILE v1 < max DO
+      INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+      VALUES ( start_time_o + INTERVAL (v1 * diff_hours) HOUR, start_time_d + INTERVAL (v1 * diff_hours) HOUR, airplane, airline, origin, destination);
+    
+      SET v1 = v1 + 1;
+    END WHILE;
+
+END$$
+
+DELIMITER ;
 
 -- insert flights
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('BA0304', CONVERT_TZ('2019-05-20 07:20:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 09:35:00.00', '+01:00', '+00:00'), 9, 'BA', 'LHR', 'CDG');
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-20 07:20:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 09:35:00.00', '+01:00', '+00:00'), 9, 'BA', 'LHR', 'CDG');
 
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('EK1234', CONVERT_TZ('2019-05-14 11:20:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-14 14:55:00.00', '+03:00', '+00:00'), 2, 'EK', 'DXB', 'IST');
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-14 11:20:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-14 14:55:00.00', '+03:00', '+00:00'), 2, 'EK', 'DXB', 'IST');
 
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0000', CONVERT_TZ('2019-05-09 16:40:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-09 20:20:00.00', '+03:00', '+00:00'), 3, 'FZ', 'DXB', 'IST');
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-09 16:40:00.00', '+04:00', '+00:00'), CONVERT_TZ('2019-05-09 20:20:00.00', '+03:00', '+00:00'), 3, 'FZ', 'DXB', 'IST');
 
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0001', CONVERT_TZ('2019-05-11 19:50:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-11 23:30:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-11 19:50:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-11 23:30:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
 
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0002', CONVERT_TZ('2019-05-20 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 12:10:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-20 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-20 12:10:00.00', '-04:00', '+00:00'), 1, 'BA', 'LHR', 'JFK');
 
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AA0003', CONVERT_TZ('2019-05-21 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-21 12:10:00.00', '-04:00', '+00:00'), 7, 'AY', 'LHR', 'JFK');
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-21 8:30:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-21 12:10:00.00', '-04:00', '+00:00'), 7, 'AY', 'LHR', 'JFK');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-20 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-20 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
 
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1724', CONVERT_TZ('2019-05-20 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-20 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1725', CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('OS0089', CONVERT_TZ('2019-05-25 10:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 13:50:00.00', '-04:00', '+00:00'), 11, 'FR', 'VIE', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LH1235', CONVERT_TZ('2019-05-25 11:10:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 15:45:00.00', '-04:00', '+00:00'), 7, 'LH', 'VIE', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AZ2275', CONVERT_TZ('2019-05-30 8:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-30 10:15:00.00', '+01:00', '+00:00'), 2, 'BA', 'LGW', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AB3275', CONVERT_TZ('2019-05-04 08:00:00.00', '+02:00', '+00:00'), CONVERT_TZ('2019-05-04 08:45:00.00', '+00:00', '+00:00'), 5, 'AY', 'HEL', 'LGW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AC1275', CONVERT_TZ('2019-05-05 18:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-05 22:50:00.00', '+02:00', '+00:00'), 5, 'AY', 'LGW', 'HEL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('BZ1275', CONVERT_TZ('2019-05-25 04:10:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-25 06:45:00.00', '+01:00', '+00:00'),6, 'LH', 'LHR', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('LI1725', CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+00:00', '+00:00'), 11, 'FR', 'TXL', 'LHR');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('MH0317', '2018-12-20 06:15:00.00', '2018-12-20 09:40:00.00', 10, 'MH', 'KUL', 'PEK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('MH0318', '2018-12-22 06:20:00.00', '2018-12-22 10:05:00.00', 10, 'MH', 'PEK', 'KUL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('MH0319', '2018-12-24 06:15:00.00', '2018-12-24 09:40:00.00', 10, 'MH', 'KUL', 'PEK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('MH0320', '2018-12-26 06:20:00.00', '2018-12-26 10:05:00.00', 10, 'MH', 'PEK', 'KUL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0017', '2018-12-20 06:19:00.00', '2018-12-20 09:44:00.00', 6, 'LH', 'LHR', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0018', '2018-12-22 06:24:00.00', '2018-12-22 10:09:00.00', 6, 'LH', 'HEL', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0019', '2018-12-24 06:19:00.00', '2018-12-24 09:44:00.00', 6, 'LH', 'BTS', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0020', '2018-12-26 06:24:00.00', '2018-12-26 10:09:00.00', 6, 'LH', 'BRQ', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0117', '2019-01-10 06:19:00.00', '2019-01-10 09:47:00.00', 6, 'LH', 'RME', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0118', '2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 6, 'LH', 'LYS', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0119', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 6, 'LH', 'MOW', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0120', '2019-01-16 10:09:00.00', '2019-01-16 13:27:00.00', 6, 'LH', 'BUD', 'FRA');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0217', '2018-12-20 06:19:00.00', '2018-12-20 09:44:00.00', 15, 'MH', 'FRA', 'LHR');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0218', '2018-12-22 06:24:00.00', '2018-12-22 10:09:00.00', 5, 'AF', 'FRA', 'HEL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0219', '2018-12-24 06:19:00.00', '2018-12-24 09:44:00.00', 11, 'AA', 'FRA', 'BTS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0220', '2018-12-26 06:24:00.00', '2018-12-26 10:09:00.00', 12, 'LH', 'FRA', 'BRQ');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0222', '2019-01-10 06:19:00.00', '2019-01-10 09:47:00.00', 11, 'LH', 'FRA', 'RME');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0243', '2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 14, 'AF', 'FRA', 'LYS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0229', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 2, 'LH', 'FRA', 'MOW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('FR0221', '2019-01-16 10:09:00.00', '2019-01-16 13:27:00.00', 3, 'LH', 'FRA', 'BUD');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0017', '2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 7, 'FR', 'LHR', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0018', '2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 11, 'AY', 'HEL', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0019', '2018-12-25 06:19:00.00', '2018-12-25 09:34:00.00', 9, 'FR', 'BTS', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0020', '2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 11, 'AF', 'BRQ', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0117', '2019-01-10 06:19:00.00', '2019-01-10 09:37:00.00', 11, 'AY', 'RME', 'CFN');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0118', '2019-01-12 10:09:00.00', '2019-01-12 14:34:00.00', 11, 'FR', 'LYS', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0198', '2019-01-12 00:09:00.00', '2019-01-12 10:04:00.00', 11, 'AA', 'JFK', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0149', '2019-01-19 02:04:00.00', '2019-01-19 12:26:00.00', 9, 'AA', 'PRG', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0148', '2019-01-19 00:09:00.00', '2019-01-19 10:04:00.00', 11, 'MH', 'JFK', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0199', '2019-01-12 02:04:00.00', '2019-01-12 12:26:00.00', 11, 'MH', 'PRG', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0119', '2019-01-14 06:19:00.00', '2019-01-14 10:31:00.00', 6, 'AA', 'MOW', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR0120', '2019-01-16 10:09:00.00', '2019-01-16 13:37:00.00', 4, 'FZ', 'BUD', 'PRG');
-
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR1218', '2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 11, 'FR', 'PRG', 'CFN');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR1219', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 11, 'FR', 'PRG', 'MOW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR1220', '2019-01-16 10:09:00.00', '2019-01-16 13:27:00.00', 11, 'MH', 'PRG', 'BTS');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR1017', '2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 11, 'FR', 'PRG', 'MOW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR1018', '2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 11, 'FR', 'PRG', 'LYS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PR1019', '2018-12-25 06:19:00.00', '2018-12-25 06:59:00.00', 11, 'FR', 'PRG', 'TXL');
-
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0229', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 11, 'FR', 'FRA', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0221', '2019-01-16 10:09:00.00', '2019-01-16 13:49:00.00', 11, 'FR', 'CDG', 'VIE');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0017', '2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 11, 'FR', 'LHR', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0018', '2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 11, 'AY', 'HEL', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0019', '2018-12-25 06:19:00.00', '2018-12-25 09:34:00.00', 11, 'FR', 'CFN', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0020', '2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 11, 'FR', 'BRQ', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0117', '2019-01-10 06:19:00.00', '2019-01-10 09:37:00.00', 11, 'FR', 'CDG', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0118', '2019-01-12 10:09:00.00', '2019-01-12 12:34:00.00', 11, 'FR', 'LYS', 'VIE');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZZ0198', '2019-01-12 00:09:00.00', '2019-01-12 10:04:00.00', 11, 'FR', 'JFK', 'VIE');
-
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0229', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 6, 'LH', 'VIE', 'FRA');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0221', '2019-01-16 10:09:00.00', '2019-01-16 13:27:00.00', 11, 'FR', 'VIE', 'CDG');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0017', '2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 15, 'OS', 'VIE', 'LHR');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0018', '2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 5, 'OS', 'VIE', 'HEL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0019', '2018-12-25 06:19:00.00', '2018-12-25 09:34:00.00', 11, 'OS', 'VIE', 'BTS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0020', '2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 11, 'FR', 'VIE', 'BRQ');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0117', '2019-01-10 06:19:00.00', '2019-01-10 09:37:00.00', 11, 'FR', 'VIE', 'CDG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0118', '2019-01-12 10:09:00.00', '2019-01-12 05:34:00.00', 11, 'FR', 'CFN', 'LYS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('XZ0198', '2019-01-12 00:09:00.00', '2019-01-12 10:04:00.00', 11, 'FR', 'VIE', 'JFK');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('CC0089', '2019-01-25 10:15:00.00', '2019-01-25 22:50:00.00', 11, 'AA', 'KUL', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('CC1235', '2019-01-25 11:10:00.00', '2019-01-25 22:45:00.00', 7, 'LH', 'PEK', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('CC2275', '2019-05-30 8:00:00.00', '2019-05-30 16:15:00.00', 2, 'BA', 'CDG', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('CC3275', '2019-05-04 08:00:00.00', '2019-05-04 19:45:00.00', 5, 'AY', 'HEL', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('CC1242', '2019-05-05 18:00:00.00', '2019-05-06 04:50:00.00', 5, 'AY', 'LGW', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('CC1275', '2019-05-25 04:10:00.00', '2019-05-25 06:45:00.00', 6, 'LH', 'LHR', 'JFK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('CC1725', '2019-05-27 06:15:00.00', '2019-05-27 07:55:00.00', 11, 'FR', 'DFW', 'JFK');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('DC1089', '2019-01-25 10:15:00.00', '2019-01-25 22:50:00.00', 11, 'AA', 'JFK', 'KUL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('DC1235', '2019-01-25 11:10:00.00', '2019-01-25 22:45:00.00', 7, 'LH', 'JFK', 'PEK');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('DC2275', '2019-05-30 8:00:00.00', '2019-05-30 16:15:00.00', 2, 'BA', 'JFK', 'CDG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('DC3275', '2019-05-04 08:00:00.00', '2019-05-04 19:45:00.00',5, 'AY', 'JFK', 'HEL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('DC1242', '2019-05-05 18:00:00.00', '2019-05-06 04:50:00.00', 5, 'AY', 'JFK', 'LGW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('DC1275', '2019-05-25 04:10:00.00', '2019-05-25 06:45:00.00', 5, 'LH', 'JFK', 'LHR');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('DC1725', '2019-05-27 06:15:00.00', '2019-05-27 07:55:00.00', 11, 'FR', 'JFK', 'DFW');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZY0017', '2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 11, 'FR', 'LHR', 'BTS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZY0018', '2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 11, 'AY', 'HEL', 'BTS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZY0020', '2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 11, 'FR', 'BRQ', 'BTS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZY0117', '2019-01-10 06:19:00.00', '2019-01-10 09:37:00.00', 11, 'AF', 'CDG', 'BTS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZY0118', '2019-01-12 10:09:00.00', '2019-01-12 05:34:00.00', 11, 'AF', 'LYS', 'BTS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('ZY0198', '2019-01-12 00:09:00.00', '2019-01-12 10:04:00.00', 11, 'AA', 'JFK', 'BTS');
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AK0017', '2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 11, 'FR', 'BTS', 'CFN');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AK0018', '2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 5, 'AY', 'BTS', 'HEL');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AK0020', '2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 11, 'FR', 'CFN', 'BRQ');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AK0117', '2019-01-10 06:19:00.00', '2019-01-10 09:37:00.00', 11, 'FR', 'BTS', 'CDG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AK0118', '2019-01-12 10:09:00.00', '2019-01-12 14:44:00.00', 11, 'FR', 'BTS', 'LYS');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AK0198', '2019-01-12 00:09:00.00', '2019-01-12 10:04:00.00', 11, 'AA', 'BTS', 'JFK');
-
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PS0199', '2019-01-12 02:04:00.00', '2019-01-12 04:26:00.00', 11, 'FR', 'PRG', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PS0119', '2019-01-14 06:19:00.00', '2019-01-14 11:11:00.00', 11, 'FR', 'MOW', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PS0120', '2019-01-16 10:09:00.00', '2019-01-16 13:37:00.00', 11, 'FR', 'BUD', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PS1218', '2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 11, 'FR', 'PRG', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PS1219', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 11, 'FR', 'PRG', 'BRU');
-
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PD0199', '2019-01-12 02:04:00.00', '2019-01-12 04:26:00.00', 11, 'FR', 'BRU', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PD0119', '2019-01-14 06:19:00.00', '2019-01-14 11:11:00.00', 11, 'FR', 'BRU', 'MOW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PD0120', '2019-01-16 10:09:00.00', '2019-01-16 13:37:00.00', 11, 'FR', 'BRU', 'BUD');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PD1218', '2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 11, 'FR', 'BRU', 'PRG');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('PD1219', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 11, 'FR', 'BRU', 'PRG');
-
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AD0199', '2019-01-12 02:04:00.00', '2019-01-12 04:26:00.00', 1, 'BA', 'BRU', 'LGW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AD0119', '2019-01-14 06:19:00.00', '2019-01-14 11:11:00.00', 1, 'BA', 'BRU', 'LGW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AD0120', '2019-01-16 10:09:00.00', '2019-01-16 13:37:00.00', 1, 'BA', 'BRU', 'LGW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AD1218', '2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 1, 'BA', 'BRU', 'LGW');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AD1219', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 1, 'BA', 'BRU', 'LGW');
-
-
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AR0199', '2019-01-12 02:04:00.00', '2019-01-12 04:26:00.00', 1, 'BA', 'LGW', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AR0119', '2019-01-14 06:19:00.00', '2019-01-14 11:11:00.00', 1, 'BA', 'LGW', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AR0120', '2019-01-16 10:09:00.00', '2019-01-16 13:37:00.00', 1, 'BA', 'LGW', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AR1218', '2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 1, 'BA', 'LGW', 'BRU');
-
-INSERT INTO flights (flight_number, departure_time, arrival_time, airplane, airline, origin, destination)
-VALUES ('AR1219', '2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 1, 'BA', 'LGW', 'BRU');
-
-
--- insert reservations
-INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2019-03-20 02:42:11.00', '1');
-
-INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('0', '2019-03-25 21:12:12.00', '2');
-
-INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2019-02-01 23:42:12.00', '3');
-
-INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('0', '2019-05-01 23:42:12.00', '4');
-
-INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2019-05-01 00:42:12.00', '4');
-
-INSERT INTO reservations (payment_status, created_at, created_by)
-VALUES ('1', '2019-05-03 5:42:12.00', '5');
-
-
--- insert tickets
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (410, 2, 'BA0304', 'E', '2019-03-20 02:42:11.00');
-
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (123, 4, 'EK1234', 'B', '2019-03-25 21:12:12.00');
-
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (142, 4, 'LH1724', 'B', '2019-02-01 23:42:12.00');
-
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (142, 6, 'LH1725', 'B', '2019-05-01 23:42:12.00');
-
--- reservation = NULL == tmp reservation
-INSERT INTO tickets (cost, flight, seat_class, created_at)
-VALUES (172, 'LI1725', 'B', '2018-11-24 02:02:12.00');
-
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (112, 5, 'AZ2275', 'E', '2019-05-03 5:42:12.00');
-
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (512, 5, 'AA0001', 'E', '2019-03-20 02:42:11.00');
-
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (512, 2, 'AA0001', 'E', '2019-03-25 21:12:12.00');
-
-INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
-VALUES (512, 4, 'AA0001', 'E', '2019-02-01 23:42:12.00');
-
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+01:00', '+00:00'), 9, 'LH', 'FRA', 'TXL');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-25 10:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 13:50:00.00', '-04:00', '+00:00'), 11, 'FR', 'VIE', 'JFK');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-25 11:10:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-25 15:45:00.00', '-04:00', '+00:00'), 7, 'LH', 'VIE', 'JFK');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-30 8:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-30 10:15:00.00', '+01:00', '+00:00'), 2, 'BA', 'LGW', 'VIE');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-04 08:00:00.00', '+02:00', '+00:00'), CONVERT_TZ('2019-05-04 08:45:00.00', '+00:00', '+00:00'), 5, 'AY', 'HEL', 'LGW');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-05 18:00:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-05 22:50:00.00', '+02:00', '+00:00'), 5, 'AY', 'LGW', 'HEL');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-25 04:10:00.00', '+00:00', '+00:00'), CONVERT_TZ('2019-05-25 06:45:00.00', '+01:00', '+00:00'),6, 'LH', 'LHR', 'FRA');
+
+INSERT INTO flights (departure_time, arrival_time, airplane, airline, origin, destination)
+VALUES (CONVERT_TZ('2019-05-27 06:15:00.00', '+01:00', '+00:00'), CONVERT_TZ('2019-05-27 07:55:00.00', '+00:00', '+00:00'), 11, 'FR', 'TXL', 'LHR');
+
+
+CALL insert_many_flights('2018-12-5 06:15:00.00', '2018-12-5 09:40:00.00', 40, 70, 10, 'MH', 'KUL', 'PEK');
+CALL insert_many_flights('2018-12-5 06:15:00.00', '2018-12-5 09:40:00.00', 40, 70, 10, 'MH', 'PEK', 'KUL');
+
+CALL insert_many_flights('2018-12-20 06:19:00.00', '2018-12-20 09:44:00.00', 150, 62, 6, 'LH', 'LHR', 'FRA');
+CALL insert_many_flights('2018-02-24 06:19:00.00', '2018-02-24 09:44:00.00', 40, 55, 6, 'LH', 'BTS', 'FRA');
+CALL insert_many_flights('2018-02-26 06:24:00.00', '2018-02-26 10:09:00.00', 40, 55, 6, 'LH', 'BRQ', 'FRA');
+CALL insert_many_flights('2019-01-10 06:19:00.00', '2019-01-10 09:47:00.00', 40, 55, 6, 'LH', 'RME', 'FRA');
+CALL insert_many_flights('2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 40, 55, 6, 'LH', 'LYS', 'FRA');
+CALL insert_many_flights('2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 40, 55, 6, 'LH', 'MOW', 'FRA');
+CALL insert_many_flights('2019-01-16 10:09:00.00', '2019-01-16 13:27:00.00', 40, 55, 6, 'LH', 'BUD', 'FRA');
+
+CALL insert_many_flights('2018-02-20 06:19:00.00', '2018-02-20 09:44:00.00', 40, 55, 15, 'MH', 'FRA', 'LHR');
+CALL insert_many_flights('2018-02-22 06:24:00.00', '2018-02-22 10:09:00.00', 40, 55, 5, 'AF', 'FRA', 'HEL');
+CALL insert_many_flights('2018-02-24 06:19:00.00', '2018-02-24 09:44:00.00', 40, 55, 11, 'AA', 'FRA', 'BTS');
+CALL insert_many_flights('2018-02-26 06:24:00.00', '2018-02-26 10:09:00.00', 40, 55, 12, 'LH', 'FRA', 'BRQ');
+CALL insert_many_flights('2019-01-10 06:19:00.00', '2019-01-10 09:47:00.00', 40, 55, 11, 'LH', 'FRA', 'RME');
+CALL insert_many_flights('2019-01-12 05:24:00.00', '2019-01-12 10:09:00.00', 40, 55, 14, 'AF', 'FRA', 'LYS');
+CALL insert_many_flights('2019-01-14 06:19:00.00', '2019-01-14 10:01:00.00', 40, 55, 2, 'LH', 'FRA', 'MOW');
+CALL insert_many_flights('2019-01-16 10:09:00.00', '2019-01-16 13:27:00.00', 40, 55, 3, 'LH', 'FRA', 'BUD');
+
+CALL insert_many_flights('2018-12-08 06:19:00.00', '2018-12-08 09:34:00.00', 30, 80, 7, 'FR', 'LHR', 'PRG');
+CALL insert_many_flights('2018-12-02 06:34:00.00', '2018-12-02 10:09:00.00', 30, 80, 11, 'AY', 'HEL', 'PRG');
+CALL insert_many_flights('2018-12-05 06:19:00.00', '2018-12-05 09:34:00.00', 30, 80, 9, 'FR', 'BTS', 'PRG');
+CALL insert_many_flights('2018-12-06 06:34:00.00', '2018-12-06 10:09:00.00', 30, 80, 11, 'AF', 'BRQ', 'PRG');
+CALL insert_many_flights('2019-01-01 06:19:00.00', '2019-01-01 09:37:00.00', 30, 80, 11, 'AY', 'RME', 'CFN');
+CALL insert_many_flights('2019-01-02 10:09:00.00', '2019-01-02 14:34:00.00', 30, 80, 11, 'FR', 'LYS', 'PRG');
+CALL insert_many_flights('2019-01-02 00:09:00.00', '2019-01-02 10:04:00.00', 30, 80, 11, 'AA', 'JFK', 'PRG');
+CALL insert_many_flights('2019-01-09 02:04:00.00', '2019-01-09 12:26:00.00', 30, 80, 9, 'AA', 'PRG', 'JFK');
+CALL insert_many_flights('2019-01-09 00:09:00.00', '2019-01-09 10:04:00.00', 30, 80, 11, 'MH', 'JFK', 'PRG');
+CALL insert_many_flights('2019-01-02 02:04:00.00', '2019-01-02 12:26:00.00', 30, 80, 11, 'MH', 'PRG', 'JFK');
+CALL insert_many_flights('2019-01-04 06:19:00.00', '2019-01-04 10:31:00.00', 30, 80, 6, 'AA', 'MOW', 'PRG');
+CALL insert_many_flights('2019-01-06 10:09:00.00', '2019-01-06 13:37:00.00', 30, 80, 4, 'FZ', 'BUD', 'PRG');
+
+
+CALL insert_many_flights('2018-12-12 05:24:00.00', '2018-12-12 10:09:00.00', 35, 90, 11, 'FR', 'PRG', 'CFN');
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 10:01:00.00', 35, 90, 11, 'FR', 'PRG', 'MOW');
+CALL insert_many_flights('2018-12-16 10:09:00.00', '2018-12-16 13:27:00.00', 35, 90, 11, 'MH', 'PRG', 'BTS');
+
+CALL insert_many_flights('2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 35, 90, 11, 'FR', 'PRG', 'MOW');
+CALL insert_many_flights('2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 35, 90, 11, 'FR', 'PRG', 'LYS');
+CALL insert_many_flights('2018-12-25 06:19:00.00', '2018-12-25 06:59:00.00', 35, 90, 11, 'FR', 'PRG', 'TXL');
+
+
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 10:01:00.00', 35, 90, 11, 'FR', 'FRA', 'VIE');
+CALL insert_many_flights('2018-12-16 10:09:00.00', '2018-12-16 13:49:00.00', 35, 90, 11, 'FR', 'CDG', 'VIE');
+
+CALL insert_many_flights('2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 35, 90, 11, 'FR', 'LHR', 'VIE');
+CALL insert_many_flights('2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 35, 90, 11, 'AY', 'HEL', 'VIE');
+CALL insert_many_flights('2018-12-25 06:19:00.00', '2018-12-25 09:34:00.00', 35, 90, 11, 'FR', 'CFN', 'VIE');
+CALL insert_many_flights('2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 35, 90, 11, 'OS', 'BRQ', 'VIE');
+CALL insert_many_flights('2018-12-10 06:19:00.00', '2018-12-10 09:37:00.00', 35, 90, 11, 'OS', 'CDG', 'VIE');
+CALL insert_many_flights('2018-12-12 10:09:00.00', '2018-12-12 12:34:00.00', 35, 90, 11, 'OS', 'LYS', 'VIE');
+CALL insert_many_flights('2018-12-12 00:09:00.00', '2018-12-12 10:04:00.00', 35, 90, 11, 'FR', 'JFK', 'VIE');
+
+
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 10:01:00.00', 35, 90, 6, 'LH', 'VIE', 'FRA');
+CALL insert_many_flights('2018-12-16 10:09:00.00', '2018-12-16 13:27:00.00', 35, 90, 11, 'FR', 'VIE', 'CDG');
+
+CALL insert_many_flights('2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 35, 90, 15, 'OS', 'VIE', 'LHR');
+CALL insert_many_flights('2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 35, 90, 5, 'OS', 'VIE', 'HEL');
+CALL insert_many_flights('2018-12-25 06:19:00.00', '2018-12-25 06:49:00.00', 35, 90, 11, 'OS', 'VIE', 'BTS');
+CALL insert_many_flights('2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 35, 90, 11, 'OS', 'VIE', 'BRQ');
+CALL insert_many_flights('2018-12-10 06:19:00.00', '2018-12-10 09:37:00.00', 35, 90, 11, 'AF', 'VIE', 'CDG');
+CALL insert_many_flights('2018-12-12 10:09:00.00', '2018-12-12 05:34:00.00', 35, 90, 11, 'FR', 'CFN', 'LYS');
+CALL insert_many_flights('2018-12-12 00:09:00.00', '2018-12-12 10:04:00.00', 35, 90, 11, 'AA', 'VIE', 'JFK');
+
+CALL insert_many_flights('2018-12-25 10:15:00.00', '2018-12-25 22:50:00.00', 35, 90, 11, 'AA', 'KUL', 'JFK');
+CALL insert_many_flights('2018-12-25 11:10:00.00', '2018-12-25 22:45:00.00', 35, 90, 7, 'LH', 'PEK', 'JFK');
+CALL insert_many_flights('2018-12-30 8:00:00.00', '2018-12-30 16:15:00.00', 35, 90, 2, 'BA', 'CDG', 'JFK');
+CALL insert_many_flights('2018-12-04 08:00:00.00', '2018-12-04 19:45:00.00', 35, 90, 5, 'AY', 'HEL', 'JFK');
+CALL insert_many_flights('2018-12-05 18:00:00.00', '2018-12-06 04:50:00.00', 35, 90, 5, 'AY', 'LGW', 'JFK');
+CALL insert_many_flights('2018-12-25 04:10:00.00', '2018-12-25 11:45:00.00', 35, 90, 6, 'LH', 'LHR', 'JFK');
+CALL insert_many_flights('2018-12-27 06:15:00.00', '2018-12-27 11:55:00.00', 35, 90, 11, 'AA', 'DFW', 'JFK');
+
+CALL insert_many_flights('2018-12-25 10:15:00.00', '2018-12-25 22:50:00.00', 35, 90, 11, 'AA', 'JFK', 'KUL');
+CALL insert_many_flights('2018-12-25 11:10:00.00', '2018-12-25 22:45:00.00', 35, 90, 7, 'LH', 'JFK', 'PEK');
+CALL insert_many_flights('2018-12-30 8:00:00.00', '2018-12-30 16:15:00.00', 35, 90, 2, 'BA', 'JFK', 'CDG');
+CALL insert_many_flights('2018-12-04 08:00:00.00', '2018-12-04 19:45:00.00', 35, 90,5, 'AY', 'JFK', 'HEL');
+CALL insert_many_flights('2018-12-05 18:00:00.00', '2018-12-06 04:50:00.00', 35, 90, 5, 'AY', 'JFK', 'LGW');
+CALL insert_many_flights('2018-12-25 04:10:00.00', '2018-12-25 11:55:00.00', 35, 90, 5, 'LH', 'JFK', 'LHR');
+CALL insert_many_flights('2018-12-27 06:15:00.00', '2018-12-27 07:55:00.00', 35, 90, 11, 'AA', 'JFK', 'DFW');
+
+CALL insert_many_flights('2018-12-28 06:19:00.00', '2018-12-28 09:34:00.00', 35, 90, 11, 'FR', 'LHR', 'BTS');
+CALL insert_many_flights('2018-12-22 06:34:00.00', '2018-12-22 10:09:00.00', 35, 90, 11, 'AY', 'HEL', 'BTS');
+CALL insert_many_flights('2018-12-26 06:34:00.00', '2018-12-26 10:09:00.00', 35, 90, 11, 'FR', 'BRQ', 'BTS');
+CALL insert_many_flights('2018-12-10 06:19:00.00', '2018-12-10 09:37:00.00', 35, 90, 11, 'AF', 'CDG', 'BTS');
+CALL insert_many_flights('2018-12-12 10:09:00.00', '2018-12-12 13:34:00.00', 35, 90, 11, 'AF', 'LYS', 'BTS');
+CALL insert_many_flights('2018-12-12 00:09:00.00', '2018-12-12 10:04:00.00', 35, 90, 11, 'AA', 'JFK', 'BTS');
+
+CALL insert_many_flights('2018-12-29 06:19:00.00', '2018-12-29 09:34:00.00', 35, 90, 11, 'FR', 'BTS', 'CFN');
+CALL insert_many_flights('2018-12-23 06:34:00.00', '2018-12-23 10:09:00.00', 35, 90, 5, 'AY', 'BTS', 'HEL');
+CALL insert_many_flights('2018-12-27 06:34:00.00', '2018-12-27 10:09:00.00', 35, 90, 11, 'FR', 'CFN', 'BRQ');
+CALL insert_many_flights('2018-12-11 06:19:00.00', '2018-12-11 09:37:00.00', 35, 90, 11, 'FR', 'BTS', 'CDG');
+CALL insert_many_flights('2018-12-13 10:09:00.00', '2018-12-13 14:44:00.00', 35, 90, 11, 'FR', 'BTS', 'LYS');
+CALL insert_many_flights('2018-12-13 00:09:00.00', '2018-12-13 10:04:00.00', 35, 90, 11, 'AA', 'BTS', 'JFK');
+
+
+CALL insert_many_flights('2018-12-12 02:04:00.00', '2018-12-12 04:26:00.00', 35, 90, 11, 'LH', 'PRG', 'BRU');
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 11:11:00.00', 35, 90, 11, 'FR', 'MOW', 'BRU');
+CALL insert_many_flights('2018-12-16 10:09:00.00', '2018-12-16 13:37:00.00', 35, 90, 11, 'FR', 'BUD', 'BRU');
+CALL insert_many_flights('2018-12-12 05:24:00.00', '2018-12-12 10:09:00.00', 35, 90, 11, 'FR', 'PRG', 'BRU');
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 10:01:00.00', 35, 90, 11, 'FR', 'PRG', 'BRU');
+
+CALL insert_many_flights('2018-12-03 02:04:00.00', '2018-12-03 04:26:00.00', 40, 70, 11, 'FR', 'BRU', 'PRG');
+CALL insert_many_flights('2018-12-05 06:19:00.00', '2018-12-05 11:11:00.00', 40, 70, 11, 'FR', 'BRU', 'MOW');
+CALL insert_many_flights('2018-12-07 10:09:00.00', '2018-12-07 13:37:00.00', 40, 70, 11, 'FR', 'BRU', 'BUD');
+CALL insert_many_flights('2018-12-03 05:24:00.00', '2018-12-03 10:09:00.00', 40, 70, 11, 'FR', 'BRU', 'PRG');
+CALL insert_many_flights('2018-12-05 06:19:00.00', '2018-12-05 10:01:00.00', 40, 70, 11, 'FR', 'BRU', 'PRG');
+
+CALL insert_many_flights('2018-12-02 02:04:00.00', '2018-12-02 04:26:00.00', 40, 70, 16, 'BA', 'BRU', 'LGW');
+CALL insert_many_flights('2018-12-03 02:04:00.00', '2018-12-03 04:06:00.00', 40, 70, 16, 'BA', 'LGW', 'BRU');
+
+CALL insert_many_flights('2018-12-04 06:19:00.00', '2018-12-04 10:01:00.00', 40, 70, 1, 'FZ', 'BRU', 'DXB');
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 11:11:00.00', 35, 90, 1, 'FZ', 'MOW', 'DXB');
+CALL insert_many_flights('2018-12-13 06:19:00.00', '2018-12-13 11:11:00.00', 35, 90, 1, 'FZ', 'FRA', 'DXB');
+CALL insert_many_flights('2018-12-12 06:19:00.00', '2018-12-12 11:11:00.00', 35, 90, 2, 'FZ', 'CDG', 'DXB');
+CALL insert_many_flights('2018-12-11 06:19:00.00', '2018-12-11 11:11:00.00', 35, 90, 2, 'TK', 'IST', 'DXB');
+CALL insert_many_flights('2018-12-10 06:19:00.00', '2018-12-10 11:11:00.00', 35, 90, 2, 'TK', 'LGW', 'DXB');
+CALL insert_many_flights('2018-12-9 06:19:00.00', '2018-12-9 11:11:00.00', 35, 90, 7, 'TK', 'PEK', 'DXB');
+CALL insert_many_flights('2018-12-4 06:19:00.00', '2018-12-4 11:11:00.00', 35, 90, 7, 'TK', 'KUL', 'DXB');
+
+CALL insert_many_flights('2018-12-05 06:19:00.00', '2018-12-05 15:41:00.00', 40, 70, 1, 'FZ', 'DXB', 'BRU');
+CALL insert_many_flights('2018-12-15 06:19:00.00', '2018-12-15 14:51:00.00', 35, 90, 1, 'FZ', 'DXB', 'MOW');
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 15:11:00.00', 35, 90, 1, 'FZ', 'DXB', 'FRA');
+CALL insert_many_flights('2018-12-13 06:19:00.00', '2018-12-13 11:11:00.00', 35, 90, 2, 'FZ', 'DXB', 'CDG');
+CALL insert_many_flights('2018-12-12 06:19:00.00', '2018-12-12 11:11:00.00', 35, 90, 2, 'TK', 'DXB', 'IST');
+CALL insert_many_flights('2018-12-11 06:19:00.00', '2018-12-11 11:11:00.00', 35, 90, 2, 'TK', 'DXB', 'LGW');
+CALL insert_many_flights('2018-12-10 06:19:00.00', '2018-12-10 16:00:00.00', 35, 90, 7, 'TK', 'DXB', 'PEK');
+CALL insert_many_flights('2018-12-05 06:19:00.00', '2018-12-05 15:55:00.00', 35, 90, 7, 'TK', 'DXB', 'KUL');
+
+
+CALL insert_many_flights('2018-12-10 06:19:00.00', '2018-12-10 11:11:00.00', 35, 90, 8, 'TK', 'LGW', 'IST');
+CALL insert_many_flights('2018-12-9 06:19:00.00', '2018-12-9 11:11:00.00', 35, 90, 8, 'TK', 'PEK', 'IST');
+CALL insert_many_flights('2018-12-4 06:19:00.00', '2018-12-4 11:11:00.00', 35, 90, 8, 'TK', 'KUL', 'IST');
+
+CALL insert_many_flights('2018-12-05 06:19:00.00', '2018-12-05 15:01:00.00', 40, 70, 8, 'TK', 'IST', 'BRU');
+CALL insert_many_flights('2018-12-15 06:19:00.00', '2018-12-15 10:11:00.00', 35, 90, 8, 'FZ', 'IST', 'MOW');
+CALL insert_many_flights('2018-12-14 06:19:00.00', '2018-12-14 14:11:00.00', 35, 90, 8, 'FZ', 'IST', 'FRA');
+CALL insert_many_flights('2018-12-13 06:19:00.00', '2018-12-13 14:43:00.00', 35, 90, 8, 'TK', 'IST', 'CDG');
+-- -- insert reservations
+-- INSERT INTO reservations (payment_status, created_at, created_by)
+-- VALUES ('1', '2019-03-20 02:42:11.00', '1');
+
+-- INSERT INTO reservations (payment_status, created_at, created_by)
+-- VALUES ('0', '2019-03-25 21:12:12.00', '2');
+
+-- INSERT INTO reservations (payment_status, created_at, created_by)
+-- VALUES ('1', '2019-02-01 23:42:12.00', '3');
+
+-- INSERT INTO reservations (payment_status, created_at, created_by)
+-- VALUES ('0', '2019-05-01 23:42:12.00', '4');
+
+-- INSERT INTO reservations (payment_status, created_at, created_by)
+-- VALUES ('1', '2019-05-01 00:42:12.00', '4');
+
+-- INSERT INTO reservations (payment_status, created_at, created_by)
+
+-- VALUES ('1', '2019-05-03 5:42:12.00', '5');
+
+-- -- insert tickets
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (410, 2, 'AA1001', 'E', '2019-03-20 02:42:11.00');
+
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (123, 4, 'AA1002', 'B', '2019-03-25 21:12:12.00');
+
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (142, 4, 'AA1003', 'B', '2019-02-01 23:42:12.00');
+
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (142, 6, 'AA1004', 'B', '2019-05-01 23:42:12.00');
+
+-- -- reservation = NULL == tmp reservation
+-- INSERT INTO tickets (cost, flight, seat_class, created_at)
+-- VALUES (172, 'LI1725', 'B', '2018-11-24 02:02:12.00');
+
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (112, 5, 'AA1006', 'E', '2019-05-03 5:42:12.00');
+
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (512, 5, 'AA1007', 'E', '2019-03-20 02:42:11.00');
+
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (512, 2, 'AA1008', 'E', '2019-03-25 21:12:12.00');
+
+-- INSERT INTO tickets (cost, reservation, flight, seat_class, created_at)
+-- VALUES (512, 4, 'AA1009', 'E', '2019-02-01 23:42:12.00');
 
 
 -- insert search records
