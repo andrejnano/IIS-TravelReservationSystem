@@ -11,7 +11,7 @@
       </v-btn> -->
     </v-list-tile-content>
     <v-spacer></v-spacer>
-    <v-btn dark color="primary" large>
+    <v-btn @click="openFlight" dark color="primary" large>
       {{ result.price }} €
     </v-btn>
   </v-list-tile>
@@ -35,7 +35,16 @@ export default {
     logo: function() {
       return `../images/${this.result.airline.id_logo}.png`;
     }
-
+  },
+  methods: {
+    openFlight() {
+      this.$router.push({
+        path: '/flight',
+        query: {
+          flight_number: this.result.flight_number
+        }
+      });
+    }
   }
 }
 

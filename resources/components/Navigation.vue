@@ -13,6 +13,7 @@
     <v-spacer></v-spacer>
     <template>
       <v-toolbar-items v-if="isLoggedIn">
+        <v-btn flat to="/profile">Logged in as {{ fullName }}</v-btn>
         <v-btn @click="logout" flat>Log out</v-btn>
       </v-toolbar-items>
       <v-toolbar-items v-else>
@@ -30,28 +31,45 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      isLoggedIn: true,
+      isLoggedIn: false,
+      firstName: '',
+      lastName: ''
+    }
+  },
+  computed: {
+    fullName() {
+      return this.firstName + ' ' + this.lastName;
     }
   },
   updated() {
+    // TODO: change to created
+    // TODO: vlozit do samostatnej f.
     axios.get('/api/session').then((response) => {
 
-      if (response.status.code == 200)
+      if (response.status == 200)
       {
+        console.log('session OK');
         this.isLoggedIn = true;
+        this.firstName = response.data.first_name ? response.data.first_name : 'Unknown';
+        this.lastName = response.data.last_name ? response.data.last_name : 'Unknown';
       }
       else
       {
+        console.log('session NOT oK');
         this.isLoggedIn = false;
       }
 
-    });
+    }).catch((error) => {console.log(error);});
   },
   methods: {
     logout() {
       axios.post('/api/logout').then((response) => {
         console.log(response);
         this.isLoggedIn = false;
+        this.$router.go({
+          path: '/',
+          force: true,
+        });
       });
     }
   }
