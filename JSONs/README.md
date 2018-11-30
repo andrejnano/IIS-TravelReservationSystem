@@ -1,15 +1,20 @@
 # Dokumentácia k rozhraniu API
 
 ## GET requests
+
 ### Search
 Vráti vyhľadané lety vo formáte JSON.
 Všetky argumenty GET requestu sú voliteľné, pokiaľ užívateľ nezadá ani jeden parameter, tak sa mu vypíše obsah tabuľky letov a nejaké ďalšie podrobnosti.
+
 #### Vysvetlenie argumentov
+
 - **origin** Definuje podmienku pre vyhľadanie počiatočného letiska. Vyhľadáva v troch rôznych stĺpcoch tabuľky **airport_code, city, country**. Pokiaľ sa zhoduje aspoň s jedným stĺpcom, tak je podmienka splnená. To znamená, že užívateľ může použiť vyhľadávacie reťazce ako napr.: VIE, Vienna, Austria. V prvom prípade vyhľadá z letisk s kódom VIE a v poslednom všetky lety s Rakúska. Default, podmienka je vynechaná.
 - **destination** Definuje podmienku pre vyhľadanie cieľového letiska. Použitie je rovnaké ako u parametru origin. Default, podmienka je vynechaná.
 - **tickets** Definuje počet lístkov, ktoré používateľ potrebuje. Celé číslo vačšie ako 0. Default 1.
 - **min_t** Určuje minimálny čas, ktorý chce užívateľ stráviť v destinácii. Hodnota je v **dňoch** celé nezáporné číslo. Default 0.
 - **max_t** Určuje maximálny čas, ktorý chce užívateľ stráviť v destinácii. Hodnota je v **dňoch** celé nezáporné číslo. Default, podmienka je vynechaná.
+- **departure_date**
+- **arrival_date**
 - **class** Trieda sedadla, let musí mať definovaný počet voľných sedadiel v tejto triede. Tri
 možnosti hodnoty argumentu triedy: **first, business, economy**. Default postupuje sa od najlacnejšej k najdrahšej a zisťuje sa či je dosť miest v tejto triede. To znamená že pokiaľ si užívateľ zadal že chce viac lístkov, tak všetky budú v jednej triede. Nikdy nerozdelí skupinu do viacerých tried.
 

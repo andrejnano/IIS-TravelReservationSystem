@@ -34516,10 +34516,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__views_Login_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__views_Login_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__views_Register_vue__ = __webpack_require__(240);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__views_Register_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__views_Register_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__views_About_vue__ = __webpack_require__(245);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__views_About_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__views_About_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__views_Contact_vue__ = __webpack_require__(250);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__views_Contact_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__views_Contact_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__views_Flight_vue__ = __webpack_require__(255);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__views_Flight_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__views_Flight_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__views_About_vue__ = __webpack_require__(245);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__views_About_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__views_About_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__views_Contact_vue__ = __webpack_require__(250);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__views_Contact_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__views_Contact_vue__);
 // Setup Vue.js
 window.Vue = __webpack_require__(12);
 
@@ -34547,6 +34549,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_resource__["a" /* default */]);
 
 
 
+// import Profile from './views/Profile.vue';
 
 
 
@@ -34568,11 +34571,11 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
   }, {
     path: '/about',
     name: 'about',
-    component: __WEBPACK_IMPORTED_MODULE_11__views_About_vue___default.a
+    component: __WEBPACK_IMPORTED_MODULE_12__views_About_vue___default.a
   }, {
     path: '/contact',
     name: 'contact',
-    component: __WEBPACK_IMPORTED_MODULE_12__views_Contact_vue___default.a
+    component: __WEBPACK_IMPORTED_MODULE_13__views_Contact_vue___default.a
   }, {
     path: '/searched',
     name: 'results',
@@ -34585,6 +34588,16 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
     path: '/register',
     name: 'register',
     component: __WEBPACK_IMPORTED_MODULE_10__views_Register_vue___default.a
+  },
+  // {
+  //   path: '/profile',
+  //   name: 'profile',
+  //   component: Profile,
+  // },
+  {
+    path: '/flight',
+    name: 'flight',
+    component: __WEBPACK_IMPORTED_MODULE_11__views_Flight_vue___default.a
   }]
 });
 
@@ -62512,6 +62525,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -62519,19 +62533,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      isLoggedIn: true
+      isLoggedIn: false,
+      firstName: '',
+      lastName: ''
     };
+  },
+
+  computed: {
+    fullName: function fullName() {
+      return this.firstName + ' ' + this.lastName;
+    }
   },
   updated: function updated() {
     var _this = this;
 
+    // TODO: change to created
+    // TODO: vlozit do samostatnej f.
     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/session').then(function (response) {
 
-      if (response.status.code == 200) {
+      if (response.status == 200) {
+        console.log('session OK');
         _this.isLoggedIn = true;
+        _this.firstName = response.data.first_name ? response.data.first_name : 'Unknown';
+        _this.lastName = response.data.last_name ? response.data.last_name : 'Unknown';
       } else {
+        console.log('session NOT oK');
         _this.isLoggedIn = false;
       }
+    }).catch(function (error) {
+      console.log(error);
     });
   },
 
@@ -62542,6 +62572,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/logout').then(function (response) {
         console.log(response);
         _this2.isLoggedIn = false;
+        _this2.$router.go({
+          path: '/',
+          force: true
+        });
       });
     }
   }
@@ -62621,6 +62655,10 @@ var render = function() {
           ? _c(
               "v-toolbar-items",
               [
+                _c("v-btn", { attrs: { flat: "", to: "/profile" } }, [
+                  _vm._v("Logged in as " + _vm._s(_vm.fullName))
+                ]),
+                _vm._v(" "),
                 _c(
                   "v-btn",
                   { attrs: { flat: "" }, on: { click: _vm.logout } },
@@ -63221,21 +63259,13 @@ __WEBPACK_IMPORTED_MODULE_6__fortawesome_fontawesome_svg_core__["d" /* library *
       loadingSubmit: false,
       departureDateMenu: false,
       arrivalDateMenu: false,
-      toggleRoundTrip: 1,
+      toggleRoundTrip: 0,
       FORMisRoundTrip: this.isRoundTrip,
       FORMisOneWay: this.isOneWay,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate.toISOString().substr(0, 10),
       FORMarrivalDate: this.arrivalDate.toISOString().substr(0, 10),
-      // destinations: [
-      //   { code: 'VIE', full: 'Vienna' },
-      //   { code: 'JFK', full: 'New York' },
-      //   { code: 'CDG', full: 'Paris' },
-      //   { code: 'PRG', full: 'Prague' },
-      //   { code: 'HEL', full: 'Helsinki'},
-      //   { code: 'LGW', full: 'London'},
-      // ],
       searchText: '',
       slider: 450,
       sliderMin: 1,
@@ -69950,58 +69980,60 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "v-card-text",
-        [
-          _c(
-            "v-menu",
-            {
-              attrs: {
-                "close-on-content-click": false,
-                "full-width": "",
-                "max-width": "290"
-              },
-              model: {
-                value: _vm.arrivalDateMenu,
-                callback: function($$v) {
-                  _vm.arrivalDateMenu = $$v
-                },
-                expression: "arrivalDateMenu"
-              }
-            },
+      _vm.FORMisRoundTrip
+        ? _c(
+            "v-card-text",
             [
-              _c("v-text-field", {
-                attrs: {
-                  slot: "activator",
-                  value: _vm.computedArrivalDateFormatted,
-                  clearable: "",
-                  label: "Date of arrival",
-                  "prepend-icon": "mdi-calendar",
-                  readonly: ""
-                },
-                slot: "activator"
-              }),
-              _vm._v(" "),
-              _c("v-date-picker", {
-                on: {
-                  change: function($event) {
-                    _vm.arrivalDateMenu = false
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    "close-on-content-click": false,
+                    "full-width": "",
+                    "max-width": "290"
+                  },
+                  model: {
+                    value: _vm.arrivalDateMenu,
+                    callback: function($$v) {
+                      _vm.arrivalDateMenu = $$v
+                    },
+                    expression: "arrivalDateMenu"
                   }
                 },
-                model: {
-                  value: _vm.FORMarrivalDate,
-                  callback: function($$v) {
-                    _vm.FORMarrivalDate = $$v
-                  },
-                  expression: "FORMarrivalDate"
-                }
-              })
+                [
+                  _c("v-text-field", {
+                    attrs: {
+                      slot: "activator",
+                      value: _vm.computedArrivalDateFormatted,
+                      clearable: "",
+                      label: "Date of arrival",
+                      "prepend-icon": "mdi-calendar",
+                      readonly: ""
+                    },
+                    slot: "activator"
+                  }),
+                  _vm._v(" "),
+                  _c("v-date-picker", {
+                    on: {
+                      change: function($event) {
+                        _vm.arrivalDateMenu = false
+                      }
+                    },
+                    model: {
+                      value: _vm.FORMarrivalDate,
+                      callback: function($$v) {
+                        _vm.FORMarrivalDate = $$v
+                      },
+                      expression: "FORMarrivalDate"
+                    }
+                  })
+                ],
+                1
+              )
             ],
             1
           )
-        ],
-        1
-      ),
+        : _vm._e(),
       _vm._v(" "),
       _c("v-divider"),
       _vm._v(" "),
@@ -70420,7 +70452,7 @@ var initialFormValues = {
       this.results = []; // reset the results
 
       // TODO: prepare query string
-      var query = '/api/search?origin=' + formValues.origin.airport_code + '&destination=' + formValues.destination.airport_code;
+      var query = '/api/search?origin=' + formValues.origin.airport_code + ('&destination=' + formValues.destination.airport_code) + ('&departure_date=' + formValues.destination.departureDate) + ('&arrival_date=' + formValues.destination.arrivalDate);
 
       // perform the query
       __WEBPACK_IMPORTED_MODULE_9_axios___default.a.get(query).then(function (response) {
@@ -70599,7 +70631,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     logo: function logo() {
       return "../images/" + this.result.airline.id_logo + ".png";
     }
-
+  },
+  methods: {
+    openFlight: function openFlight() {
+      this.$router.push({
+        path: '/flight',
+        query: {
+          flight_number: this.result.flight_number
+        }
+      });
+    }
   }
 });
 
@@ -70633,9 +70674,14 @@ var render = function() {
       _vm._v(" "),
       _c("v-spacer"),
       _vm._v(" "),
-      _c("v-btn", { attrs: { dark: "", color: "primary", large: "" } }, [
-        _vm._v("\n    " + _vm._s(_vm.result.price) + " €\n  ")
-      ])
+      _c(
+        "v-btn",
+        {
+          attrs: { dark: "", color: "primary", large: "" },
+          on: { click: _vm.openFlight }
+        },
+        [_vm._v("\n    " + _vm._s(_vm.result.price) + " €\n  ")]
+      )
     ],
     1
   )
@@ -70974,7 +71020,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -71063,6 +71109,8 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.defaults.headers.post['Content-Typ
   },
   methods: {
     submit: function submit() {
+      var _this = this;
+
       if (this.$refs.form.validate()) {
         // Native form submission is not yet supported
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/login', {
@@ -71072,9 +71120,15 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.defaults.headers.post['Content-Typ
 
           if (response.status == 200) {
             console.log("LOGIN OK! : 200");
+            _this.$router.go({
+              path: '/',
+              force: true
+            });
           } else {
             console.log("LOGIN FAILED! : " + response.status);
           }
+        }).catch(function (error) {
+          console.log("ERR: " + error);
         });
       }
     },
@@ -71121,7 +71175,7 @@ var render = function() {
                     { staticClass: "elevation-2" },
                     [
                       _c("v-card-title", { staticClass: "headline" }, [
-                        _vm._v("Sign up!")
+                        _vm._v("Log in!")
                       ]),
                       _vm._v(" "),
                       _c(
@@ -71238,10 +71292,6 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(241)
-}
 var normalizeComponent = __webpack_require__(4)
 /* script */
 var __vue_script__ = __webpack_require__(243)
@@ -71250,7 +71300,7 @@ var __vue_template__ = __webpack_require__(244)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -71285,51 +71335,62 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 241 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(242);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("1374d19c", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4fe59608\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Register.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4fe59608\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Register.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 242 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 241 */,
+/* 242 */,
 /* 243 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -71339,7 +71400,74 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+
+__WEBPACK_IMPORTED_MODULE_0_axios___default.a.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      showPasswordField: false,
+      password: 'Password',
+      rules: {
+        required: function required(value) {
+          return !!value || 'Required.';
+        },
+        min: function min(v) {
+          return v.length >= 8 || 'Min 8 characters';
+        },
+        emailMatch: function emailMatch() {
+          return 'The email and password you entered don\'t match';
+        }
+      },
+      valid: true,
+      email: '',
+      firstName: '',
+      lastName: '',
+      emailRules: [function (v) {
+        return !!v || 'E-mail is required';
+      }, function (v) {
+        return (/.+@.+/.test(v) || 'E-mail must be valid'
+        );
+      }],
+      nameRules: [function (v) {
+        return !!v || 'Name is required';
+      }, function (v) {
+        return v.length <= 10 || 'Name must be less than 10 characters';
+      }]
+    };
+  },
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      if (this.$refs.form.validate()) {
+        // Native form submission is not yet supported
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/register', {
+          first_name: this.firstName,
+          last_name: this.lastName,
+          email: this.email,
+          password: this.password
+        }).then(function (response) {
+          if (response.status == 200) {
+            console.log("REGISTER + LOGIN OK! : 200");
+            _this.$router.go({
+              path: '/',
+              force: true
+            });
+          } else {
+            console.log("REGISTRATION FAILED! : " + response.status);
+          }
+        }).catch(function (error) {
+          console.log("REGISTRATION ERR: " + error);
+        });
+      }
+    },
+    clear: function clear() {
+      this.$refs.form.reset();
+    }
+  }
+});
 
 /***/ }),
 /* 244 */
@@ -71349,16 +71477,168 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "v-content",
+    [
+      _c(
+        "v-container",
+        { attrs: { fluid: "" } },
+        [
+          _c(
+            "v-layout",
+            { attrs: { row: "", "justify-center": "" } },
+            [
+              _c(
+                "v-flex",
+                {
+                  attrs: {
+                    xs10: "",
+                    sm8: "",
+                    md6: "",
+                    lg4: "",
+                    "pa-4": "",
+                    "ma-4": ""
+                  }
+                },
+                [
+                  _c(
+                    "v-card",
+                    { staticClass: "elevation-2" },
+                    [
+                      _c("v-card-title", { staticClass: "headline" }, [
+                        _vm._v("Register!")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-form",
+                            {
+                              ref: "form",
+                              attrs: { "lazy-validation": "" },
+                              model: {
+                                value: _vm.valid,
+                                callback: function($$v) {
+                                  _vm.valid = $$v
+                                },
+                                expression: "valid"
+                              }
+                            },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: _vm.nameRules,
+                                  label: "First name",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.firstName,
+                                  callback: function($$v) {
+                                    _vm.firstName = $$v
+                                  },
+                                  expression: "firstName"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: _vm.nameRules,
+                                  label: "Last name",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.lastName,
+                                  callback: function($$v) {
+                                    _vm.lastName = $$v
+                                  },
+                                  expression: "lastName"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: _vm.emailRules,
+                                  label: "E-mail",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.email,
+                                  callback: function($$v) {
+                                    _vm.email = $$v
+                                  },
+                                  expression: "email"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-text-field", {
+                                attrs: {
+                                  "append-icon": _vm.showPasswordField
+                                    ? "visibility_off"
+                                    : "visibility",
+                                  rules: [_vm.rules.required, _vm.rules.min],
+                                  type: _vm.showPasswordField
+                                    ? "text"
+                                    : "password",
+                                  name: "password-input",
+                                  label: "Enter your password",
+                                  hint: "At least 8 characters",
+                                  counter: "",
+                                  required: ""
+                                },
+                                on: {
+                                  "click:append": function($event) {
+                                    _vm.showPasswordField = !_vm.showPasswordField
+                                  }
+                                },
+                                model: {
+                                  value: _vm.password,
+                                  callback: function($$v) {
+                                    _vm.password = $$v
+                                  },
+                                  expression: "password"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { disabled: !_vm.valid },
+                                  on: { click: _vm.submit }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                submit\n              "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("v-btn", { on: { click: _vm.clear } }, [
+                                _vm._v("clear")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("main", { attrs: { id: "faq" } }, [_c("h1", [_vm._v("FAQ")])])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -71692,6 +71972,148 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-bd758552", module.exports)
+  }
+}
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(256)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(258)
+/* template */
+var __vue_template__ = __webpack_require__(259)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/views/Flight.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-757d8eee", Component.options)
+  } else {
+    hotAPI.reload("data-v-757d8eee", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(257);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("4688beeb", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-757d8eee\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Flight.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-757d8eee\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Flight.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 257 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 258 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'Flight view'
+});
+
+/***/ }),
+/* 259 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-content",
+    [
+      _c("v-container", { attrs: { fluid: "" } }, [
+        _c("h1", [_vm._v("Flight view")])
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-757d8eee", module.exports)
   }
 }
 

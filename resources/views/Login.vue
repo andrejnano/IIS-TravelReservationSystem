@@ -4,7 +4,7 @@
       <v-layout row justify-center>
         <v-flex xs10 sm8 md6 lg4 pa-4 ma-4>
           <v-card class="elevation-2">
-            <v-card-title class="headline">Sign up!</v-card-title>
+            <v-card-title class="headline">Log in!</v-card-title>
             <v-card-text>
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
@@ -69,14 +69,21 @@ export default {
           axios.post('/api/login', {
             email: this.email,
             password: this.password,
-          }).then((response) => {
+          })
+          .then((response) => {
 
             if (response.status == 200) {
               console.log("LOGIN OK! : 200");
-
+              this.$router.go({
+                path: '/',
+                force: true,
+              });
             } else {
               console.log("LOGIN FAILED! : " + response.status);
             }
+          })
+          .catch((error) => {
+            console.log("ERR: " + error);
           });
         }
       },
