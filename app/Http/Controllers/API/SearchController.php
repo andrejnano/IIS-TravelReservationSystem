@@ -139,23 +139,10 @@ class SearchController extends Controller
     }
 
     /**
-     * Function determines number of all free seats, temporary reserved seats are subtracted
-     *
-     * @param stdClass $r One row of flight from select
-     * @return int number of all free seats
-     */
-    // protected function get_free_seats($r, $price) {
-    //     return [
-    //         [$r->fclass_seats_free - $this->count_full_class($r, "F"), class_price($r, 'first', $price)],
-    //         [$r->bclass_seats_free - $this->count_full_class($r, "B"), class_price($r, 'business', $price)],
-    //         [$r->eclass_seats_free - $this->count_full_class($r, "E"), class_price($r, 'economy', $price)]
-    //     ];
-    // }
-    /**
      * Checks if enough seats free in specified class, if no class selected cheapest possible returned
      * @return string '' if not enough empty seats, or class selected
      */
-    protected function check_tmp_reservations($r, Request $request, $price) {
+    protected function check_tmp_reservations($r, Request $request, $price, $curr_price) {
         $number_of_tickets = 1;
         $class_selected = false;
         if ($request['tickets']) {
@@ -172,24 +159,27 @@ class SearchController extends Controller
         if ($class_selected) {
             switch ($seat_class) {
                 case 'first':
-                    return [$price_f > 0 ? '' : $price_f, $price_f];
+                    return [$price_f > 0 ? 'first' : '', $price_f];
                 case 'business':
-                    return [$price_b > 0 ? '' : $price_b, $price_b];
+                    return [$price_b > 0 ? 'business' : '', $price_b];
                 case 'economy':
-                    return [$price_e > 0 ? '' : $price_e, $price_e];
+                    return [$price_e > 0 ? 'economy' : '', $price_e];
             }
         }
-        if ($price_e > 0 && ($request['min_price'] ? ((float)$request['min_price'] <= $price_e) : 1) && ($request['max_price'] ? ($price_e <= (float)$request['max_price']) : 1)) {
+        if ($price_e > 0 && /* ($request['min_price'] ? ((float)$request['min_price'] <= $price_e) : 1) && */ ($request['max_price'] ? ($price_e + $curr_price <= (float)$request['max_price']) : 1)) {
             return ['economy', $price_e];
-        } else if ($price_b > 0 && ($request['min_price'] ? ((float)$request['min_price'] <= $price_b) : 1) && ($request['max_price'] ? ($price_b <= (float)$request['max_price']) : 1)) {
+        } else if ($price_b > 0 && /* ($request['min_price'] ? ((float)$request['min_price'] <= $price_b) : 1) && */ ($request['max_price'] ? ($price_b + $curr_price <= (float)$request['max_price']) : 1)) {
             return ['business', $price_b];
-        } else if ($price_f > 0 && ($request['min_price'] ? ((float)$request['min_price'] <= $price_f) : 1) && ($request['max_price'] ? ($price_f <= (float)$request['max_price']) : 1)) {
+        } else if ($price_f > 0 && /* ($request['min_price'] ? ((float)$request['min_price'] <= $price_f) : 1) && */ ($request['max_price'] ? ($price_f + $curr_price <= (float)$request['max_price']) : 1)) {
             return ['first', $price_f];
         }
 
         return ["first", -1];
     }
 
+    /**
+     * determine flight time from first and last timestamp stored as user readable string
+     */
     protected function get_flight_time($first, $last) {
         $flight_time = (strtotime($first) - strtotime($last)) / 60;
         $flight_min = $flight_time % 60;
@@ -197,7 +187,10 @@ class SearchController extends Controller
         $flight_time_str = sprintf("%dh %dm\n", $flight_hour, $flight_min);
         return [$flight_time, $flight_time_str];
     }
-
+    /**
+     * create obhect representation for direct flights
+     * curr_price used as filter if it is exceeded, then return NULL, else return object representation
+     */
     protected function obj_rep_flight($r, Request $request, $curr_price) {
         $row_array["flight_number"] = $r->flight_number;
         $row_array["departure_time"] = date('Y-m-d G:i:s', strtotime($r->departure_time));
@@ -207,14 +200,14 @@ class SearchController extends Controller
         $square_cost = 10;
         $start_price = 0.025;
         $price = $start_price*200 + $start_price * ($flight_time + $flight_time*$flight_time/$square_cost);
-        [$seat_class, $price] = $this->check_tmp_reservations($r, $request, $price);
+        [$seat_class, $price] = $this->check_tmp_reservations($r, $request, $price, $curr_price);
         // class_price($r, $seat_class, $price);
         if (!$seat_class || $price < 0)
             return NULL;
 
-        if ($request['min_price'] && $price + $curr_price < $request['min_price']) {
-            return NULL;
-        }
+        // if ($request['min_price'] && $price + $curr_price < $request['min_price']) {
+        //     return NULL;
+        // }
         if ($request['max_price'] && $price + $curr_price > $request['max_price']) {
             return NULL;
         }
@@ -256,62 +249,23 @@ class SearchController extends Controller
             return NULL;
             // dd($all);
         $all['total_time'] = $this->get_flight_time(end($all)['arrival_time'], $all[0]['departure_time'])[1];
+        
+        if ($request['min_price'] && $curr_price <= $request['min_price']) {
+            return NULL;
+        }
+        if ($request['max_price'] && $curr_price >= $request['max_price']) {
+            return NULL;
+        }
         $all['total_price'] = $curr_price;
         return $all;        
     }
 
-
-    protected function select_flights_there(Request $request_arr) {
-
-        $pdo = DB::connection()->getPdo();
-        $origin = $pdo->quote($request_arr['origin']);
-        $destination = $pdo->quote($request_arr['destination']);
-        $departure_before = $pdo->quote($request_arr['depart_before']);
-        $departure_after = $pdo->quote($request_arr['depart_after']);
-        if (!isset($request_arr['tickets'])) {
-            $request_arr['tickets'] = 1;
-        }
-        $number_of_tickets = $pdo->quote($request_arr['tickets']);
-        $seat_class = $request_arr['class'];
-
-        if (!$departure_after)
-            $departure_after = Carbon::now();
-
-
-        $select_query= $this->get_flight_query();
-        if ($request_arr['origin']) {
-            $select_query .= $this->set_location("o", $origin);
-        }
-        if ($request_arr['destination']) {
-            $select_query .= $this->set_location("d", $destination);
-        }
-        if ($request_arr['departure_date']) {
-            $departure_after = strtotime($request_arr['departure_date']);
-            $departure_before = strtotime("+1 day", $departure_after);
-            $select_query .= " UNIX_TIMESTAMP(departure_time) < $departure_before AND ";
-            $select_query .= " UNIX_TIMESTAMP(departure_time) > $departure_after AND ";
-        } else {
-            if ($request_arr['depart_before']) {
-                $select_query .= " departure_time < $departure_before AND ";
-            }
-            if ($request_arr['depart_after']) {
-                $select_query .= " departure_time > $departure_after AND ";
-            }
-        }
-        
-        [$out_query, $class_selected] = $this->select_class($seat_class, $number_of_tickets);
-        $select_query .= $out_query;
-
-        $select_query .= $this->get_db_cross_cond();
-        
-        try {
-            return DB::select($select_query);
-        } catch (Exception $e) {
-            abort(500);
-        }
-    }
-
-    // direction 0 there 1 back
+    /**
+     * Select apropriate direct flight
+    * $dest_airport if true only destination airport code was set no need to search city or country
+    * $origin_airport same as before just for origin
+    * $direction direction 0 there 1 back
+    */
     protected function select_flights_direct(Request $request_arr, $dest_airport, $origin_airport, $direction) {
         $pdo = DB::connection()->getPdo();
         $origin = $pdo->quote($request_arr['origin']);
@@ -386,7 +340,12 @@ class SearchController extends Controller
             abort(500);
         }        
     }
-
+    /**
+    * select apropriate flights also not direct possible
+    * $dest_airport if true only destination airport code was set no need to search city or country
+    * $origin_airport same as before just for origin
+    * $direction direction 0 there 1 back
+    */
     protected function select_flights(Request $request_arr, $dest_airport, $origin_airport, $direction) {
         $selected = $this->select_flights_direct($request_arr, $dest_airport, $origin_airport, $direction);
         $i = 0;
@@ -452,10 +411,8 @@ class SearchController extends Controller
                 $back_request['origin'] = end($r)->d_airport;
                 $back_request['destination'] = $r[0]->o_airport;
                 $back_request['arrival_time'] = end($r)->arrival_time;
-                // $back_request['']
 
                 $returns = $this->select_flights($back_request, true, true, true);
-                // dd($returns);
                 
                 $return_flight_arr = array();
                 
@@ -476,15 +433,13 @@ class SearchController extends Controller
         return $return_arr;
     }
 
+    /**
+     * Acess point for user query from frontend
+     */
     public function show(Request $request)
     {
         try {
             $return_arr = $this->search_flights($request);
-
-            // if (count($return_arr) < 10) {
-            //     $return_arr = $this->search_not_direct_flights($request);
-            //     // todo search for not direct flights
-            // }
             return json_encode($return_arr);
         } catch (Exception $e) {
             abort(400);

@@ -15,6 +15,8 @@ Všetky argumenty GET requestu sú voliteľné, pokiaľ užívateľ nezadá ani 
 - **max_t** Určuje maximálny čas, ktorý chce užívateľ stráviť v destinácii. Hodnota je v **dňoch** celé nezáporné číslo. Default, podmienka je vynechaná.
 - **departure_date**
 - **arrival_date**
+- **min_price**
+- **max_price**
 - **class** Trieda sedadla, let musí mať definovaný počet voľných sedadiel v tejto triede. Tri
 možnosti hodnoty argumentu triedy: **first, business, economy**. Default postupuje sa od najlacnejšej k najdrahšej a zisťuje sa či je dosť miest v tejto triede. To znamená že pokiaľ si užívateľ zadal že chce viac lístkov, tak všetky budú v jednej triede. Nikdy nerozdelí skupinu do viacerých tried.
 
