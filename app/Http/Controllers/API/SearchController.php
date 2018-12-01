@@ -286,13 +286,13 @@ class SearchController extends Controller
         if ($origin_airport) {
             // $request_arr['origin'] by mal byt vzdy zadany
             if ($request_arr['origin'])
-            $query .= "o.airport_code = $origin AND ";
+                $query .= "o.airport_code = $origin AND ";
         } else {
             if ($request_arr['origin'])
-            $query .= $this->set_location("o", $origin);
+                $query .= $this->set_location("o", $origin);
         }
         if ($direction) {
-            if ($request_arr['arrival_date']) {
+            if ($request_arr['arrival_date'] && $request_arr['arrival_date'] != 'undefined') {
                 $arrive_after = strtotime($request_arr['arrival_date']);
                 $arrive_before = strtotime("+1 days", $arrive_after);
                 $query .= " UNIX_TIMESTAMP(arrival_time) < ".$pdo->quote($arrive_before)." AND ";
@@ -315,11 +315,11 @@ class SearchController extends Controller
             $departure_after = $pdo->quote($request_arr['depart_after']);
             if (!$departure_after)
             $departure_after = Carbon::now();
-            if ($request_arr['departure_date']) {
+            if ($request_arr['departure_date'] && $request_arr['departure_date'] != 'undefined') {
                 $departure_after = strtotime($request_arr['departure_date']);
                 $departure_before = strtotime("+1 day", $departure_after);
-                $query .= " UNIX_TIMESTAMP(departure_time) < $departure_before AND ";
-                $query .= " UNIX_TIMESTAMP(departure_time) > $departure_after AND ";
+                $query .= " UNIX_TIMESTAMP(departure_time) < ".$pdo->quote($departure_before)." AND ";
+                $query .= " UNIX_TIMESTAMP(departure_time) > ".$pdo->quote($departure_after)." AND ";
             } else {
                 if ($request_arr['depart_before']) {
                     $query .= " departure_time < $departure_before AND ";

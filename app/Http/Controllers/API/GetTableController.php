@@ -18,7 +18,7 @@ class GetTableController extends Controller
      * @return void
      */
     public function get_airports() {
-        $airports = DB::table('airports')->get();
+        $airports = DB::table('airports')->orderBy('city', 'asc')->get();
 
         $airport_arr = array();
         foreach ($airports as $airport) {
