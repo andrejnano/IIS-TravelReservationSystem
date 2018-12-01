@@ -7,61 +7,54 @@
         <v-layout ma-2 column align-start>
           <v-flex ma-2 xs11 sm9 md7 lg5>
             <main role="main">
-              <h1 class="display-2 font-weight-bold mb-3">Edit database</h1><br>
+              <h1 class="display-2 mb-3">Edit database</h1><br>
             </main>
           </v-flex>
 
-          <v-flex>
-              <!-- ADD USER - 1 -->
-              <v-btn color="info" @click="addUser" large>
-                Add user
-                <span slot="submitLoader" class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </v-btn>
-          </v-flex>
+          <!-- USER - 1 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>USERS</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addUser">ADD</v-btn>    
+            <v-btn dark color="blue">SEARCH</v-btn>
+          </v-list-tile>
 
-          <v-flex>
-              <!-- ADD FLIGHT - 2 -->
-              <v-btn color="info" @click="addFlight" large>
-                Add flight
-                <span slot="submitLoader" class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </v-btn>
-          </v-flex>
+          <!-- FLIGHT - 2 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>FLIGHTS</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addFlight">ADD</v-btn>    
+            <v-btn dark color="blue">SEARCH</v-btn>
+          </v-list-tile>
 
-          <v-flex>
-              <!-- ADD AIRLINE - 3 -->
-              <v-btn color="info" @click="addAirline" large>
-                Add airline
-                <span slot="submitLoader" class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </v-btn>
-          </v-flex>
+          <!-- AIRLINE - 3 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>AIRLINES</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addAirline">ADD</v-btn>    
+            <v-btn dark color="blue">SEARCH</v-btn>
+          </v-list-tile>
 
-          <v-flex>
-              <!-- ADD AIRPLANE - 4 -->
-              <v-btn color="info" @click="addAirplane" large>
-                Add Airplane
-                <span slot="submitLoader" class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </v-btn>
-          </v-flex>
+          <!-- AIRPLANE - 4 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>AIRPLANES</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addAirplane">ADD</v-btn>    
+            <v-btn dark color="blue">SEARCH</v-btn>
+          </v-list-tile>
 
-          <v-flex>
-              <!-- ADD AIRPORT - 5 -->
-              <v-btn color="info" @click="addAirport" large>
-                Add airport
-                <span slot="submitLoader" class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </v-btn>
-
-
-          </v-flex>
+          <!-- AIRPORTS - 5 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>AIRPORTS</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addAirport">ADD</v-btn>    
+            <v-btn dark color="blue">SEARCH</v-btn>
+          </v-list-tile>
 
         </v-layout>
 

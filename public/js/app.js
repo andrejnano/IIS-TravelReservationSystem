@@ -72944,13 +72944,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -73087,169 +73080,158 @@ var render = function() {
                     },
                     [
                       _c("main", { attrs: { role: "main" } }, [
-                        _c(
-                          "h1",
-                          { staticClass: "display-2 font-weight-bold mb-3" },
-                          [_vm._v("Edit database")]
-                        ),
+                        _c("h1", { staticClass: "display-2 mb-3" }, [
+                          _vm._v("Edit database")
+                        ]),
                         _c("br")
                       ])
                     ]
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [_c("h2", [_vm._v("USERS")])])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addUser }
                         },
-                        [
-                          _vm._v("\n              Add user\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      )
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { dark: "", color: "blue" } }, [
+                        _vm._v("SEARCH")
+                      ])
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("FLIGHTS")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addFlight }
                         },
-                        [
-                          _vm._v("\n              Add flight\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      )
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { dark: "", color: "blue" } }, [
+                        _vm._v("SEARCH")
+                      ])
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("AIRLINES")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addAirline }
                         },
-                        [
-                          _vm._v("\n              Add airline\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      )
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { dark: "", color: "blue" } }, [
+                        _vm._v("SEARCH")
+                      ])
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("AIRPLANES")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addAirplane }
                         },
-                        [
-                          _vm._v(
-                            "\n              Add Airplane\n              "
-                          ),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      )
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { dark: "", color: "blue" } }, [
+                        _vm._v("SEARCH")
+                      ])
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("AIRPORTS")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addAirport }
                         },
-                        [
-                          _vm._v("\n              Add airport\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      )
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-btn", { attrs: { dark: "", color: "blue" } }, [
+                        _vm._v("SEARCH")
+                      ])
                     ],
                     1
                   )
