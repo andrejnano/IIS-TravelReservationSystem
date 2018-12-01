@@ -126,6 +126,9 @@ class UserController extends Controller
         abort(401, "User not logged");
     }
 
+    /**
+     * Changes password for actual logged user
+     */
     public function new_password(Request $request) {
         if($this->logged_in()){
             if(!$request->input('new_password')){
@@ -140,5 +143,29 @@ class UserController extends Controller
         else{
             abort(401, "User not logged");
         }
+    }
+
+    /**
+     * Changes information (first_name, last_name, email) for actual logged user
+     */
+    public function update_information(Request $request) {
+        if($this->logged_in()){
+            if(!$request->input('first_name') ||
+                !$request->input('last_name') ||
+                !$request->input('email') ){
+                abort(400, "Missing some information.");
+            }
+            try{
+                DB::table('users')->where('id', $_SESSION["uid"])->update(
+                    ['first_name' => $request->input('first_name'),
+                    'last_name' => $request->input('last_name'),
+                    'email' => $request->input('email'),]);
+            } catch (Exception $e) {
+                abort(500, "Error while inserting new information into database.");
+            }
+        }
+        else{
+            abort(401, "User not logged");
+        } 
     }
 }

@@ -71805,6 +71805,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -71828,6 +71864,7 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
       //results: [],
       message: "",
       passwordFormVisible: false,
+      informationFormVisible: false,
       showPasswordField: false,
       password: '',
       rules: {
@@ -71839,7 +71876,10 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
         }
       },
       valid: true,
-      user: []
+      user: [],
+      firstName: "",
+      lastName: "",
+      email: ""
     };
   },
   created: function created() {
@@ -71847,6 +71887,9 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
 
     __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/session').then(function (res) {
       _this.user = res.data;
+      _this.firstName = _this.user.first_name;
+      _this.lastName = _this.user.last_name;
+      _this.email = _this.user.email;
     });
   },
 
@@ -71855,6 +71898,9 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
       console.log('User cancelled the loader.');
     },
     newPassword: function newPassword() {
+      if (this.informationFormVisible == true) {
+        this.cancelInformation();
+      }
       this.message = "";
       this.passwordFormVisible = true;
     },
@@ -71876,9 +71922,44 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
       this.passwordFormVisible = false;
       this.password = "";
     },
-    cancel: function cancel() {
+    cancelPassword: function cancelPassword() {
       this.passwordFormVisible = false;
       this.password = "";
+    },
+    updateInformation: function updateInformation() {
+      if (this.passwordFormVisible == true) {
+        this.cancelPassword();
+      }
+      this.message = "";
+      this.informationFormVisible = true;
+    },
+    saveInformation: function saveInformation() {
+      var _this3 = this;
+
+      __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/update_information', {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email
+      }).then(function (response) {
+        if (response.status == 200) {
+          _this3.message = "New information was saved!";
+        } else {
+          _this3.message = "Error - new iformation was not set";
+        }
+      }).catch(function (error) {
+        _this3.message = "Error - new information was not set";
+        console.log("ERR: " + error);
+      });
+      this.informationFormVisible = false;
+      this.user.first_name = this.firstName;
+      this.user.last_name = this.lastName;
+      this.user.email = this.email;
+    },
+    cancelInformation: function cancelInformation() {
+      this.informationFormVisible = false;
+      this.firstName = this.user.first_name;
+      this.lastName = this.user.last_name;
+      this.email = this.user.email;
     }
   },
   components: {
@@ -71951,6 +72032,40 @@ var render = function() {
                       _c("b", [_vm._v(_vm._s(this.user.email))])
                     ])
                   ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    { staticClass: "text-xs-center" },
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "info", large: "" },
+                          on: { click: _vm.updateInformation }
+                        },
+                        [
+                          _vm._v(
+                            "\n            Update information\n            "
+                          ),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "custom-loader",
+                              attrs: { slot: "submitLoader" },
+                              slot: "submitLoader"
+                            },
+                            [
+                              _c("v-icon", { attrs: { light: "" } }, [
+                                _vm._v("cached")
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c(
                     "v-card-text",
@@ -72056,12 +72171,110 @@ var render = function() {
                               attrs: { disabled: !_vm.valid },
                               on: { click: _vm.savePassword }
                             },
-                            [_vm._v("submit")]
+                            [_vm._v("save")]
                           ),
                           _vm._v(" "),
-                          _c("v-btn", { on: { click: _vm.cancel } }, [
+                          _c("v-btn", { on: { click: _vm.cancelPassword } }, [
                             _vm._v("cancel")
                           ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-card-text", { staticClass: "text-xs-center" })
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.informationFormVisible
+                ? _c(
+                    "v-flex",
+                    {
+                      attrs: { "ma-2": "", xs11: "", sm8: "", md6: "", lg4: "" }
+                    },
+                    [
+                      _c("main", { attrs: { role: "main" } }, [
+                        _c(
+                          "p",
+                          { staticClass: "subheading font-weight-regular" },
+                          [_vm._v(" Change user information")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-form",
+                        {
+                          ref: "form",
+                          attrs: { "lazy-validation": "" },
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
+                          }
+                        },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.nameRules,
+                              label: "First name",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.firstName,
+                              callback: function($$v) {
+                                _vm.firstName = $$v
+                              },
+                              expression: "firstName"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.nameRules,
+                              label: "Last name",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.lastName,
+                              callback: function($$v) {
+                                _vm.lastName = $$v
+                              },
+                              expression: "lastName"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.emailRules,
+                              label: "E-mail",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { disabled: !_vm.valid },
+                              on: { click: _vm.saveInformation }
+                            },
+                            [_vm._v("save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            { on: { click: _vm.cancelInformation } },
+                            [_vm._v("cancel")]
+                          )
                         ],
                         1
                       ),
