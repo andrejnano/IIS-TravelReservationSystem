@@ -248,7 +248,10 @@ class SearchController extends Controller
         if ($curr_price <= 0)
             return NULL;
             // dd($all);
-        $all['total_time'] = $this->get_flight_time(end($all)['arrival_time'], $all[0]['departure_time'])[1];
+        $tmp1 = end($all)['arrival_time'];
+        $tmp2 = $all[0]['departure_time'];
+        $all['total_time'] = $this->get_flight_time($tmp1, $tmp2)[1];
+        $all['total_time_mins'] = $this->get_flight_time($tmp1, $tmp2)[0];
         
         if ($request['min_price'] && $curr_price <= $request['min_price']) {
             return NULL;
@@ -429,12 +432,15 @@ class SearchController extends Controller
                     $row_array['back'] = $return_flight_arr[0];
                     $cur_total_price = $row_array['back']['total_price'] + $row_array['there']['total_price'];
                     $row_array['total_price'] = $cur_total_price;
+
+                    $row_array['total_time'] = round(($row_array['back']['total_time_mins'] + $row_array['there']['total_time_mins']) / 60);
                     array_push($return_arr,$row_array);
 
                 }
             } else if ($row_array['there'] && (is_null($min_t) && is_null($max_t) && is_null($arrival_date))) { 
                 $cur_total_price = $row_array['there']['total_price'];
                 $row_array['total_price']+= $cur_total_price;
+                $row_array['total_time'] = round($row_array['there']['total_time_mins'] / 60);
                 array_push($return_arr,$row_array);
             }
         }
