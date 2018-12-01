@@ -8,7 +8,7 @@
     <title>{{config('app.name', 'IIS')}}</title>
   </head>
   <body>
-    
+
     <!-- Vue will insert everything inside of this container -->
     <div id="app">
     </div>

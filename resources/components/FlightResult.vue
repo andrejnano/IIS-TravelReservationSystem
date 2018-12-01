@@ -1,18 +1,15 @@
 <template>
-  <v-list-tile avatar @click="">
+  <v-list-tile avatar>
     <v-list-tile-avatar>
       <img :src="logo">
     </v-list-tile-avatar>
     <v-list-tile-content>
-      <v-list-tile-title v-html="title"></v-list-tile-title>
-      <v-list-tile-sub-title>Flight number: {{result.flight_number}}</v-list-tile-sub-title>
-      <!-- <v-btn dark color="primary" large>
-        {{ result.price }} €
-      </v-btn> -->
+      <v-list-tile-title v-html="title">{{ thereTitle }}</v-list-tile-title>
+      <v-list-tile-sub-title>Flight number (there): {{result.there['0'].flight_number}} | Total time: {{result.total_time}}</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-spacer></v-spacer>
     <v-btn @click="openFlight" dark color="primary" large>
-      {{ result.price }} €
+      {{ result.total_price }} €
     </v-btn>
   </v-list-tile>
 </template>
@@ -28,8 +25,59 @@ export default {
     console.log("got a result");
   },
   computed: {
-    title: function() {
-      return this.result.origin.airport + " → " + this.result.destination.airport;
+    thereTitle: function() {
+      var output;
+      if (this.there.hasOwnProperty('1')) {
+        // s prestupom
+        output += this.there['0'].origin.city + " → ";
+        output += this.there['1'].destination.city;
+      } else {
+        // bez prestupu
+        output += this.there['0'].origin.city + " → ";
+        output += this.there['0'].destination.city;
+      }
+      return output;
+    },
+    backTitle: function() {
+      var output;
+      if (this.there.hasOwnProperty('1')) {
+        // s prestupom
+        output += this.there['0'].origin.city + " → ";
+        output += this.there['1'].destination.city;
+      } else {
+        // bez prestupu
+        output += this.there['0'].origin.city + " → ";
+        output += this.there['0'].destination.city;
+      }
+      return output;
+    },
+    thereDetailedTitle: function() {
+      var output;
+      if (this.there.hasOwnProperty('1')) {
+        // s prestupom
+        output += this.there['0'].origin.city + " → ";
+        output += this.there['0'].destination.city + " → ";
+        output += this.there['1'].destination.city;
+      } else {
+        // bez prestupu
+        output += this.there['0'].origin.city + " → ";
+        output += this.there['0'].destination.city;
+      }
+      return output;
+    },
+    backDetailedTitle: function() {
+      var output;
+      if (this.back.hasOwnProperty('1')) {
+        // s prestupom
+        output += this.back['0'].origin.city + " → ";
+        output += this.back['0'].destination.city + " → ";
+        output += this.back['1'].destination.city;
+      } else {
+        // bez prestupu
+        output += this.back['0'].origin.city + " → ";
+        output += this.back['0'].destination.city;
+      }
+      return output;
     },
 
     logo: function() {

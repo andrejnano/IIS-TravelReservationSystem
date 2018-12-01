@@ -9,10 +9,10 @@
       <!-- ROUNDTRIP/ONEWAY TOGGLE -->
       <v-card-text class="text-xs-center">
         <v-btn-toggle v-model="toggleRoundTrip">
-          <v-btn flat @click="setRoundTrip">
-            Round trip
+          <v-btn flat>
+            Round Trip
           </v-btn>
-          <v-btn flat @click="setOneWay">
+          <v-btn flat>
             One way
           </v-btn>
         </v-btn-toggle>
@@ -34,7 +34,6 @@
         hint="Select a city"
         persistent-hint
         hide-no-data
-        hide-selected
         return-object
         prepend-icon="mdi-airplane-takeoff"
         >
@@ -55,7 +54,6 @@
         hint="Select a city"
         persistent-hint
         hide-no-data
-        hide-selected
         return-object
         prepend-icon="mdi-airplane-landing"
         >
@@ -87,7 +85,7 @@
         </v-menu>
       </v-card-text>
 
-      <v-card-text v-if="FORMisRoundTrip">
+      <v-card-text v-if="toggleRoundTrip == 0">
         <v-menu
           v-model="arrivalDateMenu"
           :close-on-content-click="false"
@@ -111,9 +109,25 @@
 
       <v-divider></v-divider>
 
+      <v-card-text class="text-xs-center">
+        <v-btn-toggle v-model="toggleClass">
+          <v-btn flat>
+            Economy
+          </v-btn>
+          <v-btn flat>
+            Business
+          </v-btn>
+          <v-btn flat>
+            First
+          </v-btn>
+        </v-btn-toggle>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
       <v-card-text>
         <div class='flight-search-form__group'>
-          <vue-slider v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
+          <vue-slider style="margin-top: 1rem;" v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
         </div>
         <div class='caption'>Set the price interval</div>
       </v-card-text>
@@ -141,15 +155,16 @@
 </template>
 
 <script>
-
 // custom mutation of date class
 Date.prototype.addDays = function(days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
   return date;
 }
+
 import '@mdi/font/css/materialdesignicons.css';
 import moment from 'moment';
+import axios from 'axios'
 
 import DebugBox from './DebugBox.vue';
 import { ModelListSelect } from 'vue-search-select';
@@ -167,19 +182,16 @@ library.add(faPlaneDeparture)
 library.add(faPlaneArrival)
 
 
-import axios from 'axios'
-
 export default {
   name: 'FlightSearchForm',
   props: {
-    isRoundTrip: Boolean,
-    isOneWay: Boolean,
     origin: Object,
     destination: Object,
-    departureDate: Date,
-    arrivalDate: Date,
+    departureDate: String,
+    arrivalDate: String,
     priceMin: Number,
     priceMax: Number,
+    setClass: Number,
   },
   data() {
     return {
@@ -187,17 +199,13 @@ export default {
       loadingSubmit: false,
       departureDateMenu: false,
       arrivalDateMenu: false,
-      toggleRoundTrip: 0,
-      FORMisRoundTrip: this.isRoundTrip,
-      FORMisOneWay: this.isOneWay,
+      toggleRoundTrip: this.arrivalDate != null ? 0 : 1, // depending on the existence of arrival date
+      toggleClass: this.setClass,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
-      FORMdepartureDate: this.departureDate.toISOString().substr(0,10),
-      FORMarrivalDate: this.arrivalDate.toISOString().substr(0,10),
+      FORMdepartureDate: this.departureDate,
+      FORMarrivalDate: this.arrivalDate,
       searchText: '',
-      slider: 450,
-      sliderMin: 1,
-      sliderMax: 3000,
       priceSlider: {
         value: [
           this.priceMin,
@@ -233,7 +241,6 @@ export default {
       },
       // Destination picking autocomplete MODEL + Logic setup
       airports: [],
-
       // experiment
       originLoading: false,
       destinationLoading: false,
@@ -292,40 +299,28 @@ export default {
           this.originItems = this.airports.filter(e => {
             return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
           })
-          this.loadingOrigin = false
+          this.loadingOrigin = false;
         }, 500)
       },
-    setRoundTrip() {
-      this.FORMisRoundTrip = true;
-      this.FORMisOneWay = false;
-    },
-    setOneWay() {
-      this.FORMisRoundTrip = false;
-      this.FORMisOneWay = true;
-    },
-    // searchDestination (searchText) {
-    //   this.searchText = searchText;
-    //   // TODO: add query to API
-    //   // this.destinations = this.destinationsFromApi;
-    // },
     searchSubmit() {
+      // convert class to a string format from toggle
       this.$emit('searchSubmited', {
-        isRoundTrip: this.FORMisRoundTrip,
-        isOneWay: this.FORMisOneWay,
+        isRoundTrip: this.toggleRoundTrip == 1 ? true : false,
+        isOneWay: this.toggleRoundTrip == 2 ? true : false,
         origin: {airport_code: this.FORMorigin.airport_code, city: this.FORMorigin.city, country: this.FORMorigin.country},
         destination: {airport_code: this.FORMdestination.airport_code, city: this.FORMdestination.city, country: this.FORMdestination.country},
         departureDate: this.FORMdepartureDate,
         arrivalDate: this.FORMarrivalDate,
         priceMin: this.priceSlider.value[0],
         priceMax: this.priceSlider.value[1],
+        class: this.toggleClass,
       });
 
-      // change the URL and view to /searched?...
       this.$router.push({
         path: '/searched',
         query: {
-          isRoundTrip: this.FORMisRoundTrip,
-          isOneWay: this.FORMisOneWay,
+          isRoundTrip: this.toggleRoundTrip == 1 ? true : false,
+          isOneWay: this.toggleRoundTrip == 2 ? true : false,
           originCode: this.FORMorigin.airport_code,
           originFull: this.FORMorigin.city,
           destinationCode: this.FORMdestination.airport_code,
@@ -334,6 +329,7 @@ export default {
           arrivalDate: this.FORMarrivalDate,
           priceMin: this.priceSlider.value[0],
           priceMax: this.priceSlider.value[1],
+          class: this.toggleClass,
         },
       });
     }

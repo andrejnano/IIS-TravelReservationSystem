@@ -20,7 +20,9 @@
                   <v-toolbar card prominent color="info" dark>
                     <v-toolbar-title>Found these results:</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-tooltip top>
+
+                    <v-btn-toggle v-model="sortToggle">
+                      <v-tooltip top>
                       <v-btn slot="activator" icon><v-icon>monetization_on</v-icon></v-btn>
                       <span>Sort by price</span>
                     </v-tooltip>
@@ -28,20 +30,25 @@
                       <v-btn slot="activator" icon><v-icon>access_time</v-icon></v-btn>
                       <span>Sort by flight time</span>
                     </v-tooltip>
-                    <v-tooltip top>
-                      <v-btn slot="activator" icon><v-icon>local_airport</v-icon></v-btn>
-                      <span>Sort by number of changes</span>
-                    </v-tooltip>
+                    </v-btn-toggle>
                   </v-toolbar>
 
                   <v-divider></v-divider>
 
                   <v-list two-line>
-                    <flight-result-component
-                      v-for="result in sortedByPrice"
-                      v-bind="result"
-                      :key="result.price">
-                    </flight-result-component>
+                    <template>
+                      <flight-result-component
+                        v-if="sortToggle == 0"
+                        v-for="result in sortedByPrice"
+                        :key="result.total_price">
+                      </flight-result-component>
+
+                      <flight-result-component
+                        v-if="sortToggle == 1"
+                        v-for="result in sortedByTime"
+                        :key="result.total_time">
+                      </flight-result-component>
+                    </template>
                   </v-list>
                 </v-card>
               </v-flex>
@@ -54,9 +61,6 @@
 </template>
 
 <script>
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
 
 // custom mutation of date class
 Date.prototype.addDays = function(days) {
@@ -78,46 +82,44 @@ import FlightResultComponent from '../components/FlightResult.vue';
 
 import axios from 'axios';
 
-const initialFormValues = {
-  isRoundTrip: true,
-  isOneWay: false,
-  origin: {code: 'VIE', full: 'Vienna'},
-  destination: {code: '', full: ''},
-  departureDate: new Date(),
-  arrivalDate: new Date().addDays(7),
-  priceMin: 200,
-  priceMax: 1200
-};
-
 export default {
   name: 'ResultsView',
   data() {
     return {
+      sortToggle: 0,
       isLoading: false,
       fullPage: true,
-      sortByPrice: true,
       results: [],
       formValuesToPass: {
-        isRoundTrip: JSON.parse(this.$route.query.isRoundTrip),
-        isOneWay: JSON.parse(this.$route.query.isOneWay),
         origin: {airport_code: this.$route.query.originCode, city: this.$route.query.originFull},
         destination: {airport_code: this.$route.query.destinationCode, city: this.$route.query.destinationFull},
-        departureDate: new Date(this.$route.query.departureDate),
-        arrivalDate: new Date(this.$route.query.arrivalDate),
+        departureDate: this.$route.query.departureDate,
+        arrivalDate: this.$route.query.arrivalDate ? this.$route.query.arrivalDate : null,
         priceMin: JSON.parse(this.$route.query.priceMin),
         priceMax: JSON.parse(this.$route.query.priceMax),
+        setClass: JSON.parse(this.$route.query.class),
       },
     }
   },
   computed: {
+    // TODO: sort there + back together
     sortedByPrice: function() {
       function comparePrice(a,b) {
-        if (a.result.price < b.result.price) { return -1; }
-        else if (a.result.price > b.result.price) { return 1; }
+        if (a.total_price < b.total_price) { return -1; }
+        else if (a.total_price > b.total_price) { return 1; }
         else return 0;
       }
       console.log(this.results.sort(comparePrice));
       return this.results.sort(comparePrice); // return sorted by price
+    },
+    sortedByTime: function() {
+      function compareTime(a,b) {
+        if (a.total_time < b.total_time) { return -1; }
+        else if (a.total_time > b.total_time) { return 1; }
+        else return 0;
+      }
+      console.log(this.results.sort(compareTime));
+      return this.results.sort(compareTime);
     },
   },
   methods: {
@@ -126,32 +128,39 @@ export default {
       this.isLoading = true;
       this.results = [];  // reset the results
 
-      // TODO: prepare query string
-      let query = `/api/search?origin=${formValues.origin.airport_code}` +
-              `&destination=${formValues.destination.airport_code}` +
-              `&departure_date=${formValues.destination.departureDate}` +
-              `&arrival_date=${formValues.destination.arrivalDate}`;
+      // construct the query to API
+      let query = `/api/search?`;
+      query += `origin=${formValues.origin.airport_code}`;
+      query += `&destination=${formValues.destination.airport_code}`;
+      query += `&departure_date=${formValues.departureDate}`;
+
+      if (formValues.arrivalDate != null)
+      {
+        query += `&arrival_date=${formValues.arrivalDate}`;
+      }
+
+      query += `&max_price=${formValues.priceMax}`;
+      query += `&min_price=${formValues.priceMin}`;
+
+
+      console.log({query});
+
 
       // perform the query
       axios.get(query).then((response) => {
 
-        // check if the request went OK
         if (response.status == 200) {
           console.log("QUERY OK! : 200");
         } else {
           return; // TODO: not found
         }
-
         // extract only the data part
         let responseResults = response.data;
 
         responseResults.forEach(flightResult => {
           // TODO: check if result returned correctly
-          console.log(flightResult.there);
-          console.log(flightResult.back);
-
           // add result to the view model
-          this.results.push( { result: flightResult.there } );
+          this.results.push( flightResult );
 
         });
         this.isLoading = false;
