@@ -111,17 +111,18 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Returns information about logged user
+     */
     public function session() {
         if($this->logged_in()){
-            $user = DB::table('users')->select('first_name', 'last_name')->where('id', $_SESSION["uid"])->get();
+            $user = DB::table('users')->select('first_name', 'last_name', 'email')->where('id', $_SESSION["uid"])->get();
             $user_arr = array();
             foreach ($user as $u) {
                 array_push($user_arr, $u);
             }
             return json_encode($user_arr[0]);
         }
-        else{
-            abort(401, "User not logged");
-        }
+        abort(401, "User not logged");
     }
 }
