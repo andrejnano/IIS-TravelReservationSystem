@@ -67,6 +67,10 @@
           <v-flex xs12 sm12 md12 lg12>
             <add-flight-form v-if="adminState == 12"/>
           </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
+            <add-airport-form v-if="adminState == 15"/>
+          </v-flex>
         </v-layout>
 
       </v-layout>
@@ -93,6 +97,7 @@
 
   import AddUserForm from '../components/AddUserForm.vue';
   import AddFlightForm from '../components/AddFlightForm.vue';
+  import AddAirportForm from '../components/AddAirportForm.vue';
 
   import axios from 'axios'
 
@@ -245,6 +250,7 @@
       'font-awesome-icon': FontAwesomeIcon,
       'add-user-form': AddUserForm,
       'add-flight-form': AddFlightForm,
+      'add-airport-form': AddAirportForm,
       Loading
     }
   }
