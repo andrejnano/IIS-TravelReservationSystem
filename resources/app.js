@@ -30,6 +30,7 @@ import Profile from './views/Profile.vue';
 import Flight from './views/Flight.vue';
 import About from './views/About.vue';
 import Contact from './views/Contact.vue';
+import Admin from './views/Admin.vue';
 
 // create new Router, handling SPA routes
 const router = new VueRouter({
@@ -79,6 +80,11 @@ const router = new VueRouter({
       path: '/flight',
       name: 'flight',
       component: Flight,
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
     },
   ],
 })
