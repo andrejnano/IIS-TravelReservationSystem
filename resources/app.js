@@ -26,7 +26,7 @@ import Search from './views/Search.vue';
 import Results from './views/Results.vue';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
-// import Profile from './views/Profile.vue';
+import Profile from './views/Profile.vue';
 import Flight from './views/Flight.vue';
 import About from './views/About.vue';
 import Contact from './views/Contact.vue';
@@ -70,11 +70,11 @@ const router = new VueRouter({
       name: 'register',
       component: Register,
     },
-    // {
-    //   path: '/profile',
-    //   name: 'profile',
-    //   component: Profile,
-    // },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+    },
     {
       path: '/flight',
       name: 'flight',

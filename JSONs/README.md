@@ -45,6 +45,9 @@ Bez parametra. Vráti obsah tabuľky airlines v podobe JSON
 ### users
 Bez parametra. Vráti obsah tabuľky users v podobe JSON. **Túto operáciu môže spustiť iba prihlásený administrátor.**
 
+### Session
+bez parametru. Vraci JSON obsahujici jmeno, prijmeni a email prave prihlaseneho uzivatele.
+
 
 
 ## POST requests
@@ -81,7 +84,7 @@ Vytvori novy let v databazi v tabulce flights. Request musi provadet admin.
 #### Vysvetlenie argumentov
 - **flight_number** unikatni retezec oznacujici cislo letu (napr. LH1724)
 - **departure_time** datum a cas odletu (ve formatu "2019-03-23 09:42:00.00")
-- **arrival-time** datum a cas priletu (ve formatu "2019-03-23 09:42:00.00")
+- **arrival_time** datum a cas priletu (ve formatu "2019-03-23 09:42:00.00")
 - **airplane** id letadla, odkaz do tabulky airplanes
 - **airline** kod letecke spolecnosti (napr. "AF")
 - **origin** startovni letiste (odkazujici do tabulky airports, napr. "LHR")
