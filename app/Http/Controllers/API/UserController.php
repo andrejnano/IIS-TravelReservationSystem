@@ -125,4 +125,20 @@ class UserController extends Controller
         }
         abort(401, "User not logged");
     }
+
+    public function new_password(Request $request) {
+        if($this->logged_in()){
+            if(!$request->input('new_password')){
+                abort(400, "Missing new password.");
+            }
+            try{
+                DB::table('users')->where('id', $_SESSION["uid"])->update(['password' => Hash::make($request->input('new_password'))]);
+            } catch (Exception $e) {
+                abort(500, "Error while inserting new password into database.");
+            }
+        }
+        else{
+            abort(401, "User not logged");
+        }
+    }
 }

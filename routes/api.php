@@ -34,6 +34,8 @@ Route::middleware('api')->get('/session', 'API\UserController@session');
 
 Route::middleware('api')->post('/register', 'API\UserController@register');
 
+Route::middleware('api')->post('/new_password', 'API\UserController@new_password');
+
 Route::middleware('api')->post('/add_flight', 'API\AdminController@add_flight');
 
 Route::middleware('api')->post('/add_airline', 'API\AdminController@add_airline');
