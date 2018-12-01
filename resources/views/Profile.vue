@@ -12,11 +12,15 @@
             <p class="subheading font-weight-regular"> E-mail:   <b>{{this.user.email}}</b></p>
           </main>
           <v-card-text class="text-xs-center">
-            <v-btn
-              color="info"
-              @click="newPassword"
-              large
-            >
+            <v-btn color="info" @click="updateInformation" large>
+              Update information
+              <span slot="submitLoader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+              </span>
+            </v-btn>
+          </v-card-text>
+          <v-card-text class="text-xs-center">
+            <v-btn color="info" @click="newPassword" large>
               Change password
               <span slot="submitLoader" class="custom-loader">
                 <v-icon light>cached</v-icon>
@@ -43,9 +47,41 @@
                   @click:append="showPasswordField = !showPasswordField"
                   required
                 ></v-text-field>
-                <v-btn :disabled="!valid" @click="savePassword">submit</v-btn>
-                <v-btn @click="cancel">cancel</v-btn>
+                <v-btn :disabled="!valid" @click="savePassword">save</v-btn>
+                <v-btn @click="cancelPassword">cancel</v-btn>
               </v-form>
+
+          <v-card-text class="text-xs-center">
+          </v-card-text>
+        </v-flex>
+
+        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="informationFormVisible">
+          <main role="main">
+            <p class="subheading font-weight-regular"> Change user information</p>
+          </main>
+
+          <v-form ref="form" v-model="valid" lazy-validation>
+                <v-text-field
+                  v-model="firstName"
+                  :rules="nameRules"
+                  label="First name"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="lastName"
+                  :rules="nameRules"
+                  label="Last name"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="email"
+                  :rules="emailRules"
+                  label="E-mail"
+                  required
+                ></v-text-field>
+                <v-btn :disabled="!valid" @click="saveInformation">save</v-btn>
+                <v-btn @click="cancelInformation">cancel</v-btn>
+          </v-form>
 
           <v-card-text class="text-xs-center">
           </v-card-text>
@@ -87,6 +123,7 @@
         //results: [],
         message: "",
         passwordFormVisible: false,
+        informationFormVisible: false,
         showPasswordField: false,
         password: '',
         rules: {
@@ -94,12 +131,18 @@
           min: v => v.length >= 8 || 'Min 8 characters'
         },
         valid: true,
-        user: []
+        user: [],
+        firstName: "",
+        lastName: "",
+        email: ""
       }
     },
     created () {
       axios.get('/api/session').then(res => {
         this.user = res.data;
+        this.firstName = this.user.first_name;
+        this.lastName = this.user.last_name;
+        this.email = this.user.email;
       });
     },
     methods: {
@@ -107,6 +150,9 @@
         console.log('User cancelled the loader.');
       },
       newPassword() {
+        if(this.informationFormVisible == true){
+          this.cancelInformation();
+        }
         this.message = "";
         this.passwordFormVisible = true;
       },
@@ -127,9 +173,43 @@
         this.passwordFormVisible = false;
         this.password = "";
       },
-      cancel () {
+      cancelPassword () {
         this.passwordFormVisible = false;
         this.password = "";
+      },
+      updateInformation(){
+        if(this.passwordFormVisible == true){
+          this.cancelPassword();
+        }
+        this.message = "";
+        this.informationFormVisible = true;
+      },
+      saveInformation(){
+        axios.post('/api/update_information', {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            email: this.email
+        }).then((response) => {
+            if (response.status == 200) {
+              this.message = "New information was saved!";
+            } else {
+              this.message = "Error - new iformation was not set";
+            }
+          })
+          .catch((error) => {
+            this.message = "Error - new information was not set";
+            console.log("ERR: " + error);
+          });
+        this.informationFormVisible = false;
+        this.user.first_name = this.firstName;
+        this.user.last_name = this.lastName;
+        this.user.email = this.email;
+      },
+      cancelInformation(){
+        this.informationFormVisible = false;
+        this.firstName = this.user.first_name;
+        this.lastName = this.user.last_name;
+        this.email = this.user.email;
       }
     },
     components: {
