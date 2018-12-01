@@ -3,70 +3,74 @@
     <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
     <v-container fluid>
       <v-layout ma-2 row align-start>
-        <v-flex ma-2 xs11 sm9 md7 lg5>
-          <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
-            <h1 class="display-2 font-weight-bold mb-3">Database insertion</h1><br>
-          </main>
-          <v-card-text class="text-xs-center">
-          </v-card-text>
-            <v-btn
-              color="info"
-              @click="newPassword"
-              large
-            >
-              Insert flight
-              <span slot="submitLoader" class="custom-loader">
-                <v-icon light>cached</v-icon>
-              </span>
-            </v-btn>
-          </v-card-text>
-        </v-flex>
 
-        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="newFlightFormVisible">
+        <v-layout ma-2 column align-start>
+          <v-flex ma-2 xs11 sm9 md7 lg5>
+            <main role="main">
+              <h1 class="display-2 font-weight-bold mb-3">Edit database</h1><br>
+            </main>
+          </v-flex>
 
-          <main role="main">
-            <p class="subheading font-weight-regular"> Insert new flight</p>
-          </main>
+          <v-flex>
+              <!-- ADD USER - 1 -->
+              <v-btn color="info" @click="addUser" large>
+                Add user
+                <span slot="submitLoader" class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </v-btn>
+          </v-flex>
 
-          <v-form ref="form" v-model="valid" lazy-validation>
-                <v-text-field
-                  v-model="origin"
-                  label="Origin airport code"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="destination"
-                  label="Destination airport code"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="departure_time"
-                  label="Departure time"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="arrival_time"
-                  label="Arrival time"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="airplane"
-                  label="Airplane"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="airline"
-                  label="Airline"
-                  required
-                ></v-text-field>
-                <v-btn :disabled="!valid" @click="insertFlight">submit</v-btn>
-                <v-btn @click="cancel">cancel</v-btn>
-              </v-form>
+          <v-flex>
+              <!-- ADD FLIGHT - 2 -->
+              <v-btn color="info" @click="addFlight" large>
+                Add flight
+                <span slot="submitLoader" class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </v-btn>
+          </v-flex>
 
-          <v-card-text class="text-xs-center">
-          </v-card-text>
-        </v-flex>
+          <v-flex>
+              <!-- ADD AIRLINE - 3 -->
+              <v-btn color="info" @click="addAirline" large>
+                Add airline
+                <span slot="submitLoader" class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </v-btn>
+          </v-flex>
+
+          <v-flex>
+              <!-- ADD AIRPLANE - 4 -->
+              <v-btn color="info" @click="addAirplane" large>
+                Add Airplane
+                <span slot="submitLoader" class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </v-btn>
+          </v-flex>
+
+          <v-flex>
+              <!-- ADD AIRPORT - 5 -->
+              <v-btn color="info" @click="addAirport" large>
+                Add airport
+                <span slot="submitLoader" class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </v-btn>
+
+
+          </v-flex>
+
+        </v-layout>
+
+
+        <v-layout>
+            <v-flex ma-2 xs12 sm12 md12 lg12>
+            <add-user-form v-if="adminState == 1"/>
+          </v-flex>
+        </v-layout>
 
       </v-layout>
     </v-container>
@@ -90,6 +94,8 @@
     dom
   } from '@fortawesome/fontawesome-svg-core'
 
+  import AddUserForm from '../components/AddUserForm.vue';
+
   import axios from 'axios'
 
   library.add(faSpinner)
@@ -101,8 +107,9 @@
       return {
         isLoading: false,
         fullPage: true,
+        adminState: 0
         //results: [],
-        message: "",
+        /*message: "",
         newFlightFormVisible: false,
         showPasswordField: false,
         origin: '',
@@ -110,34 +117,64 @@
         departure_time: '',
         arrival_time: '',
         airplane: '',
-        airline: '',
+        airline: '',*/
 
-
-        rules: {
+        /*rules: {
           required: value => !!value || 'Required.',
           min: v => v.length >= 8 || 'Min 8 characters'
-        },
-        valid: true,
-        user: []
+        },*/
+        //valid: true,
+        //user: []
       }
-    },
-    created () {
-      axios.get('/api/session').then(res => {
-        this.user = res.data;
-      });
     },
     methods: {
       loadingCancel() {
         console.log('User cancelled the loader.');
       },
-      newPassword() {
-        this.message = "";
-        this.newFlightFormVisible = true;
+      addUser() {
+        if(this.adminState == 1){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 1;
+        }
+      },
+      addFlight() {
+        if(this.adminState == 2){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 2;
+        }
+      },
+      addAirline() {
+        if(this.adminState == 3){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 3;
+        }
+      },
+      addAirplane() {
+        if(this.adminState == 4){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 4;
+        }
+      },
+      addAirport() {
+        if(this.adminState == 5){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 5;
+        }
       },
 
 
 
-      insertFlight() {
+      /*insertFlight() {
         axios.post('/api/add_flight', {
             airplane: this.airplane,
             airline: this.airline,
@@ -159,16 +196,11 @@
           });
         this.newFlightFormVisible = false;
         this.password = "";
-      },
-
-
-      cancel () {
-        this.newFlightFormVisible = false;
-        this.password = "";
-      }
+      },*/
     },
     components: {
       'font-awesome-icon': FontAwesomeIcon,
+      'add-user-form': AddUserForm,
       Loading
     }
   }

@@ -193,11 +193,11 @@
             if (response.status == 200) {
               this.message = "New information was saved!";
             } else {
-              this.message = "Error - new iformation was not set";
+              this.message = "Error - new information was not saved";
             }
           })
           .catch((error) => {
-            this.message = "Error - new information was not set";
+            this.message = "Error - new information was not saved";
             console.log("ERR: " + error);
           });
         this.informationFormVisible = false;
