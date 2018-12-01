@@ -197,9 +197,8 @@ class SearchController extends Controller
         $row_array["arrival_time"] = date('Y-m-d G:i:s', strtotime($r->arrival_time));
         
         [$flight_time, $flight_time_str] = $this->get_flight_time($r->arrival_time, $r->departure_time);
-        $square_cost = 10;
-        $start_price = 0.025;
-        $price = $start_price*200 + $start_price * ($flight_time + $flight_time*$flight_time/$square_cost);
+        $start_price = 0.55;
+        $price = $start_price*200 + $start_price * ($flight_time + 1/($flight_time));
         [$seat_class, $price] = $this->check_tmp_reservations($r, $request, $price, $curr_price);
         // class_price($r, $seat_class, $price);
         if (!$seat_class || $price < 0)
