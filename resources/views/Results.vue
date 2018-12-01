@@ -127,7 +127,10 @@ export default {
       this.results = [];  // reset the results
 
       // TODO: prepare query string
-      let query = `/api/search?origin=${formValues.origin.airport_code}&destination=${formValues.destination.airport_code}`;
+      let query = `/api/search?origin=${formValues.origin.airport_code}` +
+              `&destination=${formValues.destination.airport_code}` +
+              `&departure_date=${formValues.destination.departureDate}` +
+              `&arrival_date=${formValues.destination.arrivalDate}`;
 
       // perform the query
       axios.get(query).then((response) => {

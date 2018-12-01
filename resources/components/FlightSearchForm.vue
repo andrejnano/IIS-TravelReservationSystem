@@ -87,7 +87,7 @@
         </v-menu>
       </v-card-text>
 
-      <v-card-text>
+      <v-card-text v-if="FORMisRoundTrip">
         <v-menu
           v-model="arrivalDateMenu"
           :close-on-content-click="false"
@@ -187,21 +187,13 @@ export default {
       loadingSubmit: false,
       departureDateMenu: false,
       arrivalDateMenu: false,
-      toggleRoundTrip: 1,
+      toggleRoundTrip: 0,
       FORMisRoundTrip: this.isRoundTrip,
       FORMisOneWay: this.isOneWay,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate.toISOString().substr(0,10),
       FORMarrivalDate: this.arrivalDate.toISOString().substr(0,10),
-      // destinations: [
-      //   { code: 'VIE', full: 'Vienna' },
-      //   { code: 'JFK', full: 'New York' },
-      //   { code: 'CDG', full: 'Paris' },
-      //   { code: 'PRG', full: 'Prague' },
-      //   { code: 'HEL', full: 'Helsinki'},
-      //   { code: 'LGW', full: 'London'},
-      // ],
       searchText: '',
       slider: 450,
       sliderMin: 1,
