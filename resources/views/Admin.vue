@@ -66,9 +66,13 @@
         </v-layout>
 
 
-        <v-layout>
-            <v-flex ma-2 xs12 sm12 md12 lg12>
+        <v-layout column>
+          <v-flex xs12 sm12 md12 lg12>
             <add-user-form v-if="adminState == 1"/>
+          </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
+            <add-flight-form v-if="adminState == 2"/>
           </v-flex>
         </v-layout>
 
@@ -95,6 +99,7 @@
   } from '@fortawesome/fontawesome-svg-core'
 
   import AddUserForm from '../components/AddUserForm.vue';
+  import AddFlightForm from '../components/AddFlightForm.vue';
 
   import axios from 'axios'
 
@@ -201,6 +206,7 @@
     components: {
       'font-awesome-icon': FontAwesomeIcon,
       'add-user-form': AddUserForm,
+      'add-flight-form': AddFlightForm,
       Loading
     }
   }

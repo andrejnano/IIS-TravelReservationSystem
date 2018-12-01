@@ -2,43 +2,43 @@
   <v-card class="layout column" light>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> Add new user</p>
+            <p class="subheading font-weight-regular"> Add new flight</p>
           </main>
 
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
-                  v-model="firstName"
-                  :rules="nameRules"
-                  label="First name"
+                  v-model="origin"
+                  label="Origin airport code (e.g. LHR)"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="lastName"
-                  :rules="nameRules"
-                  label="Last name"
+                  v-model="destination"
+                  label="Destination airport code (e.g. JFK)"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="email"
-                  :rules="emailRules"
-                  label="E-mail"
+                  v-model="departure_time"
+                  label="Departure time (e.g. 2018-12-28 09:30:00)"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="password"
-                  :append-icon="showPasswordField ? 'visibility_off' : 'visibility'"
-                  :rules="[rules.required, rules.min]"
-                  :type="showPasswordField ? 'text' : 'password'"
-                  name="password-input"
-                  label="Password"
-                  hint="At least 8 characters"
-                  counter
-                  @click:append="showPasswordField = !showPasswordField"
+                  v-model="arrival_time"
+                  label="Arrival time (e.g. 2018-12-28 15:10:00)"
                   required
                 ></v-text-field>
-                <v-btn :disabled="!valid" @click="add">add user</v-btn>
+                <v-text-field
+                  v-model="airplane"
+                  label="Airplane ID (e.g. 9)"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="airline"
+                  label="Airline (e.g. AY)"
+                  required
+                ></v-text-field>
+                <v-btn :disabled="!valid" @click="add">add flight</v-btn>
                 <v-btn @click="clear">clear</v-btn>
-          </v-form>
+              </v-form>
 
           <main role="main">
             <p class="subheading font-weight-regular"> {{this.message}}</p>
@@ -60,14 +60,16 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import axios from 'axios'
 
 export default {
-  name: 'ChangePasswordForm',
+  name: 'AddFlightForm',
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "", 
-      message: "",
+      origin: '',
+      destination: '',
+      departure_time: '',
+      arrival_time: '',
+      airplane: '',
+      airline: '', 
+      message: '',
       showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
@@ -86,14 +88,16 @@ export default {
   },
   methods: {
     add(){
-      axios.post('/api/add_user', {
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email,
-            password: this.password
+      axios.post('/api/add_flight', {
+            airplane: this.airplane,
+            airline: this.airline,
+            departure_time: this.departure_time,
+            arrival_time: this.arrival_time,
+            origin: this.origin,
+            destination: this.destination
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "New user was successfully inserted";
+              this.message = "New flight was successfully inserted";
             } else {
               this.message = "Error - inserting failed";
             }
