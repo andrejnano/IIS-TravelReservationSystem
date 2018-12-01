@@ -439,6 +439,19 @@ class SearchController extends Controller
     public function show(Request $request)
     {
         try {
+            if (isset($request['class'])) {
+                switch ($request['class']) {
+                    case '2':
+                        $request['class'] = 'economy';
+                    break;
+                    case '1':
+                        $request['class'] = 'business';
+                    break;
+                    case '0':
+                        $request['class'] = 'first';
+                    break;
+                }
+            }
             $return_arr = $this->search_flights($request);
             return json_encode($return_arr);
         } catch (Exception $e) {
@@ -458,7 +471,10 @@ class SearchController extends Controller
         $flight_query = $this->get_flight_query();
         $flight_query .= " flight_number = $quoted_flight_num AND ";
         $flight_query .= $this->get_db_cross_cond();
-        return DB::select($flight_query)[0];
+        $selected = DB::select($flight_query);
+        if (!$selected)
+            return NULL;
+        return $selected[0];
     }
 
     /**
@@ -468,18 +484,38 @@ class SearchController extends Controller
      * @return array object representation of flight from database
      */
     protected function get_flight(Request $request) {
-        $f1 = $this->select_flight($request['f1']);
+        $flight_there = array();
+        $tmp = $this->select_flight($request['ft_1']);
+        if (!$tmp)
+            return NULL;
+        array_push($flight_there, $tmp);
+        if (isset($request['ft_2'])){
+            $tmp = $this->select_flight($request['ft_2']);
+            if (!$tmp)
+                return NULL;
+            array_push($flight_there, $tmp);
+        }
         $class_selected = false;
         if (in_array($request['class'], ['first', 'business', 'economy'])) {
             $class_selected = true;
         }
 
         $return_arr = array();
-        $tmp_obj = $this->create_object_representation($f1, $request);
+        $tmp_obj = $this->create_object_representation($flight_there, $request);
         array_push($return_arr, $tmp_obj);
-        if (isset($request['f2'])) {
-            $f2 = $this->select_flight($request['f2']);
-            $tmp_obj = $this->create_object_representation($f2, $request);
+        if (isset($request['fb_1'])) {
+            $flight_back = array();
+            $tmp = $this->select_flight($request['fb_1']);
+            if (!$tmp)
+                return NULL;
+            array_push($flight_back, $tmp);
+            if (isset($request['fb_2'])){
+                $tmp = $this->select_flight($request['fb_2']);
+                if (!$tmp)
+                    return NULL;
+                array_push($flight_back, $tmp);
+            }
+            $tmp_obj = $this->create_object_representation($flight_back, $request);
             array_push($return_arr, $tmp_obj);
         }
         return $return_arr;
@@ -514,16 +550,27 @@ class SearchController extends Controller
         $return_arr = array();
         /* example 2 */
         // todo error nothing inserted
-        $max = $flight['tickets'];
+        $max = $flight['0']['tickets'];
         for ($i = 0; $i < $max; $i++) {
             DB::table('tickets')->insert(
-                ['cost' => $flight['price'],
-                'flight' => $flight['flight_number'],
+                ['cost' => $flight['0']['price'],
+                'flight' => $flight['0']['flight_number'],
                 'seat_class' => $this->class_convert($request['class']),
                 'created_at' => Carbon::now()]
             );
             $f = DB::getPdo()->lastInsertId();
             array_push($return_arr, $f);
+
+            if (isset($flight['1'])) {
+                DB::table('tickets')->insert(
+                    ['cost' => $flight['1']['price'],
+                    'flight' => $flight['1']['flight_number'],
+                    'seat_class' => $this->class_convert($request['class']),
+                    'created_at' => Carbon::now()]
+                );
+                $f = DB::getPdo()->lastInsertId();
+                array_push($return_arr, $f);
+            }
         }
         return $return_arr;
     }
@@ -562,9 +609,9 @@ class SearchController extends Controller
      */
     public function ticket_detail(Request $request)
     {
-        if (!isset($request["class"]) || !isset($request["f1"]) || !isset($request["tickets"])) {
-            abort(400);
-        }
+        // if (!isset($request["class"]) || !isset($request["f1"]) || !isset($request["tickets"])) {
+        //     abort(400);
+        // }
         try {
             $return_arr = $this->get_flight($request);
             $return_arr = $this->tmp_ticket($return_arr, $request);
