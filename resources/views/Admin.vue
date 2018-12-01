@@ -3,69 +3,71 @@
     <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
     <v-container fluid>
       <v-layout ma-2 row align-start>
-        <v-flex ma-2 xs11 sm9 md7 lg5>
-          <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
-            <h1 class="display-2 font-weight-bold mb-3">Database insertion</h1><br>
-          </main>
-          <v-card-text class="text-xs-center">
-            <v-btn
-              color="info"
-              @click="newPassword"
-              large
-            >
-              Insert flight
-              <span slot="submitLoader" class="custom-loader">
-                <v-icon light>cached</v-icon>
-              </span>
-            </v-btn>
-          </v-card-text>
-        </v-flex>
 
-        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="newFlightFormVisible">
+        <v-layout ma-2 column align-start>
+          <v-flex ma-2 xs11 sm9 md7 lg5>
+            <main role="main">
+              <h1 class="display-2 mb-3">Edit database</h1><br>
+            </main>
+          </v-flex>
 
-          <main role="main">
-            <p class="subheading font-weight-regular"> Insert new flight</p>
-          </main>
+          <!-- USER - x1 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>USERS</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addUser">ADD</v-btn>    
+            <v-btn dark color="blue" @click="searchUser">SEARCH</v-btn>
+          </v-list-tile>
 
-          <v-form ref="form" v-model="valid" lazy-validation>
-                <v-text-field
-                  v-model="origin"
-                  label="Origin airport code"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="destination"
-                  label="Destination airport code"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="departure_time"
-                  label="Departure time"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="arrival_time"
-                  label="Arrival time"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="airplane"
-                  label="Airplane"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="airline"
-                  label="Airline"
-                  required
-                ></v-text-field>
-                <v-btn :disabled="!valid" @click="insertFlight">submit</v-btn>
-                <v-btn @click="cancel">cancel</v-btn>
-              </v-form>
+          <!-- FLIGHT - x2 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>FLIGHTS</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addFlight">ADD</v-btn>    
+            <v-btn dark color="blue" @click="searchFlight">SEARCH</v-btn>
+          </v-list-tile>
 
-          <v-card-text class="text-xs-center">
-          </v-card-text>
-        </v-flex>
+          <!-- AIRLINE - x3 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>AIRLINES</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addAirline">ADD</v-btn>    
+            <v-btn dark color="blue" @click="searchAirline">SEARCH</v-btn>
+          </v-list-tile>
+
+          <!-- AIRPLANE - x4 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>AIRPLANES</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addAirplane">ADD</v-btn>    
+            <v-btn dark color="blue" @click="searchAirplane">SEARCH</v-btn>
+          </v-list-tile>
+
+          <!-- AIRPORTS - x5 -->
+          <v-list-tile avatar ripple>
+            <v-list-tile-content>
+              <v-list-tile-title> <h2>AIRPORTS</h2> </v-list-tile-title>
+            </v-list-tile-content>
+            <v-btn dark color="green" @click="addAirport">ADD</v-btn>    
+            <v-btn dark color="blue" @click="searchAirport">SEARCH</v-btn>
+          </v-list-tile>
+
+        </v-layout>
+
+
+        <v-layout column>
+          <v-flex xs12 sm12 md12 lg12>
+            <add-user-form v-if="adminState == 11"/>
+          </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
+            <add-flight-form v-if="adminState == 12"/>
+          </v-flex>
+        </v-layout>
 
       </v-layout>
     </v-container>
@@ -89,6 +91,9 @@
     dom
   } from '@fortawesome/fontawesome-svg-core'
 
+  import AddUserForm from '../components/AddUserForm.vue';
+  import AddFlightForm from '../components/AddFlightForm.vue';
+
   import axios from 'axios'
 
   library.add(faSpinner)
@@ -100,8 +105,9 @@
       return {
         isLoading: false,
         fullPage: true,
+        adminState: 0
         //results: [],
-        message: "",
+        /*message: "",
         newFlightFormVisible: false,
         showPasswordField: false,
         origin: '',
@@ -109,34 +115,109 @@
         departure_time: '',
         arrival_time: '',
         airplane: '',
-        airline: '',
+        airline: '',*/
 
-
-        rules: {
+        /*rules: {
           required: value => !!value || 'Required.',
           min: v => v.length >= 8 || 'Min 8 characters'
-        },
-        valid: true,
-        user: []
+        },*/
+        //valid: true,
+        //user: []
       }
-    },
-    created () {
-      axios.get('/api/session').then(res => {
-        this.user = res.data;
-      });
     },
     methods: {
       loadingCancel() {
         console.log('User cancelled the loader.');
       },
-      newPassword() {
-        this.message = "";
-        this.newFlightFormVisible = true;
+      /**
+       * codes:
+       *    add: 1x   |   search: 2x
+       *    users x1  |  flights: x2  |  airlines: x3  |  airplanes: x4  |  airports: x5
+       */
+      addUser() {
+        if(this.adminState == 11){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 11;
+        }
+      },
+      addFlight() {
+        if(this.adminState == 12){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 12;
+        }
+      },
+      addAirline() {
+        if(this.adminState == 13){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 13;
+        }
+      },
+      addAirplane() {
+        if(this.adminState == 14){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 14;
+        }
+      },
+      addAirport() {
+        if(this.adminState == 15){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 15;
+        }
+      },
+      searchUser() {
+        if(this.adminState == 21){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 21;
+        }
+      },
+      searchFlight() {
+        if(this.adminState == 22){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 22;
+        }
+      },
+      searchAirline() {
+        if(this.adminState == 23){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 23;
+        }
+      },
+      searchAirplane() {
+        if(this.adminState == 24){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 24;
+        }
+      },
+      searchAirport() {
+        if(this.adminState == 25){
+          this.adminState = 0;
+        }
+        else{
+          this.adminState = 25;
+        }
       },
 
 
 
-      insertFlight() {
+      /*insertFlight() {
         axios.post('/api/add_flight', {
             airplane: this.airplane,
             airline: this.airline,
@@ -158,16 +239,12 @@
           });
         this.newFlightFormVisible = false;
         this.password = "";
-      },
-
-
-      cancel () {
-        this.newFlightFormVisible = false;
-        this.password = "";
-      }
+      },*/
     },
     components: {
       'font-awesome-icon': FontAwesomeIcon,
+      'add-user-form': AddUserForm,
+      'add-flight-form': AddFlightForm,
       Loading
     }
   }

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\UserController;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -123,6 +124,33 @@ class AdminController extends Controller
             );
         } catch (Exception $e) {
             abort(500, "Error in inserting airplane into database.");
+        }
+    }
+
+    /**
+     * function adds new user into database. Only for admin.
+     */
+    public function add_user(Request $request) {
+        $this->abort_if_no_admin();
+        if (!$request->input('first_name') || !$request->input('last_name') ||
+        !$request->input('email') || !$request->input('password')) {
+            abort(400, 'Parameter from first_name, last_name, email, password is missing');
+        }
+        $user = DB::table('users')->where('email', '=', $request->input('email'))->first();
+        if ($user) {
+            abort(409, 'User already registered');
+        }
+        else {
+            try {
+                DB::table('users')->insert([
+                    "first_name" => $request->input("first_name"),
+                    "last_name" => $request->input("last_name"),
+                    "email" => $request->input("email"),
+                    "password" => Hash::make($request->input("password"))
+                    ]);
+            } catch (Exception $e) {
+                abort(500);
+            }
         }
     }
 
