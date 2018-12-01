@@ -48,15 +48,6 @@
     return date;
   }
 
-  function FlightResult({
-    origin,
-    destination,
-    price
-  }) {
-    this.origin = origin;
-    this.destination = destination;
-    this.price = price;
-  }
 
   // temp debug wait, remove later
   function wait(ms) {
@@ -69,8 +60,6 @@
 
   // default form values
   const initialFormValues = {
-    isRoundTrip: true,
-    isOneWay: false,
     origin: {
       airport_code: 'VIE',
       city: 'Vienna'
@@ -79,10 +68,11 @@
       airport_code: '',
       city: ''
     },
-    departureDate: new Date(),
-    arrivalDate: new Date(),
+    departureDate: new Date().toISOString().substr(0,10),
+    arrivalDate: new Date().addDays(7).toISOString().substr(0,10),
     priceMin: 200,
-    priceMax: 1200
+    priceMax: 1200,
+    setClass: 0
   };
 
   export default {

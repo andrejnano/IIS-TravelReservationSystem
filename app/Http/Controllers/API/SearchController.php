@@ -243,12 +243,17 @@ class SearchController extends Controller
             if ($obj) {
                 $curr_price += $obj['price'];
                 array_push($all, $obj);
+            } else {
+                return NULL;
             }
         }
         if ($curr_price <= 0)
             return NULL;
             // dd($all);
-        $all['total_time'] = $this->get_flight_time(end($all)['arrival_time'], $all[0]['departure_time'])[1];
+        $tmp1 = end($all)['arrival_time'];
+        $tmp2 = $all[0]['departure_time'];
+        $all['total_time'] = $this->get_flight_time($tmp1, $tmp2)[1];
+        $all['total_time_mins'] = $this->get_flight_time($tmp1, $tmp2)[0];
         
         if ($request['min_price'] && $curr_price <= $request['min_price']) {
             return NULL;
@@ -357,6 +362,9 @@ class SearchController extends Controller
             $first = $request_arr;
             $dest = $first['destination'];
             $first['destination'] = NULL;
+            $first['destination'] = NULL;
+            $tmp_date = $first['arrival_date'];
+            $first['arrival_date'] = NULL;
             $first_r = $this->select_flights_direct($first, false, $origin_airport, $direction);
             // dd($first_r);
             foreach($first_r as $fr) {
@@ -367,6 +375,7 @@ class SearchController extends Controller
                 $second['min_t'] = '0';
                 $second['max_t'] = '2';
                 $second['arrival_time'] = $fr->arrival_time;
+                $first['departure_date'] = $tmp_date;
                 $second_r = $this->select_flights_direct($second, $dest_airport, false, true);
                 if ($second_r) {
                     array_push($selected, array($fr, $second_r[0]));
@@ -429,12 +438,15 @@ class SearchController extends Controller
                     $row_array['back'] = $return_flight_arr[0];
                     $cur_total_price = $row_array['back']['total_price'] + $row_array['there']['total_price'];
                     $row_array['total_price'] = $cur_total_price;
+
+                    $row_array['total_time'] = round(($row_array['back']['total_time_mins'] + $row_array['there']['total_time_mins']) / 60);
                     array_push($return_arr,$row_array);
 
                 }
-            } else if ($row_array['there'] && (is_null($min_t) && is_null($max_t) && is_null($arrival_date))) { 
+            } else if ($row_array['there'] && (is_null($min_t) && is_null($max_t) && is_null($arrival_date))) {
                 $cur_total_price = $row_array['there']['total_price'];
-                $row_array['total_price']+= $cur_total_price;
+                $row_array['total_price'] = $cur_total_price;
+                $row_array['total_time'] = round($row_array['there']['total_time_mins'] / 60);
                 array_push($return_arr,$row_array);
             }
         }
@@ -500,7 +512,7 @@ class SearchController extends Controller
         if (isset($request['ft_2'])){
             $tmp = $this->select_flight($request['ft_2']);
             if (!$tmp)
-                return NULL;
+            return NULL;
             array_push($flight_there, $tmp);
         }
         $class_selected = false;
@@ -510,6 +522,7 @@ class SearchController extends Controller
 
         $return_arr = array();
         $tmp_obj = $this->create_object_representation($flight_there, $request);
+        $curr_price = $tmp_obj['total_price'];
         array_push($return_arr, $tmp_obj);
         if (isset($request['fb_1'])) {
             $flight_back = array();
@@ -524,8 +537,10 @@ class SearchController extends Controller
                 array_push($flight_back, $tmp);
             }
             $tmp_obj = $this->create_object_representation($flight_back, $request);
+            $curr_price += $tmp_obj['total_price'];
             array_push($return_arr, $tmp_obj);
         }
+        $return_arr['total_price'] = $curr_price;
         return $return_arr;
     }
 
