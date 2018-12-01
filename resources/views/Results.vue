@@ -1,9 +1,29 @@
 <template>
   <v-content>
-    <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
+    <v-dialog
+      v-model="isLoading"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text>
+          Searching for flights...
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <v-container fluid>
       <v-layout ma-2 row align-start fill-height>
-        <v-flex ma-2 xs12 sm5 md4 lg4>
+        <v-flex ma-2 xs12 sm4 md4 lg4>
           <v-container fluid>
               <flight-search-form
               v-bind="formValuesToPass"
@@ -12,7 +32,7 @@
           </v-container>
         </v-flex>
 
-        <v-flex ma-2 xs12 sm6 md7 lg4>
+        <v-flex ma-2 xs12 sm8 md8 lg8>
           <v-container fluid>
             <v-layout row>
               <v-flex xs12>
@@ -36,17 +56,19 @@
                   <v-divider></v-divider>
 
                   <v-list two-line>
-                    <template>
+                    <template v-if="sortToggle == 0">
                       <flight-result-component
-                        v-if="sortToggle == 0"
-                        v-for="result in sortedByPrice"
-                        :key="result.total_price">
+                        v-for="(result, i) in sortedByPrice"
+                        :result="result"
+                        :key="i">
                       </flight-result-component>
+                    </template>
 
+                    <template v-if="sortToggle == 1">
                       <flight-result-component
-                        v-if="sortToggle == 1"
-                        v-for="result in sortedByTime"
-                        :key="result.total_time">
+                        v-for="(result, i) in sortedByTime"
+                        :result="result"
+                        :key="i">
                       </flight-result-component>
                     </template>
                   </v-list>
@@ -94,10 +116,10 @@ export default {
         origin: {airport_code: this.$route.query.originCode, city: this.$route.query.originFull},
         destination: {airport_code: this.$route.query.destinationCode, city: this.$route.query.destinationFull},
         departureDate: this.$route.query.departureDate,
-        arrivalDate: this.$route.query.arrivalDate ? this.$route.query.arrivalDate : null,
-        priceMin: JSON.parse(this.$route.query.priceMin),
-        priceMax: JSON.parse(this.$route.query.priceMax),
-        setClass: JSON.parse(this.$route.query.class),
+        arrivalDate: this.$route.query.arrivalDate != '' ? this.$route.query.arrivalDate : null,
+        priceMin: this.$route.query.priceMin ? JSON.parse(this.$route.query.priceMin) : null,
+        priceMax: this.$route.query.priceMax ? JSON.parse(this.$route.query.priceMax) : null,
+        setClass: this.$route.query.class ? JSON.parse(this.$route.query.class) : null,
       },
     }
   },
@@ -132,19 +154,28 @@ export default {
       let query = `/api/search?`;
       query += `origin=${formValues.origin.airport_code}`;
       query += `&destination=${formValues.destination.airport_code}`;
-      query += `&departure_date=${formValues.departureDate}`;
+
+      if (formValues.departureDate != null)
+      {
+        query += `&departure_date=${formValues.departureDate}`;
+      }
 
       if (formValues.arrivalDate != null)
       {
         query += `&arrival_date=${formValues.arrivalDate}`;
       }
 
-      query += `&max_price=${formValues.priceMax}`;
-      query += `&min_price=${formValues.priceMin}`;
+      if (formValues.priceMax != null)
+      {
+        query += `&max_price=${formValues.priceMax}`;
+      }
 
+      if (formValues.priceMin != null)
+      {
+        query += `&min_price=${formValues.priceMin}`;
+      }
 
       console.log({query});
-
 
       // perform the query
       axios.get(query).then((response) => {
@@ -158,8 +189,7 @@ export default {
         let responseResults = response.data;
 
         responseResults.forEach(flightResult => {
-          // TODO: check if result returned correctly
-          // add result to the view model
+
           this.results.push( flightResult );
 
         });

@@ -200,7 +200,7 @@ export default {
       departureDateMenu: false,
       arrivalDateMenu: false,
       toggleRoundTrip: this.arrivalDate != null ? 0 : 1, // depending on the existence of arrival date
-      toggleClass: this.setClass,
+      toggleClass: this.setClass != null ? this.setClass : 0,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate,
@@ -305,8 +305,6 @@ export default {
     searchSubmit() {
       // convert class to a string format from toggle
       this.$emit('searchSubmited', {
-        isRoundTrip: this.toggleRoundTrip == 1 ? true : false,
-        isOneWay: this.toggleRoundTrip == 2 ? true : false,
         origin: {airport_code: this.FORMorigin.airport_code, city: this.FORMorigin.city, country: this.FORMorigin.country},
         destination: {airport_code: this.FORMdestination.airport_code, city: this.FORMdestination.city, country: this.FORMdestination.country},
         departureDate: this.FORMdepartureDate,
@@ -319,8 +317,6 @@ export default {
       this.$router.push({
         path: '/searched',
         query: {
-          isRoundTrip: this.toggleRoundTrip == 1 ? true : false,
-          isOneWay: this.toggleRoundTrip == 2 ? true : false,
           originCode: this.FORMorigin.airport_code,
           originFull: this.FORMorigin.city,
           destinationCode: this.FORMdestination.airport_code,

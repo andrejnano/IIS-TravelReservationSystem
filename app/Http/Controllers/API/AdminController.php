@@ -26,7 +26,7 @@ class AdminController extends Controller
     public function add_flight(Request $request)
     {
         $this->abort_if_no_admin();
-        if(!$request->input('flight_number') ||
+        if(
             !$request->input('airplane') ||
             !$request->input('airline') ||
             !$request->input('departure_time') ||
@@ -37,8 +37,7 @@ class AdminController extends Controller
         }
         try {
             DB::table('flights')->insert(
-                ['flight_number' => $request->input('flight_number'),
-                "departure_time" => $request->input('departure_time'),
+                ["departure_time" => $request->input('departure_time'),
                 "arrival_time" => $request->input('arrival_time'),
                 "airplane" => $request->input('airplane'),
                 "airline" => $request->input('airline'),

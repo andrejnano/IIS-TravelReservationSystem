@@ -8,6 +8,7 @@
     <v-spacer></v-spacer>
     <v-toolbar-items>
       <v-btn flat to="/about">About</v-btn>
+      <v-btn flat to="/admin">Admin</v-btn>
       <v-btn flat to="/contact">Contact</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>

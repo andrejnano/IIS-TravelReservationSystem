@@ -106,8 +106,6 @@ class UserController extends Controller
         if ($this->logged_in()) {
             session_unset();     // unset $_SESSION variable for the run-time 
             session_destroy();   // destroy session data in storage
-        } else {
-            abort(400);
         }
     }
 
@@ -124,5 +122,48 @@ class UserController extends Controller
             return json_encode($user_arr[0]);
         }
         abort(401, "User not logged");
+    }
+
+    /**
+     * Changes password for actual logged user
+     */
+    public function new_password(Request $request) {
+        if($this->logged_in()){
+            if(!$request->input('new_password')){
+                abort(400, "Missing new password.");
+            }
+            try{
+                DB::table('users')->where('id', $_SESSION["uid"])->update(['password' => Hash::make($request->input('new_password'))]);
+            } catch (Exception $e) {
+                abort(500, "Error while inserting new password into database.");
+            }
+        }
+        else{
+            abort(401, "User not logged");
+        }
+    }
+
+    /**
+     * Changes information (first_name, last_name, email) for actual logged user
+     */
+    public function update_information(Request $request) {
+        if($this->logged_in()){
+            if(!$request->input('first_name') ||
+                !$request->input('last_name') ||
+                !$request->input('email') ){
+                abort(400, "Missing some information.");
+            }
+            try{
+                DB::table('users')->where('id', $_SESSION["uid"])->update(
+                    ['first_name' => $request->input('first_name'),
+                    'last_name' => $request->input('last_name'),
+                    'email' => $request->input('email'),]);
+            } catch (Exception $e) {
+                abort(500, "Error while inserting new information into database.");
+            }
+        }
+        else{
+            abort(401, "User not logged");
+        } 
     }
 }

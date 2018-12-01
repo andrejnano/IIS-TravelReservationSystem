@@ -34424,6 +34424,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__views_About_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__views_About_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__views_Contact_vue__ = __webpack_require__(254);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__views_Contact_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14__views_Contact_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__views_Admin_vue__ = __webpack_require__(259);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__views_Admin_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15__views_Admin_vue__);
 // Setup Vue.js
 window.Vue = __webpack_require__(14);
 
@@ -34444,6 +34446,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_2_vuetify___default.a, {
 });
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_resource__["a" /* default */]);
+
 
 
 
@@ -34498,6 +34501,10 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
     path: '/flight',
     name: 'flight',
     component: __WEBPACK_IMPORTED_MODULE_12__views_Flight_vue___default.a
+  }, {
+    path: '/admin',
+    name: 'admin',
+    component: __WEBPACK_IMPORTED_MODULE_15__views_Admin_vue___default.a
   }]
 });
 
@@ -62426,6 +62433,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -63395,6 +63403,8 @@ var render = function() {
         [
           _c("v-btn", { attrs: { flat: "", to: "/about" } }, [_vm._v("About")]),
           _vm._v(" "),
+          _c("v-btn", { attrs: { flat: "", to: "/admin" } }, [_vm._v("Admin")]),
+          _vm._v(" "),
           _c("v-btn", { attrs: { flat: "", to: "/contact" } }, [
             _vm._v("Contact")
           ])
@@ -64015,7 +64025,7 @@ __WEBPACK_IMPORTED_MODULE_7__fortawesome_fontawesome_svg_core__["d" /* library *
       departureDateMenu: false,
       arrivalDateMenu: false,
       toggleRoundTrip: this.arrivalDate != null ? 0 : 1, // depending on the existence of arrival date
-      toggleClass: this.setClass,
+      toggleClass: this.setClass != null ? this.setClass : 0,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate,
@@ -64131,8 +64141,6 @@ __WEBPACK_IMPORTED_MODULE_7__fortawesome_fontawesome_svg_core__["d" /* library *
     searchSubmit: function searchSubmit() {
       // convert class to a string format from toggle
       this.$emit('searchSubmited', {
-        isRoundTrip: this.toggleRoundTrip == 1 ? true : false,
-        isOneWay: this.toggleRoundTrip == 2 ? true : false,
         origin: { airport_code: this.FORMorigin.airport_code, city: this.FORMorigin.city, country: this.FORMorigin.country },
         destination: { airport_code: this.FORMdestination.airport_code, city: this.FORMdestination.city, country: this.FORMdestination.country },
         departureDate: this.FORMdepartureDate,
@@ -64145,8 +64153,6 @@ __WEBPACK_IMPORTED_MODULE_7__fortawesome_fontawesome_svg_core__["d" /* library *
       this.$router.push({
         path: '/searched',
         query: {
-          isRoundTrip: this.toggleRoundTrip == 1 ? true : false,
-          isOneWay: this.toggleRoundTrip == 2 ? true : false,
           originCode: this.FORMorigin.airport_code,
           originFull: this.FORMorigin.city,
           destinationCode: this.FORMdestination.airport_code,
@@ -70264,6 +70270,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 // custom mutation of date class
@@ -70298,10 +70326,10 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
         origin: { airport_code: this.$route.query.originCode, city: this.$route.query.originFull },
         destination: { airport_code: this.$route.query.destinationCode, city: this.$route.query.destinationFull },
         departureDate: this.$route.query.departureDate,
-        arrivalDate: this.$route.query.arrivalDate ? this.$route.query.arrivalDate : null,
-        priceMin: JSON.parse(this.$route.query.priceMin),
-        priceMax: JSON.parse(this.$route.query.priceMax),
-        setClass: JSON.parse(this.$route.query.class)
+        arrivalDate: this.$route.query.arrivalDate != '' ? this.$route.query.arrivalDate : null,
+        priceMin: this.$route.query.priceMin ? JSON.parse(this.$route.query.priceMin) : null,
+        priceMax: this.$route.query.priceMax ? JSON.parse(this.$route.query.priceMax) : null,
+        setClass: this.$route.query.class ? JSON.parse(this.$route.query.class) : null
       }
     };
   },
@@ -70343,14 +70371,22 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
       var query = '/api/search?';
       query += 'origin=' + formValues.origin.airport_code;
       query += '&destination=' + formValues.destination.airport_code;
-      query += '&departure_date=' + formValues.departureDate;
+
+      if (formValues.departureDate != null) {
+        query += '&departure_date=' + formValues.departureDate;
+      }
 
       if (formValues.arrivalDate != null) {
         query += '&arrival_date=' + formValues.arrivalDate;
       }
 
-      query += '&max_price=' + formValues.priceMax;
-      query += '&min_price=' + formValues.priceMin;
+      if (formValues.priceMax != null) {
+        query += '&max_price=' + formValues.priceMax;
+      }
+
+      if (formValues.priceMin != null) {
+        query += '&min_price=' + formValues.priceMin;
+      }
 
       console.log({ query: query });
 
@@ -70366,8 +70402,7 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
         var responseResults = response.data;
 
         responseResults.forEach(function (flightResult) {
-          // TODO: check if result returned correctly
-          // add result to the view model
+
           _this.results.push(flightResult);
         });
         _this.isLoading = false;
@@ -70396,19 +70431,19 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(226)
+  __webpack_require__(264)
 }
 var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(228)
 /* template */
-var __vue_template__ = __webpack_require__(229)
+var __vue_template__ = __webpack_require__(266)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-140bff9e"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -70441,46 +70476,8 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 226 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(227);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("693e3ed4", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-140bff9e\",\"scoped\":true,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FlightResult.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-140bff9e\",\"scoped\":true,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FlightResult.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 227 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.flight-result[data-v-140bff9e] {\n  margin-top: 1rem;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 226 */,
+/* 227 */,
 /* 228 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -70513,140 +70510,143 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   created: function created() {
     console.log("got a result");
+    console.log({ result: this.result });
   },
 
   computed: {
+    subTitle: function subTitle() {
+      var output = "";
+
+      var isRoundTrip = this.result.hasOwnProperty('back');
+
+      output += this.thereDetailedTitle;
+
+      if (isRoundTrip) {
+        output += " <br>" + this.backDetailedTitle;
+      }
+      //class to string
+      var classString = "";
+      if (this.result.there['0'].seat_class == "economy") {
+        classString = "<span class='bronze'>economy class</span>";
+      } else if (this.result.there['0'].seat_class == "business") {
+        classString = "<span class='silver'>business class</span>";
+      } else if (this.result.there['0'].seat_class == "first") {
+        classString = "<span class='gold'>first class</span>";
+      } else {
+        classString = "<span class='error'>unknown class</span>";
+      }
+
+      output += "<br>Class: " + classString;
+
+      output += " | <span class='mdi mdi-timer'></span><strong>" + this.result.total_time + " hours</strong>";
+
+      return output;
+    },
     thereTitle: function thereTitle() {
-      var output;
-      if (this.there.hasOwnProperty('1')) {
+      var output = "";
+      if (this.result.there.hasOwnProperty('1')) {
         // s prestupom
-        output += this.there['0'].origin.city + " → ";
-        output += this.there['1'].destination.city;
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['1'].destination.city;
       } else {
         // bez prestupu
-        output += this.there['0'].origin.city + " → ";
-        output += this.there['0'].destination.city;
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['0'].destination.city;
       }
       return output;
     },
     backTitle: function backTitle() {
-      var output;
-      if (this.there.hasOwnProperty('1')) {
+      var output = "";
+      if (this.result.there.hasOwnProperty('1')) {
         // s prestupom
-        output += this.there['0'].origin.city + " → ";
-        output += this.there['1'].destination.city;
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['1'].destination.city;
       } else {
         // bez prestupu
-        output += this.there['0'].origin.city + " → ";
-        output += this.there['0'].destination.city;
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['0'].destination.city;
       }
       return output;
     },
     thereDetailedTitle: function thereDetailedTitle() {
-      var output;
-      if (this.there.hasOwnProperty('1')) {
-        // s prestupom
-        output += this.there['0'].origin.city + " → ";
-        output += this.there['0'].destination.city + " → ";
-        output += this.there['1'].destination.city;
+
+      var output = "";
+      var there = this.result.there;
+
+      var isConnectingThere = this.result.there.hasOwnProperty('1');
+
+      output += there['0'].origin.airport + " <strong>" + there['0'].departure_time + "</strong> → ";
+
+      if (isConnectingThere) {
+        output += there['1'].origin.airport + " <strong>" + there['1'].departure_time + "</strong> (stop) → ";
+        output += there['1'].destination.airport + " " + there['1'].arrival_time;
       } else {
-        // bez prestupu
-        output += this.there['0'].origin.city + " → ";
-        output += this.there['0'].destination.city;
+        output += there['0'].destination.airport + " <strong>" + there['0'].arrival_time + "</strong>";
       }
+
       return output;
     },
     backDetailedTitle: function backDetailedTitle() {
-      var output;
-      if (this.back.hasOwnProperty('1')) {
-        // s prestupom
-        output += this.back['0'].origin.city + " → ";
-        output += this.back['0'].destination.city + " → ";
-        output += this.back['1'].destination.city;
+      var output = "";
+      var back = this.result.back;
+
+      var isConnectingBack = this.result.back.hasOwnProperty('1');
+
+      output += back['0'].origin.airport + "  <strong>" + back['0'].departure_time + "</strong> → ";
+
+      if (isConnectingBack) {
+        output += back['1'].origin.airport + " <strong>" + back['1'].departure_time + "</strong> (stop) → ";
+        output += back['1'].destination.airport + " <strong>" + back['1'].arrival_time + "</strong>";
       } else {
-        // bez prestupu
-        output += this.back['0'].origin.city + " → ";
-        output += this.back['0'].destination.city;
+        output += back['0'].destination.airport + " <strong>" + back['0'].arrival_time + "</strong>";
       }
+
       return output;
     },
 
     logo: function logo() {
-      return '../images/' + this.result.airline.id_logo + '.png';
+      return "../images/" + this.result.there['0'].airline.id_logo + ".png";
     }
   },
   methods: {
     openFlight: function openFlight() {
-      this.$router.push({
-        path: '/flight',
-        query: {
-          flight_number: this.result.flight_number
+
+      var query = {};
+
+      var isRoundTrip = this.result.hasOwnProperty('back');
+      var isConnectingThere = this.result.there.hasOwnProperty('1');
+
+      var there = this.result.there;
+
+      // flight there, first segment
+      query.ft_1 = there[0].flight_number;
+
+      if (isConnectingThere) {
+        // flight there, second segment
+        query.ft_2 = there[1].flight_number;
+      }
+
+      if (isRoundTrip) {
+        var isConnectingBack = this.result.back.hasOwnProperty('1');
+        var back = this.result.back;
+
+        query.fb_1 = back[0].flight_number;
+
+        if (isConnectingBack) {
+          query.fb_2 = back[1].flight_number;
         }
-      });
+      }
+
+      query.class = there.seat_class;
+      query.tickets = 1;
+
+      this.$router.push({ path: '/flight', query: query });
     }
   }
 });
 
 /***/ }),
-/* 229 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-list-tile",
-    { attrs: { avatar: "" } },
-    [
-      _c("v-list-tile-avatar", [_c("img", { attrs: { src: _vm.logo } })]),
-      _vm._v(" "),
-      _c(
-        "v-list-tile-content",
-        [
-          _c(
-            "v-list-tile-title",
-            { domProps: { innerHTML: _vm._s(_vm.title) } },
-            [_vm._v(_vm._s(_vm.thereTitle))]
-          ),
-          _vm._v(" "),
-          _c("v-list-tile-sub-title", [
-            _vm._v(
-              "Flight number (there): " +
-                _vm._s(_vm.result.there["0"].flight_number) +
-                " | Total time: " +
-                _vm._s(_vm.result.total_time)
-            )
-          ])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("v-spacer"),
-      _vm._v(" "),
-      _c(
-        "v-btn",
-        {
-          attrs: { dark: "", color: "primary", large: "" },
-          on: { click: _vm.openFlight }
-        },
-        [_vm._v("\n    " + _vm._s(_vm.result.total_price) + " €\n  ")]
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-140bff9e", module.exports)
-  }
-}
-
-/***/ }),
+/* 229 */,
 /* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -70657,19 +70657,40 @@ var render = function() {
   return _c(
     "v-content",
     [
-      _c("loading", {
-        attrs: {
-          active: _vm.isLoading,
-          "can-cancel": true,
-          "on-cancel": _vm.loadingCancel,
-          "is-full-page": _vm.fullPage
-        },
-        on: {
-          "update:active": function($event) {
-            _vm.isLoading = $event
+      _c(
+        "v-dialog",
+        {
+          attrs: { "hide-overlay": "", persistent: "", width: "300" },
+          model: {
+            value: _vm.isLoading,
+            callback: function($$v) {
+              _vm.isLoading = $$v
+            },
+            expression: "isLoading"
           }
-        }
-      }),
+        },
+        [
+          _c(
+            "v-card",
+            { attrs: { color: "primary", dark: "" } },
+            [
+              _c(
+                "v-card-text",
+                [
+                  _vm._v("\n        Searching for flights...\n        "),
+                  _c("v-progress-linear", {
+                    staticClass: "mb-0",
+                    attrs: { indeterminate: "", color: "white" }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "v-container",
@@ -70688,7 +70709,7 @@ var render = function() {
             [
               _c(
                 "v-flex",
-                { attrs: { "ma-2": "", xs12: "", sm5: "", md4: "", lg4: "" } },
+                { attrs: { "ma-2": "", xs12: "", sm4: "", md4: "", lg4: "" } },
                 [
                   _c(
                     "v-container",
@@ -70712,7 +70733,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-flex",
-                { attrs: { "ma-2": "", xs12: "", sm6: "", md7: "", lg4: "" } },
+                { attrs: { "ma-2": "", xs12: "", sm8: "", md8: "", lg8: "" } },
                 [
                   _c(
                     "v-container",
@@ -70827,27 +70848,35 @@ var render = function() {
                                     "v-list",
                                     { attrs: { "two-line": "" } },
                                     [
-                                      [
-                                        _vm._l(_vm.sortedByPrice, function(
-                                          result
-                                        ) {
-                                          return _vm.sortToggle == 0
-                                            ? _c("flight-result-component", {
-                                                key: result.total_price
-                                              })
-                                            : _vm._e()
-                                        }),
-                                        _vm._v(" "),
-                                        _vm._l(_vm.sortedByTime, function(
-                                          result
-                                        ) {
-                                          return _vm.sortToggle == 1
-                                            ? _c("flight-result-component", {
-                                                key: result.total_time
-                                              })
-                                            : _vm._e()
-                                        })
-                                      ]
+                                      _vm.sortToggle == 0
+                                        ? _vm._l(_vm.sortedByPrice, function(
+                                            result,
+                                            i
+                                          ) {
+                                            return _c(
+                                              "flight-result-component",
+                                              {
+                                                key: i,
+                                                attrs: { result: result }
+                                              }
+                                            )
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm.sortToggle == 1
+                                        ? _vm._l(_vm.sortedByTime, function(
+                                            result,
+                                            i
+                                          ) {
+                                            return _c(
+                                              "flight-result-component",
+                                              {
+                                                key: i,
+                                                attrs: { result: result }
+                                              }
+                                            )
+                                          })
+                                        : _vm._e()
                                     ],
                                     2
                                   )
@@ -71037,7 +71066,7 @@ __WEBPACK_IMPORTED_MODULE_0_axios___default.a.defaults.headers.post['Content-Typ
   data: function data() {
     return {
       showPasswordField: false,
-      password: 'Password',
+      password: '',
       rules: {
         required: function required(value) {
           return !!value || 'Required.';
@@ -71722,6 +71751,82 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -71743,8 +71848,24 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
       isLoading: false,
       fullPage: true,
       //results: [],
-      firstName: "-undef-",
-      user: []
+      message: "",
+      passwordFormVisible: false,
+      informationFormVisible: false,
+      showPasswordField: false,
+      password: '',
+      rules: {
+        required: function required(value) {
+          return !!value || 'Required.';
+        },
+        min: function min(v) {
+          return v.length >= 8 || 'Min 8 characters';
+        }
+      },
+      valid: true,
+      user: [],
+      firstName: "",
+      lastName: "",
+      email: ""
     };
   },
   created: function created() {
@@ -71752,12 +71873,79 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
 
     __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/session').then(function (res) {
       _this.user = res.data;
+      _this.firstName = _this.user.first_name;
+      _this.lastName = _this.user.last_name;
+      _this.email = _this.user.email;
     });
   },
 
   methods: {
     loadingCancel: function loadingCancel() {
       console.log('User cancelled the loader.');
+    },
+    newPassword: function newPassword() {
+      if (this.informationFormVisible == true) {
+        this.cancelInformation();
+      }
+      this.message = "";
+      this.passwordFormVisible = true;
+    },
+    savePassword: function savePassword() {
+      var _this2 = this;
+
+      __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/new_password', {
+        new_password: this.password
+      }).then(function (response) {
+        if (response.status == 200) {
+          _this2.message = "New password was saved!";
+        } else {
+          _this2.message = "Error - password was not set";
+        }
+      }).catch(function (error) {
+        _this2.message = "Error - password was not set";
+        console.log("ERR: " + error);
+      });
+      this.passwordFormVisible = false;
+      this.password = "";
+    },
+    cancelPassword: function cancelPassword() {
+      this.passwordFormVisible = false;
+      this.password = "";
+    },
+    updateInformation: function updateInformation() {
+      if (this.passwordFormVisible == true) {
+        this.cancelPassword();
+      }
+      this.message = "";
+      this.informationFormVisible = true;
+    },
+    saveInformation: function saveInformation() {
+      var _this3 = this;
+
+      __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/update_information', {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email
+      }).then(function (response) {
+        if (response.status == 200) {
+          _this3.message = "New information was saved!";
+        } else {
+          _this3.message = "Error - new iformation was not set";
+        }
+      }).catch(function (error) {
+        _this3.message = "Error - new information was not set";
+        console.log("ERR: " + error);
+      });
+      this.informationFormVisible = false;
+      this.user.first_name = this.firstName;
+      this.user.last_name = this.lastName;
+      this.user.email = this.email;
+    },
+    cancelInformation: function cancelInformation() {
+      this.informationFormVisible = false;
+      this.firstName = this.user.first_name;
+      this.lastName = this.user.last_name;
+      this.email = this.user.email;
     }
   },
   components: {
@@ -71801,9 +71989,13 @@ var render = function() {
             [
               _c(
                 "v-flex",
-                { attrs: { "ma-2": "", xs12: "", sm10: "", md8: "", lg6: "" } },
+                { attrs: { "ma-2": "", xs11: "", sm9: "", md7: "", lg5: "" } },
                 [
                   _c("main", { attrs: { role: "main" } }, [
+                    _c("p", { staticClass: "subheading font-weight-regular" }, [
+                      _vm._v(" " + _vm._s(this.message))
+                    ]),
+                    _vm._v(" "),
                     _c(
                       "h1",
                       { staticClass: "display-2 font-weight-bold mb-3" },
@@ -71825,9 +72017,259 @@ var render = function() {
                       _vm._v(" E-mail:   "),
                       _c("b", [_vm._v(_vm._s(this.user.email))])
                     ])
-                  ])
-                ]
-              )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    { staticClass: "text-xs-center" },
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "info", large: "" },
+                          on: { click: _vm.updateInformation }
+                        },
+                        [
+                          _vm._v(
+                            "\n            Update information\n            "
+                          ),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "custom-loader",
+                              attrs: { slot: "submitLoader" },
+                              slot: "submitLoader"
+                            },
+                            [
+                              _c("v-icon", { attrs: { light: "" } }, [
+                                _vm._v("cached")
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    { staticClass: "text-xs-center" },
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "info", large: "" },
+                          on: { click: _vm.newPassword }
+                        },
+                        [
+                          _vm._v("\n            Change password\n            "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "custom-loader",
+                              attrs: { slot: "submitLoader" },
+                              slot: "submitLoader"
+                            },
+                            [
+                              _c("v-icon", { attrs: { light: "" } }, [
+                                _vm._v("cached")
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.passwordFormVisible
+                ? _c(
+                    "v-flex",
+                    {
+                      attrs: { "ma-2": "", xs11: "", sm8: "", md6: "", lg4: "" }
+                    },
+                    [
+                      _c("main", { attrs: { role: "main" } }, [
+                        _c(
+                          "p",
+                          { staticClass: "subheading font-weight-regular" },
+                          [
+                            _vm._v(
+                              " Change password for user " +
+                                _vm._s(this.user.first_name) +
+                                " " +
+                                _vm._s(this.user.last_name)
+                            )
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-form",
+                        {
+                          ref: "form",
+                          attrs: { "lazy-validation": "" },
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
+                          }
+                        },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              "append-icon": _vm.showPasswordField
+                                ? "visibility_off"
+                                : "visibility",
+                              rules: [_vm.rules.required, _vm.rules.min],
+                              type: _vm.showPasswordField ? "text" : "password",
+                              name: "password-input",
+                              label: "Enter your new password",
+                              hint: "At least 8 characters",
+                              counter: "",
+                              required: ""
+                            },
+                            on: {
+                              "click:append": function($event) {
+                                _vm.showPasswordField = !_vm.showPasswordField
+                              }
+                            },
+                            model: {
+                              value: _vm.password,
+                              callback: function($$v) {
+                                _vm.password = $$v
+                              },
+                              expression: "password"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { disabled: !_vm.valid },
+                              on: { click: _vm.savePassword }
+                            },
+                            [_vm._v("save")]
+                          ),
+                          _vm._v(" "),
+                          _c("v-btn", { on: { click: _vm.cancelPassword } }, [
+                            _vm._v("cancel")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-card-text", { staticClass: "text-xs-center" })
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.informationFormVisible
+                ? _c(
+                    "v-flex",
+                    {
+                      attrs: { "ma-2": "", xs11: "", sm8: "", md6: "", lg4: "" }
+                    },
+                    [
+                      _c("main", { attrs: { role: "main" } }, [
+                        _c(
+                          "p",
+                          { staticClass: "subheading font-weight-regular" },
+                          [_vm._v(" Change user information")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-form",
+                        {
+                          ref: "form",
+                          attrs: { "lazy-validation": "" },
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
+                          }
+                        },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.nameRules,
+                              label: "First name",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.firstName,
+                              callback: function($$v) {
+                                _vm.firstName = $$v
+                              },
+                              expression: "firstName"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.nameRules,
+                              label: "Last name",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.lastName,
+                              callback: function($$v) {
+                                _vm.lastName = $$v
+                              },
+                              expression: "lastName"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.emailRules,
+                              label: "E-mail",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { disabled: !_vm.valid },
+                              on: { click: _vm.saveInformation }
+                            },
+                            [_vm._v("save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            { on: { click: _vm.cancelInformation } },
+                            [_vm._v("cancel")]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-card-text", { staticClass: "text-xs-center" })
+                    ],
+                    1
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -72314,6 +72756,597 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-bd758552", module.exports)
+  }
+}
+
+/***/ }),
+/* 259 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(260)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(262)
+/* template */
+var __vue_template__ = __webpack_require__(263)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/views/Admin.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4b83ee74", Component.options)
+  } else {
+    hotAPI.reload("data-v-4b83ee74", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 260 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(261);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("25f4102a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b83ee74\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Admin.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b83ee74\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Admin.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#loading {\n  position: fixed;\n  opacity: 0.7;\n  z-index: 1000;\n  background: #000;\n  height: 100%;\n  width: 100%;\n  display: none;\n}\n#loading.on {\n  display: block;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 262 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_loading_overlay_dist_vue_loading_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fortawesome_free_solid_svg_icons__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["d" /* library */].add(__WEBPACK_IMPORTED_MODULE_3__fortawesome_free_solid_svg_icons__["c" /* faSpinner */]);
+__WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].watch(); // This will kick of the initial replacement of i to svg tags and configure a MutationObserver
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'ProfileView',
+  data: function data() {
+    return {
+      isLoading: false,
+      fullPage: true,
+      //results: [],
+      message: "",
+      newFlightFormVisible: false,
+      showPasswordField: false,
+      origin: '',
+      destination: '',
+      departure_time: '',
+      arrival_time: '',
+      airplane: '',
+      airline: '',
+
+      rules: {
+        required: function required(value) {
+          return !!value || 'Required.';
+        },
+        min: function min(v) {
+          return v.length >= 8 || 'Min 8 characters';
+        }
+      },
+      valid: true,
+      user: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/session').then(function (res) {
+      _this.user = res.data;
+    });
+  },
+
+  methods: {
+    loadingCancel: function loadingCancel() {
+      console.log('User cancelled the loader.');
+    },
+    newPassword: function newPassword() {
+      this.message = "";
+      this.newFlightFormVisible = true;
+    },
+    insertFlight: function insertFlight() {
+      var _this2 = this;
+
+      __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/add_flight', {
+        airplane: this.airplane,
+        airline: this.airline,
+        departure_time: this.departure_time,
+        arrival_time: this.arrival_time,
+        origin: this.origin,
+        destination: this.destination
+
+      }).then(function (response) {
+        if (response.status == 200) {
+          _this2.message = "New password was saved!";
+        } else {
+          _this2.message = "Error - password was not set";
+        }
+      }).catch(function (error) {
+        _this2.message = "Error - password was not set";
+        console.log("ERR: " + error);
+      });
+      this.newFlightFormVisible = false;
+      this.password = "";
+    },
+    cancel: function cancel() {
+      this.newFlightFormVisible = false;
+      this.password = "";
+    }
+  },
+  components: {
+    'font-awesome-icon': __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__["a" /* FontAwesomeIcon */],
+    Loading: __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay___default.a
+  }
+});
+
+/***/ }),
+/* 263 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-content",
+    [
+      _c("loading", {
+        attrs: {
+          active: _vm.isLoading,
+          "can-cancel": true,
+          "on-cancel": _vm.loadingCancel,
+          "is-full-page": _vm.fullPage
+        },
+        on: {
+          "update:active": function($event) {
+            _vm.isLoading = $event
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c(
+        "v-container",
+        { attrs: { fluid: "" } },
+        [
+          _c(
+            "v-layout",
+            { attrs: { "ma-2": "", row: "", "align-start": "" } },
+            [
+              _c(
+                "v-flex",
+                { attrs: { "ma-2": "", xs11: "", sm9: "", md7: "", lg5: "" } },
+                [
+                  _c("main", { attrs: { role: "main" } }, [
+                    _c("p", { staticClass: "subheading font-weight-regular" }, [
+                      _vm._v(" " + _vm._s(this.message))
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "h1",
+                      { staticClass: "display-2 font-weight-bold mb-3" },
+                      [_vm._v("Database insertion")]
+                    ),
+                    _c("br")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    { staticClass: "text-xs-center" },
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "info", large: "" },
+                          on: { click: _vm.newPassword }
+                        },
+                        [
+                          _vm._v("\n            Insert flight\n            "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "custom-loader",
+                              attrs: { slot: "submitLoader" },
+                              slot: "submitLoader"
+                            },
+                            [
+                              _c("v-icon", { attrs: { light: "" } }, [
+                                _vm._v("cached")
+                              ])
+                            ],
+                            1
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.newFlightFormVisible
+                ? _c(
+                    "v-flex",
+                    {
+                      attrs: { "ma-2": "", xs11: "", sm8: "", md6: "", lg4: "" }
+                    },
+                    [
+                      _c("main", { attrs: { role: "main" } }, [
+                        _c(
+                          "p",
+                          { staticClass: "subheading font-weight-regular" },
+                          [_vm._v(" Insert new flight")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-form",
+                        {
+                          ref: "form",
+                          attrs: { "lazy-validation": "" },
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
+                          }
+                        },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Origin airport code",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.origin,
+                              callback: function($$v) {
+                                _vm.origin = $$v
+                              },
+                              expression: "origin"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Destination airport code",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.destination,
+                              callback: function($$v) {
+                                _vm.destination = $$v
+                              },
+                              expression: "destination"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: { label: "Departure time", required: "" },
+                            model: {
+                              value: _vm.departure_time,
+                              callback: function($$v) {
+                                _vm.departure_time = $$v
+                              },
+                              expression: "departure_time"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: { label: "Arrival time", required: "" },
+                            model: {
+                              value: _vm.arrival_time,
+                              callback: function($$v) {
+                                _vm.arrival_time = $$v
+                              },
+                              expression: "arrival_time"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: { label: "Airplane", required: "" },
+                            model: {
+                              value: _vm.airplane,
+                              callback: function($$v) {
+                                _vm.airplane = $$v
+                              },
+                              expression: "airplane"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: { label: "Airline", required: "" },
+                            model: {
+                              value: _vm.airline,
+                              callback: function($$v) {
+                                _vm.airline = $$v
+                              },
+                              expression: "airline"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { disabled: !_vm.valid },
+                              on: { click: _vm.insertFlight }
+                            },
+                            [_vm._v("submit")]
+                          ),
+                          _vm._v(" "),
+                          _c("v-btn", { on: { click: _vm.cancel } }, [
+                            _vm._v("cancel")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-card-text", { staticClass: "text-xs-center" })
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4b83ee74", module.exports)
+  }
+}
+
+/***/ }),
+/* 264 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(265);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("2cdb90d3", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-140bff9e\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FlightResult.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-140bff9e\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FlightResult.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 265 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.gold, .silver, .bronze {\n  font-weight: bold;\n  color: #fff;\n  padding: 0.2em 0.4em;\n  opacity: 0.5;\n  border-radius: 5px;\n}\n.gold {\n  background-color: #D6AF36;\n}\n.silver {\n  background-color: #A7A7AD;\n}\n.bronze {\n  background-color: #A77044;\n}\n.flight-result {\n  margin-top: 1rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 266 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-list-tile",
+    { attrs: { avatar: "", ripple: "" }, on: { click: _vm.expandDetails } },
+    [
+      _c("v-list-tile-avatar", [_c("img", { attrs: { src: _vm.logo } })]),
+      _vm._v(" "),
+      _c(
+        "v-list-tile-content",
+        [
+          _c("v-list-tile-title", [_vm._v(" " + _vm._s(_vm.thereTitle) + " ")]),
+          _vm._v(" "),
+          _c("v-list-tile-sub-title", {
+            domProps: { innerHTML: _vm._s(_vm.subTitle) }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("v-spacer"),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        {
+          attrs: { dark: "", color: "green", large: "" },
+          on: { click: _vm.openFlight }
+        },
+        [_vm._v("\n    " + _vm._s(_vm.result.total_price) + " €\n  ")]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-140bff9e", module.exports)
   }
 }
 
