@@ -70287,6 +70287,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 // custom mutation of date class
@@ -70498,13 +70500,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+
+// format the date string to just display hours and minutes
+function onlyHoursMinutes(dateString) {
+  return new Date(dateString).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+}
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['result'],
   data: function data() {
     return {
-      show: false
+      show: false,
+      dialog: false
     };
   },
   created: function created() {
@@ -70512,17 +70556,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     console.log({ result: this.result });
   },
 
+  watch: {
+    dialog: function dialog(val) {
+      val || this.close();
+    }
+  },
   computed: {
-    subTitle: function subTitle() {
+    smallDescription: function smallDescription() {
+
       var output = "";
-
-      var isRoundTrip = this.result.hasOwnProperty('back');
-
-      output += this.thereDetailedTitle;
-
-      if (isRoundTrip) {
-        output += " <br>" + this.backDetailedTitle;
-      }
       //class to string
       var classString = "";
       if (this.result.there['0'].seat_class == "economy") {
@@ -70535,9 +70577,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         classString = "<span class='error'>unknown class</span>";
       }
 
-      output += "<br>Class: " + classString;
+      output += "Class: " + classString;
+      output += " | <span class='mdi mdi-timer'></span> ± <strong>" + this.result.total_time + " hours</strong>";
 
-      output += " | <span class='mdi mdi-timer'></span><strong>" + this.result.total_time + " hours</strong>";
+      return output;
+    },
+    bigDescription: function bigDescription() {
+      var output = "";
+
+      var isRoundTrip = this.result.hasOwnProperty('back');
+
+      output += this.thereDetailedTitle;
+
+      if (isRoundTrip) {
+        output += " <br>" + this.backDetailedTitle;
+      }
 
       return output;
     },
@@ -70569,35 +70623,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     thereDetailedTitle: function thereDetailedTitle() {
 
-      var output = "";
+      var output = "There: ";
       var there = this.result.there;
 
       var isConnectingThere = this.result.there.hasOwnProperty('1');
 
-      output += there['0'].origin.airport + " <strong>" + there['0'].departure_time + "</strong> → ";
+      output += there['0'].origin.airport + " <strong>" + onlyHoursMinutes(there['0'].departure_time) + "</strong> → ";
 
       if (isConnectingThere) {
-        output += there['1'].origin.airport + " <strong>" + there['1'].departure_time + "</strong> (stop) → ";
-        output += there['1'].destination.airport + " " + there['1'].arrival_time;
+        output += there['1'].origin.airport + " <strong>" + onlyHoursMinutes(there['1'].departure_time) + "</strong> (stop) → ";
+        output += there['1'].destination.airport + " " + onlyHoursMinutes(there['1'].arrival_time);
       } else {
-        output += there['0'].destination.airport + " <strong>" + there['0'].arrival_time + "</strong>";
+        output += there['0'].destination.airport + " <strong>" + onlyHoursMinutes(there['0'].arrival_time) + "</strong>";
       }
 
       return output;
     },
     backDetailedTitle: function backDetailedTitle() {
-      var output = "";
+      var output = "Back: ";
       var back = this.result.back;
 
       var isConnectingBack = this.result.back.hasOwnProperty('1');
 
-      output += back['0'].origin.airport + "  <strong>" + back['0'].departure_time + "</strong> → ";
+      output += back['0'].origin.airport + "  <strong>" + onlyHoursMinutes(back['0'].departure_time) + "</strong> → ";
 
       if (isConnectingBack) {
-        output += back['1'].origin.airport + " <strong>" + back['1'].departure_time + "</strong> (stop) → ";
-        output += back['1'].destination.airport + " <strong>" + back['1'].arrival_time + "</strong>";
+        output += back['1'].origin.airport + " <strong>" + onlyHoursMinutes(back['1'].departure_time) + "</strong> (stop) → ";
+        output += back['1'].destination.airport + " <strong>" + onlyHoursMinutes(back['1'].arrival_time) + "</strong>";
       } else {
-        output += back['0'].destination.airport + " <strong>" + back['0'].arrival_time + "</strong>";
+        output += back['0'].destination.airport + " <strong>" + onlyHoursMinutes(back['0'].arrival_time) + "</strong>";
       }
 
       return output;
@@ -70605,9 +70659,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     logo: function logo() {
       return "../images/" + this.result.there['0'].airline.id_logo + ".png";
+    },
+
+    expandedTitle: function expandedTitle() {
+      var output = "";
+      var there = this.result.there;
+
+      var isRoundTrip = this.result.hasOwnProperty('back');
+
+      if (isRoundTrip) {
+        output += "Round trip flight from " + "&nbsp;<strong>" + there[0].origin.city + "</strong>&nbsp;" + " to";
+      } else {
+        output += "One way flight from " + "&nbsp;<strong>" + there[0].origin.city + "</strong>&nbsp;" + " to";
+      }
+
+      var isConnectingThere = this.result.there.hasOwnProperty('1');
+
+      if (isConnectingThere) {
+        output += "&nbsp;<strong>" + there[1].destination.city + "</strong>&nbsp;";
+      } else {
+        output += "&nbsp;<strong>" + there[0].destination.city + "</strong>&nbsp;";
+      }
+
+      return output;
+    },
+
+    expandedBody: function expandedBody() {
+      return "body";
     }
+
   },
   methods: {
+    close: function close() {
+      this.dialog = false;
+    },
     openFlight: function openFlight() {
 
       var query = {};
@@ -70640,6 +70725,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       query.tickets = 1;
 
       this.$router.push({ path: '/flight', query: query });
+    },
+    expandDetails: function expandDetails() {
+      this.dialog = true;
     }
   }
 });
@@ -73752,32 +73840,100 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-list-tile",
-    { attrs: { avatar: "", ripple: "" }, on: { click: _vm.expandDetails } },
+    "div",
     [
-      _c("v-list-tile-avatar", [_c("img", { attrs: { src: _vm.logo } })]),
-      _vm._v(" "),
       _c(
-        "v-list-tile-content",
+        "v-list-tile",
+        {
+          attrs: { slot: "activator", avatar: "", ripple: "" },
+          on: { click: _vm.expandDetails },
+          slot: "activator"
+        },
         [
-          _c("v-list-tile-title", [_vm._v(" " + _vm._s(_vm.thereTitle) + " ")]),
+          _c("v-list-tile-avatar", [_c("img", { attrs: { src: _vm.logo } })]),
           _vm._v(" "),
-          _c("v-list-tile-sub-title", {
-            domProps: { innerHTML: _vm._s(_vm.subTitle) }
-          })
+          _c(
+            "v-list-tile-content",
+            [
+              _c("v-list-tile-title", {
+                domProps: { innerHTML: _vm._s(_vm.thereTitle) }
+              }),
+              _vm._v(" "),
+              _c("v-list-tile-sub-title", {
+                domProps: { innerHTML: _vm._s(_vm.smallDescription) }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: { dark: "", color: "green", large: "" },
+              on: { click: _vm.openFlight }
+            },
+            [_vm._v("\n      " + _vm._s(_vm.result.total_price) + " €\n    ")]
+          )
         ],
         1
       ),
       _vm._v(" "),
-      _c("v-spacer"),
-      _vm._v(" "),
       _c(
-        "v-btn",
+        "v-dialog",
         {
-          attrs: { dark: "", color: "green", large: "" },
-          on: { click: _vm.openFlight }
+          attrs: { width: "900" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
         },
-        [_vm._v("\n    " + _vm._s(_vm.result.total_price) + " €\n  ")]
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", {
+                staticClass: "headline grey lighten-2",
+                attrs: { "primary-title": "" },
+                domProps: { innerHTML: _vm._s(_vm.expandedTitle) }
+              }),
+              _vm._v(" "),
+              _c("v-card-text", [
+                _vm._v("\n        " + _vm._s(_vm.expandedBody) + "\n      ")
+              ]),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { dark: "", color: "green", large: "" },
+                      on: { click: _vm.openFlight }
+                    },
+                    [
+                      _vm._v("\n          Book this flight for   "),
+                      _c("strong", [
+                        _vm._v(" " + _vm._s(_vm.result.total_price) + " €")
+                      ])
+                    ]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
       )
     ],
     1

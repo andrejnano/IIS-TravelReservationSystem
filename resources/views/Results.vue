@@ -56,6 +56,7 @@
                   <v-divider></v-divider>
 
                   <v-list two-line>
+
                     <template v-if="sortToggle == 0">
                       <flight-result-component
                         v-for="(result, i) in sortedByPrice"
@@ -71,6 +72,7 @@
                         :key="i">
                       </flight-result-component>
                     </template>
+
                   </v-list>
                 </v-card>
               </v-flex>
