@@ -59,6 +59,10 @@
         </v-layout>
 
 
+
+       <!-- codes: -->
+       <!-- add: 1x   |   search: 2x -->
+       <!-- users x1  |  flights: x2  |  airlines: x3  |  airplanes: x4  |  airports: x5 -->
         <v-layout column>
           <v-flex xs12 sm12 md12 lg12>
             <add-user-form v-if="adminState == 11"/>
@@ -66,6 +70,11 @@
 
           <v-flex xs12 sm12 md12 lg12>
             <add-flight-form v-if="adminState == 12"/>
+          </v-flex>
+
+
+          <v-flex xs12 sm12 md12 lg12>
+            <search-user-form v-if="adminState == 21"/>
           </v-flex>
         </v-layout>
 
@@ -94,6 +103,8 @@
   import AddUserForm from '../components/AddUserForm.vue';
   import AddFlightForm from '../components/AddFlightForm.vue';
 
+  import SearchUserForm from '../components/SearchUserForm.vue';
+
   import axios from 'axios'
 
   library.add(faSpinner)
@@ -106,23 +117,6 @@
         isLoading: false,
         fullPage: true,
         adminState: 0
-        //results: [],
-        /*message: "",
-        newFlightFormVisible: false,
-        showPasswordField: false,
-        origin: '',
-        destination: '',
-        departure_time: '',
-        arrival_time: '',
-        airplane: '',
-        airline: '',*/
-
-        /*rules: {
-          required: value => !!value || 'Required.',
-          min: v => v.length >= 8 || 'Min 8 characters'
-        },*/
-        //valid: true,
-        //user: []
       }
     },
     methods: {
@@ -214,37 +208,12 @@
           this.adminState = 25;
         }
       },
-
-
-
-      /*insertFlight() {
-        axios.post('/api/add_flight', {
-            airplane: this.airplane,
-            airline: this.airline,
-            departure_time: this.departure_time,
-            arrival_time: this.arrival_time,
-            origin: this.origin,
-            destination: this.destination
-
-        }).then((response) => {
-            if (response.status == 200) {
-              this.message = "New password was saved!";
-            } else {
-              this.message = "Error - password was not set";
-            }
-          })
-          .catch((error) => {
-            this.message = "Error - password was not set";
-            console.log("ERR: " + error);
-          });
-        this.newFlightFormVisible = false;
-        this.password = "";
-      },*/
     },
     components: {
       'font-awesome-icon': FontAwesomeIcon,
       'add-user-form': AddUserForm,
       'add-flight-form': AddFlightForm,
+      'search-user-form': SearchUserForm,
       Loading
     }
   }

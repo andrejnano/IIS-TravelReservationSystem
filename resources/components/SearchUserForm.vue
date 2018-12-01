@@ -1,10 +1,8 @@
 <template>
   <v-card class="layout column" light>
 
-          <main role="main">
-            <p class="subheading font-weight-regular"> Add new user</p>
-          </main>
-
+        <!-- EDIT FORM -->
+        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser != 0">
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
                   v-model="firstName"
@@ -24,25 +22,27 @@
                   label="E-mail"
                   required
                 ></v-text-field>
-                <v-text-field
-                  v-model="password"
-                  :append-icon="showPasswordField ? 'visibility_off' : 'visibility'"
-                  :rules="[rules.required, rules.min]"
-                  :type="showPasswordField ? 'text' : 'password'"
-                  name="password-input"
-                  label="Password"
-                  hint="At least 8 characters"
-                  counter
-                  @click:append="showPasswordField = !showPasswordField"
-                  required
-                ></v-text-field>
-                <v-btn :disabled="!valid" @click="add">add user</v-btn>
-                <v-btn @click="clear">clear</v-btn>
+                <v-btn :disabled="!valid" @click="save">save</v-btn>
+                <v-btn @click="cancel">cancel</v-btn>
+                <v-btn color="red" @click="deleteUser">delete user</v-btn>
           </v-form>
+        </v-flex>
 
           <main role="main">
             <p class="subheading font-weight-regular"> {{this.message}}</p>
           </main>
+
+            <!-- USER LIST -->
+            <v-list-tile v-for="user in users" :key="user.id" avatar ripple>
+              <v-list-tile-content>
+                <v-list-tile-title> {{ user.id }}  | {{ user.first_name }} {{ user.last_name }} {{ user.is_admin ? "[admin]" : ""}}</v-list-tile-title>
+                <v-list-tile-sub-title > {{ user.email }} </v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-spacer></v-spacer>
+              <v-btn dark color="green"
+              @click="editUser(user)"
+              large>EDIT</v-btn>
+            </v-list-tile>
 
   </v-card>
 </template>
@@ -65,9 +65,11 @@ export default {
     return {
       firstName: "",
       lastName: "",
-      email: "",
-      password: "", 
+      email: "", 
       message: "",
+      actualUser: 0,
+      fullName: "",
+      users: [],
       showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
@@ -84,31 +86,79 @@ export default {
       valid: true
     }
   },
-  methods: {
-    add(){
-      axios.post('/api/add_user', {
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email,
-            password: this.password
+  created () {
+    axios.get('/api/users', {
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "New user was successfully inserted";
+              this.users = response.data;
+              this.message = "Users";
             } else {
-              this.message = "Error - inserting failed";
+              this.message = "Error - not able to get users";
             }
           })
           .catch((error) => {
-            this.message = "Error - inserting failed";
-            if(error.status == 409){
-              this.message = "Error - user with this email already exists!";
+            this.message = "Error - not able to get users";
+            console.log("ERR: " + error);
+          });
+  },
+  methods: {
+    editUser(editedUser) {
+      this.actualUser = editedUser.id;
+      this.firstName = editedUser.first_name;
+      this.lastName = editedUser.last_name;
+      this.email = editedUser.email;
+    },
+    save() {
+      axios.post('/api/update_user', {
+            id: this.actualUser,
+            first_name: this.firstName,
+            last_name: this.lastName,
+            email: this.email
+        }).then((response) => {
+            if (response.status == 200) {
+              this.message = "User information was successfully saved!";
+            } else {
+              this.message = "Error - information was not saved";
             }
+          })
+          .catch((error) => {
+            this.message = "Error - information was not saved";
+            console.log("ERR: " + error);
+          });
+      axios.get('/api/users', {
+        }).then((response) => {
+            if (response.status == 200) {
+              this.users = response.data;
+            } else {
+              this.message = "Error - not able to get users";
+            }
+          })
+          .catch((error) => {
+            this.message = "Error - not able to get users";
+            console.log("ERR: " + error);
+          });      
+    },
+    cancel() {
+      this.$refs.form.reset();
+      this.actualUser = 0;
+    },
+    deleteUser() {
+      this.fullName = this.firstName + " " + this.lastName;
+      axios.post('/api/delete_user', {
+            id: this.actualUser,
+        }).then((response) => {
+            if (response.status == 200) {
+              this.message = "User " + this.fullName + " was successfully deleted";
+            } else {
+              this.message = "Error - user was not deleted";
+            }
+          })
+          .catch((error) => {
+            this.message = "Error - user was not deleted";
             console.log("ERR: " + error);
           });
       this.$refs.form.reset();
-    },
-    clear(){
-      this.$refs.form.reset();
+      this.actualUser = 0;
     }
   },
   components: {
