@@ -243,6 +243,8 @@ class SearchController extends Controller
             if ($obj) {
                 $curr_price += $obj['price'];
                 array_push($all, $obj);
+            } else {
+                return NULL;
             }
         }
         if ($curr_price <= 0)
@@ -360,6 +362,9 @@ class SearchController extends Controller
             $first = $request_arr;
             $dest = $first['destination'];
             $first['destination'] = NULL;
+            $first['destination'] = NULL;
+            $tmp_date = $first['arrival_date'];
+            $first['arrival_date'] = NULL;
             $first_r = $this->select_flights_direct($first, false, $origin_airport, $direction);
             // dd($first_r);
             foreach($first_r as $fr) {
@@ -370,6 +375,7 @@ class SearchController extends Controller
                 $second['min_t'] = '0';
                 $second['max_t'] = '2';
                 $second['arrival_time'] = $fr->arrival_time;
+                $first['departure_date'] = $tmp_date;
                 $second_r = $this->select_flights_direct($second, $dest_airport, false, true);
                 if ($second_r) {
                     array_push($selected, array($fr, $second_r[0]));
@@ -437,9 +443,9 @@ class SearchController extends Controller
                     array_push($return_arr,$row_array);
 
                 }
-            } else if ($row_array['there'] && (is_null($min_t) && is_null($max_t) && is_null($arrival_date))) { 
+            } else if ($row_array['there'] && (is_null($min_t) && is_null($max_t) && is_null($arrival_date))) {
                 $cur_total_price = $row_array['there']['total_price'];
-                $row_array['total_price']+= $cur_total_price;
+                $row_array['total_price'] = $cur_total_price;
                 $row_array['total_time'] = round($row_array['there']['total_time_mins'] / 60);
                 array_push($return_arr,$row_array);
             }
@@ -506,7 +512,7 @@ class SearchController extends Controller
         if (isset($request['ft_2'])){
             $tmp = $this->select_flight($request['ft_2']);
             if (!$tmp)
-                return NULL;
+            return NULL;
             array_push($flight_there, $tmp);
         }
         $class_selected = false;
@@ -516,6 +522,7 @@ class SearchController extends Controller
 
         $return_arr = array();
         $tmp_obj = $this->create_object_representation($flight_there, $request);
+        $curr_price = $tmp_obj['total_price'];
         array_push($return_arr, $tmp_obj);
         if (isset($request['fb_1'])) {
             $flight_back = array();
@@ -530,8 +537,10 @@ class SearchController extends Controller
                 array_push($flight_back, $tmp);
             }
             $tmp_obj = $this->create_object_representation($flight_back, $request);
+            $curr_price += $tmp_obj['total_price'];
             array_push($return_arr, $tmp_obj);
         }
+        $return_arr['total_price'] = $curr_price;
         return $return_arr;
     }
 
