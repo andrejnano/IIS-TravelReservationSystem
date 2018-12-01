@@ -424,9 +424,17 @@ class SearchController extends Controller
                     break;
                 }
                 $row_array['back'] = $return_flight_arr;
-                if (!empty($return_flight_arr) && $row_array['there'] && $row_array['back'])
+                if (!empty($return_flight_arr) && $row_array['there'] && $row_array['back']) {
+
+                    $row_array['back'] = $return_flight_arr[0];
+                    $cur_total_price = $row_array['back']['total_price'] + $row_array['there']['total_price'];
+                    $row_array['total_price'] = $cur_total_price;
                     array_push($return_arr,$row_array);
+
+                }
             } else if ($row_array['there'] && (is_null($min_t) && is_null($max_t) && is_null($arrival_date))) { 
+                $cur_total_price = $row_array['there']['total_price'];
+                $row_array['total_price']+= $cur_total_price;
                 array_push($return_arr,$row_array);
             }
         }
