@@ -72944,13 +72944,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -72999,39 +72992,80 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
     loadingCancel: function loadingCancel() {
       console.log('User cancelled the loader.');
     },
+
+    /**
+     * codes:
+     *    add: 1x   |   search: 2x
+     *    users x1  |  flights: x2  |  airlines: x3  |  airplanes: x4  |  airports: x5
+     */
     addUser: function addUser() {
-      if (this.adminState == 1) {
+      if (this.adminState == 11) {
         this.adminState = 0;
       } else {
-        this.adminState = 1;
+        this.adminState = 11;
       }
     },
     addFlight: function addFlight() {
-      if (this.adminState == 2) {
+      if (this.adminState == 12) {
         this.adminState = 0;
       } else {
-        this.adminState = 2;
+        this.adminState = 12;
       }
     },
     addAirline: function addAirline() {
-      if (this.adminState == 3) {
+      if (this.adminState == 13) {
         this.adminState = 0;
       } else {
-        this.adminState = 3;
+        this.adminState = 13;
       }
     },
     addAirplane: function addAirplane() {
-      if (this.adminState == 4) {
+      if (this.adminState == 14) {
         this.adminState = 0;
       } else {
-        this.adminState = 4;
+        this.adminState = 14;
       }
     },
     addAirport: function addAirport() {
-      if (this.adminState == 5) {
+      if (this.adminState == 15) {
         this.adminState = 0;
       } else {
-        this.adminState = 5;
+        this.adminState = 15;
+      }
+    },
+    searchUser: function searchUser() {
+      if (this.adminState == 21) {
+        this.adminState = 0;
+      } else {
+        this.adminState = 21;
+      }
+    },
+    searchFlight: function searchFlight() {
+      if (this.adminState == 22) {
+        this.adminState = 0;
+      } else {
+        this.adminState = 22;
+      }
+    },
+    searchAirline: function searchAirline() {
+      if (this.adminState == 23) {
+        this.adminState = 0;
+      } else {
+        this.adminState = 23;
+      }
+    },
+    searchAirplane: function searchAirplane() {
+      if (this.adminState == 24) {
+        this.adminState = 0;
+      } else {
+        this.adminState = 24;
+      }
+    },
+    searchAirport: function searchAirport() {
+      if (this.adminState == 25) {
+        this.adminState = 0;
+      } else {
+        this.adminState = 25;
       }
     }
   },
@@ -73087,168 +73121,182 @@ var render = function() {
                     },
                     [
                       _c("main", { attrs: { role: "main" } }, [
-                        _c(
-                          "h1",
-                          { staticClass: "display-2 font-weight-bold mb-3" },
-                          [_vm._v("Edit database")]
-                        ),
+                        _c("h1", { staticClass: "display-2 mb-3" }, [
+                          _vm._v("Edit database")
+                        ]),
                         _c("br")
                       ])
                     ]
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [_c("h2", [_vm._v("USERS")])])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addUser }
                         },
-                        [
-                          _vm._v("\n              Add user\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { dark: "", color: "blue" },
+                          on: { click: _vm.searchUser }
+                        },
+                        [_vm._v("SEARCH")]
                       )
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("FLIGHTS")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addFlight }
                         },
-                        [
-                          _vm._v("\n              Add flight\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { dark: "", color: "blue" },
+                          on: { click: _vm.searchFlight }
+                        },
+                        [_vm._v("SEARCH")]
                       )
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("AIRLINES")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addAirline }
                         },
-                        [
-                          _vm._v("\n              Add airline\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { dark: "", color: "blue" },
+                          on: { click: _vm.searchAirline }
+                        },
+                        [_vm._v("SEARCH")]
                       )
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("AIRPLANES")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addAirplane }
                         },
-                        [
-                          _vm._v(
-                            "\n              Add Airplane\n              "
-                          ),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { dark: "", color: "blue" },
+                          on: { click: _vm.searchAirplane }
+                        },
+                        [_vm._v("SEARCH")]
                       )
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-flex",
+                    "v-list-tile",
+                    { attrs: { avatar: "", ripple: "" } },
                     [
+                      _c(
+                        "v-list-tile-content",
+                        [
+                          _c("v-list-tile-title", [
+                            _c("h2", [_vm._v("AIRPORTS")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          attrs: { color: "info", large: "" },
+                          attrs: { dark: "", color: "green" },
                           on: { click: _vm.addAirport }
                         },
-                        [
-                          _vm._v("\n              Add airport\n              "),
-                          _c(
-                            "span",
-                            {
-                              staticClass: "custom-loader",
-                              attrs: { slot: "submitLoader" },
-                              slot: "submitLoader"
-                            },
-                            [
-                              _c("v-icon", { attrs: { light: "" } }, [
-                                _vm._v("cached")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
+                        [_vm._v("ADD")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { dark: "", color: "blue" },
+                          on: { click: _vm.searchAirport }
+                        },
+                        [_vm._v("SEARCH")]
                       )
                     ],
                     1
@@ -73264,14 +73312,14 @@ var render = function() {
                   _c(
                     "v-flex",
                     { attrs: { xs12: "", sm12: "", md12: "", lg12: "" } },
-                    [_vm.adminState == 1 ? _c("add-user-form") : _vm._e()],
+                    [_vm.adminState == 11 ? _c("add-user-form") : _vm._e()],
                     1
                   ),
                   _vm._v(" "),
                   _c(
                     "v-flex",
                     { attrs: { xs12: "", sm12: "", md12: "", lg12: "" } },
-                    [_vm.adminState == 2 ? _c("add-flight-form") : _vm._e()],
+                    [_vm.adminState == 12 ? _c("add-flight-form") : _vm._e()],
                     1
                   )
                 ],
