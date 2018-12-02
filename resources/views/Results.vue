@@ -191,7 +191,7 @@ export default {
         if (response.status == 200) {
           console.log("QUERY OK! : 200");
         } else {
-          return; // TODO: not found
+          return;
         }
         // extract only the data part
         let responseResults = response.data;

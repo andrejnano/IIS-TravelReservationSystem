@@ -70387,7 +70387,7 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
         if (response.status == 200) {
           console.log("QUERY OK! : 200");
         } else {
-          return; // TODO: not found
+          return;
         }
         // extract only the data part
         var responseResults = response.data;
@@ -72638,7 +72638,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -72659,11 +72659,402 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
+
+// format the date string to just display hours and minutes
+function onlyHoursMinutes(dateString) {
+  return new Date(dateString).toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+}
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Flight view'
+  name: 'Flight',
+  data: function data() {
+    return {
+      flightParams: {
+        ft_1: this.$route.query.ft_1 != null ? this.$route.query.ft_1 : null,
+        ft_2: this.$route.query.ft_2 != null ? this.$route.query.ft_2 : null,
+        fb_1: this.$route.query.fb_1 != null ? this.$route.query.fb_1 : null,
+        fb_2: this.$route.query.fb_2 != null ? this.$route.query.fb_2 : null
+      },
+      result: {}
+    };
+  },
+
+  methods: {
+    getFlight: function getFlight(params) {
+      var _this = this;
+
+      var query = '/api/flight?';
+
+      if (params.ft_1 != null && params.ft_1 != '') {
+        query += '&ft_1=' + params.ft_1;
+      }
+      if (params.ft_2 != null && params.ft_2 != '') {
+        query += '&ft_2=' + params.ft_2;
+      }
+      if (params.fb_1 != null && params.fb_1 != '') {
+        query += '&fb_1=' + params.fb_1;
+      }
+      if (params.fb_2 != null && params.fb_2 != '') {
+        query += '&fb_2=' + params.fb_2;
+      }
+
+      query += '&tickets=1';
+      query += '&class=0';
+
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(query).then(function (response) {
+
+        if (response.status == 200) {
+          console.log({ query: query });
+          console.log('%c FLIGHT FOUND! ', 'background: #00ff00; color: #ffffff');
+        } else {
+          console.log('%c FLIGHT NOT FOUND! ', 'background: #ff0000; color: #ffffff');
+          return;
+        }
+        var responseResults = response.data;
+
+        responseResults.forEach(function (flight) {
+          _this.result = flight;
+        });
+      });
+    }
+  },
+  created: function created() {
+    this.getFlight(this.flightParams);
+  },
+
+  computed: {
+    smallDescription: function smallDescription() {
+
+      var output = "";
+      //class to string
+      var classString = "";
+      if (this.result.there['0'].seat_class == "economy") {
+        classString = "<span class='bronze'>economy class</span>";
+      } else if (this.result.there['0'].seat_class == "business") {
+        classString = "<span class='silver'>business class</span>";
+      } else if (this.result.there['0'].seat_class == "first") {
+        classString = "<span class='gold'>first class</span>";
+      } else {
+        classString = "<span class='error'>unknown class</span>";
+      }
+
+      output += "Class: " + classString;
+      output += " | <span class='mdi mdi-timer'></span> ± <strong>" + this.result.total_time + " hours</strong>";
+
+      return output;
+    },
+    bigDescription: function bigDescription() {
+      var output = "";
+
+      var isRoundTrip = this.result.hasOwnProperty('back');
+
+      output += this.thereDetailedTitle;
+
+      if (isRoundTrip) {
+        output += " <br>" + this.backDetailedTitle;
+      }
+
+      return output;
+    },
+    thereTitle: function thereTitle() {
+      var output = "";
+      if (this.result.there.hasOwnProperty('1')) {
+        // s prestupom
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['1'].destination.city;
+      } else {
+        // bez prestupu
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['0'].destination.city;
+      }
+      return output;
+    },
+    backTitle: function backTitle() {
+      var output = "";
+      if (this.result.there.hasOwnProperty('1')) {
+        // s prestupom
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['1'].destination.city;
+      } else {
+        // bez prestupu
+        output += this.result.there['0'].origin.city + " → ";
+        output += this.result.there['0'].destination.city;
+      }
+      return output;
+    },
+    thereDetailedTitle: function thereDetailedTitle() {
+
+      var output = "There: ";
+      var there = this.result.there;
+
+      var isConnectingThere = this.result.there.hasOwnProperty('1');
+
+      output += there['0'].origin.airport + " <strong>" + onlyHoursMinutes(there['0'].departure_time) + "</strong> → ";
+
+      if (isConnectingThere) {
+        output += there['1'].origin.airport + " <strong>" + onlyHoursMinutes(there['1'].departure_time) + "</strong> (stop) → ";
+        output += there['1'].destination.airport + " " + onlyHoursMinutes(there['1'].arrival_time);
+      } else {
+        output += there['0'].destination.airport + " <strong>" + onlyHoursMinutes(there['0'].arrival_time) + "</strong>";
+      }
+
+      return output;
+    },
+    backDetailedTitle: function backDetailedTitle() {
+      var output = "Back: ";
+      var back = this.result.back;
+
+      var isConnectingBack = this.result.back.hasOwnProperty('1');
+
+      output += back['0'].origin.airport + "  <strong>" + onlyHoursMinutes(back['0'].departure_time) + "</strong> → ";
+
+      if (isConnectingBack) {
+        output += back['1'].origin.airport + " <strong>" + onlyHoursMinutes(back['1'].departure_time) + "</strong> (stop) → ";
+        output += back['1'].destination.airport + " <strong>" + onlyHoursMinutes(back['1'].arrival_time) + "</strong>";
+      } else {
+        output += back['0'].destination.airport + " <strong>" + onlyHoursMinutes(back['0'].arrival_time) + "</strong>";
+      }
+
+      return output;
+    },
+
+    logoThere0: function logoThere0() {
+      return '../images/' + this.result.there['0'].airline.id_logo + '.png';
+    },
+    logoThere1: function logoThere1() {
+      return '../images/' + this.result.there['1'].airline.id_logo + '.png';
+    },
+    logoBack0: function logoBack0() {
+      return '../images/' + this.result.back['0'].airline.id_logo + '.png';
+    },
+    logoBack1: function logoBack1() {
+      return '../images/' + this.result.back['1'].airline.id_logo + '.png';
+    },
+
+    expandedTopThere0: function expandedTopThere0() {
+      var segment = this.result.there[0];
+      return 'Flight number: <strong>' + segment.flight_number + '</strong>';
+    },
+    expandedTopThere1: function expandedTopThere1() {
+      var segment = this.result.there[1];
+      return 'Flight number: <strong>' + segment.flight_number + '</strong>';
+    },
+    expandedTopBack0: function expandedTopBack0() {
+      var segment = this.result.back[0];
+      return 'Flight number: <strong>' + segment.flight_number + '</strong>';
+    },
+    expandedTopBack1: function expandedTopBack1() {
+      var segment = this.result.back[1];
+      return 'Flight number: <strong>' + segment.flight_number + '</strong>';
+    },
+
+    expandedTitleThere0: function expandedTitleThere0() {
+      var segment = this.result.there[0];
+      return '<span class=\'mdi mdi-airplane-takeoff\'></span> ' + segment.origin.city + ' (' + segment.origin.airport + ') <strong> ' + onlyHoursMinutes(segment.departure_time) + ' </strong> \u2192  ' + segment.destination.city + ' (' + segment.destination.airport + ') <strong> ' + onlyHoursMinutes(segment.arrival_time) + ' </strong> <span class=\'mdi mdi-airplane-landing\'></span>';
+    },
+    expandedTitleThere1: function expandedTitleThere1() {
+      var segment = this.result.there[1];
+      return '<span class=\'mdi mdi-airplane-takeoff\'></span> ' + segment.origin.city + ' (' + segment.origin.airport + ') <strong> ' + onlyHoursMinutes(segment.departure_time) + ' </strong> \u2192  ' + segment.destination.city + ' (' + segment.destination.airport + ') <strong> ' + onlyHoursMinutes(segment.arrival_time) + ' </strong> <span class=\'mdi mdi-airplane-landing\'></span>';
+    },
+    expandedTitleBack0: function expandedTitleBack0() {
+      var segment = this.result.back[0];
+      return '<span class=\'mdi mdi-airplane-takeoff\'></span> ' + segment.origin.city + ' (' + segment.origin.airport + ') <strong> ' + onlyHoursMinutes(segment.departure_time) + ' </strong> \u2192  ' + segment.destination.city + ' (' + segment.destination.airport + ') <strong> ' + onlyHoursMinutes(segment.arrival_time) + ' </strong> <span class=\'mdi mdi-airplane-landing\'></span>';
+    },
+    expandedTitleBack1: function expandedTitleBack1() {
+      var segment = this.result.back[1];
+      return '<span class=\'mdi mdi-airplane-takeoff\'></span> ' + segment.origin.city + ' (' + segment.origin.airport + ') <strong> ' + onlyHoursMinutes(segment.departure_time) + ' </strong> \u2192  ' + segment.destination.city + ' (' + segment.destination.airport + ') <strong> ' + onlyHoursMinutes(segment.arrival_time) + ' </strong> <span class=\'mdi mdi-airplane-landing\'></span>';
+    },
+
+    expandedSubTitleThere0: function expandedSubTitleThere0() {
+      var segment = this.result.there[0];
+      return '<span class=\'mdi mdi-timer\'></span> ' + segment.flight_time + ' | <span class=\'mdi mdi-airplane\'></span> ' + segment.airplane.producer + ' ' + segment.airplane.model + ' | ' + segment.airline.full_name + ' ' + segment.airline.nationality;
+    },
+    expandedSubTitleThere1: function expandedSubTitleThere1() {
+      var segment = this.result.there[1];
+      return '<span class=\'mdi mdi-timer\'></span> ' + segment.flight_time + ' | <span class=\'mdi mdi-airplane\'></span> ' + segment.airplane.producer + ' ' + segment.airplane.model + ' | ' + segment.airline.full_name + ' ' + segment.airline.nationality;
+    },
+    expandedSubTitleBack0: function expandedSubTitleBack0() {
+      var segment = this.result.back[0];
+      return '<span class=\'mdi mdi-timer\'></span> ' + segment.flight_time + ' | <span class=\'mdi mdi-airplane\'></span> ' + segment.airplane.producer + ' ' + segment.airplane.model + ' | ' + segment.airline.full_name + ' ' + segment.airline.nationality;
+    },
+    expandedSubTitleBack1: function expandedSubTitleBack1() {
+      var segment = this.result.back[1];
+      return '<span class=\'mdi mdi-timer\'></span> ' + segment.flight_time + ' | <span class=\'mdi mdi-airplane\'></span> ' + segment.airplane.producer + ' ' + segment.airplane.model + ' | ' + segment.airline.full_name + ' ' + segment.airline.nationality;
+    },
+
+    layoverThere: function layoverThere() {
+      var time1 = new Date(this.result.there[0].arrival_time);
+      var time2 = new Date(this.result.there[1].departure_time);
+
+      var difference = time2 - time1;
+
+      return '<span class=\'mdi mdi-clock\'></span> Layover time: ' + onlyHoursMinutes(difference) + ' @ <span class=\'mdi mdi-airport\'></span> ' + this.result.there[0].destination.city + ' International Airport (' + this.result.there[0].destination.airport + ')';
+    },
+    layoverBack: function layoverBack() {
+      var time1 = new Date(this.result.back[0].arrival_time);
+      var time2 = new Date(this.result.back[1].departure_time);
+
+      var difference = time2 - time1;
+
+      return '<span class=\'mdi mdi-clock\'></span> Layover time: ' + onlyHoursMinutes(difference) + ' @ <span class=\'mdi mdi-airport\'></span> ' + this.result.back[0].destination.city + ' International Airport (' + this.result.back[0].destination.airport + ')';
+    },
+
+    expandedTitle: function expandedTitle() {
+      var output = "";
+      var there = this.result.there;
+
+      var isRoundTrip = this.result.hasOwnProperty('back');
+
+      if (isRoundTrip) {
+        output += "Round trip flight from " + "&nbsp;<strong>" + there[0].origin.city + "</strong>&nbsp;" + " to";
+      } else {
+        output += "One way flight from " + "&nbsp;<strong>" + there[0].origin.city + "</strong>&nbsp;" + " to";
+      }
+
+      var isConnectingThere = this.result.there.hasOwnProperty('1');
+
+      if (isConnectingThere) {
+        output += "&nbsp;<strong>" + there[1].destination.city + "</strong>&nbsp;";
+      } else {
+        output += "&nbsp;<strong>" + there[0].destination.city + "</strong>&nbsp;";
+      }
+
+      return output;
+    },
+
+    expandedBottomDescription: function expandedBottomDescription() {
+
+      var output = "";
+      //class to string
+      var classString = "";
+      if (this.result.there['0'].seat_class == "economy") {
+        classString = "<span class='bronze'>economy class</span>";
+      } else if (this.result.there['0'].seat_class == "business") {
+        classString = "<span class='silver'>business class</span>";
+      } else if (this.result.there['0'].seat_class == "first") {
+        classString = "<span class='gold'>first class</span>";
+      } else {
+        classString = "<span class='error'>unknown class</span>";
+      }
+
+      output += "Total travel time: <span class='mdi mdi-timer'></span> about <strong>" + this.result.total_time + " hours</strong>";
+      output += "&nbsp;-&nbsp;" + classString + "&nbsp;-&nbsp;<span class='mdi mdi-dark mdi-briefcase-check'></span>";
+
+      return output;
+    }
+
+  }
 });
 
 /***/ }),
@@ -72677,9 +73068,336 @@ var render = function() {
   return _c(
     "v-content",
     [
-      _c("v-container", { attrs: { fluid: "" } }, [
-        _c("h1", [_vm._v("Flight view")])
-      ])
+      _c(
+        "v-container",
+        { attrs: { fluid: "" } },
+        [
+          _c(
+            "v-layout",
+            { attrs: { "justify-center": "", column: "" } },
+            [
+              _c(
+                "v-flex",
+                { attrs: { xs12: "" } },
+                [
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", {
+                        staticClass: "headline grey lighten-2",
+                        attrs: { "primary-title": "" },
+                        domProps: { innerHTML: _vm._s(_vm.expandedTitle) }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-list",
+                            { attrs: { "three-line": "", subheader: "" } },
+                            [
+                              _c("v-divider"),
+                              _vm._v(" "),
+                              _c("v-subheader", [_vm._v("Departing flights")]),
+                              _vm._v(" "),
+                              _c("v-divider", { attrs: { inset: "" } }),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-tile",
+                                { attrs: { avatar: "" } },
+                                [
+                                  _c("v-list-tile-avatar", [
+                                    _c("img", {
+                                      attrs: { src: _vm.logoThere0 }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-list-tile-content",
+                                    [
+                                      _c("v-list-tile-sub-title", {
+                                        domProps: {
+                                          innerHTML: _vm._s(
+                                            _vm.expandedTopThere0
+                                          )
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-list-tile-title", {
+                                        domProps: {
+                                          innerHTML: _vm._s(
+                                            _vm.expandedTitleThere0
+                                          )
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-list-tile-sub-title", {
+                                        domProps: {
+                                          innerHTML: _vm._s(
+                                            _vm.expandedSubTitleThere0
+                                          )
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-divider", { attrs: { inset: "" } }),
+                              _vm._v(" "),
+                              _vm.result.there.hasOwnProperty("1")
+                                ? _c(
+                                    "v-list-tile",
+                                    { attrs: { color: "purple" } },
+                                    [
+                                      _c(
+                                        "v-list-tile-content",
+                                        [
+                                          _c("v-list-tile-sub-title", {
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.layoverThere
+                                              )
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("v-divider", { attrs: { inset: "" } }),
+                              _vm._v(" "),
+                              _vm.result.there.hasOwnProperty("1")
+                                ? _c(
+                                    "v-list-tile",
+                                    { attrs: { avatar: "" } },
+                                    [
+                                      _c("v-list-tile-avatar", [
+                                        _c("img", {
+                                          attrs: { src: _vm.logoThere1 }
+                                        })
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-tile-content",
+                                        [
+                                          _c("v-list-tile-sub-title", {
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.expandedTopThere1
+                                              )
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-list-tile-title", {
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.expandedTitleThere1
+                                              )
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("v-list-tile-sub-title", {
+                                            domProps: {
+                                              innerHTML: _vm._s(
+                                                _vm.expandedSubTitleThere1
+                                              )
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("v-divider", { attrs: { inset: "" } }),
+                              _vm._v(" "),
+                              _vm.result.hasOwnProperty("back")
+                                ? [
+                                    _c("v-subheader", [
+                                      _vm._v("Returning flights")
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm.result.back.hasOwnProperty("0")
+                                      ? _c(
+                                          "v-list-tile",
+                                          [
+                                            _c("v-list-tile-avatar", [
+                                              _c("img", {
+                                                attrs: { src: _vm.logoBack0 }
+                                              })
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-list-tile-content",
+                                              [
+                                                _c("v-list-tile-sub-title", {
+                                                  domProps: {
+                                                    innerHTML: _vm._s(
+                                                      _vm.expandedTopBack0
+                                                    )
+                                                  }
+                                                }),
+                                                _vm._v(" "),
+                                                _c("v-list-tile-title", {
+                                                  domProps: {
+                                                    innerHTML: _vm._s(
+                                                      _vm.expandedTitleBack0
+                                                    )
+                                                  }
+                                                }),
+                                                _vm._v(" "),
+                                                _c("v-list-tile-sub-title", {
+                                                  domProps: {
+                                                    innerHTML: _vm._s(
+                                                      _vm.expandedSubTitleBack0
+                                                    )
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _c("v-divider"),
+                                    _vm._v(" "),
+                                    _vm.result.back.hasOwnProperty("1")
+                                      ? _c(
+                                          "v-list-tile",
+                                          [
+                                            _c(
+                                              "v-list-tile-content",
+                                              [
+                                                _c("v-list-tile-sub-title", {
+                                                  domProps: {
+                                                    innerHTML: _vm._s(
+                                                      _vm.layoverBack
+                                                    )
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _c("v-divider"),
+                                    _vm._v(" "),
+                                    _vm.result.back.hasOwnProperty("1")
+                                      ? _c(
+                                          "v-list-tile",
+                                          [
+                                            _c("v-list-tile-avatar", [
+                                              _c("img", {
+                                                attrs: { src: _vm.logoBack1 }
+                                              })
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-list-tile-content",
+                                              [
+                                                _c("v-list-tile-sub-title", {
+                                                  domProps: {
+                                                    innerHTML: _vm._s(
+                                                      _vm.expandedTopBack1
+                                                    )
+                                                  }
+                                                }),
+                                                _vm._v(" "),
+                                                _c("v-list-tile-title", {
+                                                  domProps: {
+                                                    innerHTML: _vm._s(
+                                                      _vm.expandedTitleBack1
+                                                    )
+                                                  }
+                                                }),
+                                                _vm._v(" "),
+                                                _c("v-list-tile-sub-title", {
+                                                  domProps: {
+                                                    innerHTML: _vm._s(
+                                                      _vm.expandedSubTitleBack1
+                                                    )
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      : _vm._e()
+                                  ]
+                                : _vm._e()
+                            ],
+                            2
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c("span", {
+                            domProps: {
+                              innerHTML: _vm._s(_vm.expandedBottomDescription)
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                ripple: "",
+                                dark: "",
+                                color: "success",
+                                large: ""
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n              Create reservation for this flight   "
+                              ),
+                              _c("strong", [
+                                _vm._v(
+                                  " " + _vm._s(_vm.result.total_price) + " €"
+                                )
+                              ])
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
