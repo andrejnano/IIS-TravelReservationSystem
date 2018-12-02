@@ -2,41 +2,45 @@
   <v-card class="layout column" light>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> Add new user</p>
+            <p class="subheading font-weight-regular"> Add new airplane</p>
           </main>
 
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
-                  v-model="firstName"
-                  :rules="nameRules"
-                  label="First name"
+                  v-model="producer"
+                  :rules="cityRules"
+                  label="Producer"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="lastName"
-                  :rules="nameRules"
-                  label="Last name"
+                  v-model="model"
+                  label="Model"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="email"
-                  :rules="emailRules"
-                  label="E-mail"
+                  v-model="fclassSeats"
+                  :rules="intRules"
+                  label="First class seats count"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="password"
-                  :append-icon="showPasswordField ? 'visibility_off' : 'visibility'"
-                  :rules="[rules.required, rules.min]"
-                  :type="showPasswordField ? 'text' : 'password'"
-                  name="password-input"
-                  label="Password"
-                  hint="At least 8 characters"
-                  counter
-                  @click:append="showPasswordField = !showPasswordField"
+                  v-model="bclassSeats"
+                  :rules="intRules"
+                  label="Business class seats count"
                   required
                 ></v-text-field>
-                <v-btn :disabled="!valid" @click="add">add user</v-btn>
+                <v-text-field
+                  v-model="eclassSeats"
+                  :rules="intRules"
+                  label="Economy class seats count"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="airline"
+                  label="Airline"
+                  required
+                ></v-text-field>
+                <v-btn :disabled="!valid" @click="add">add airplane</v-btn>
                 <v-btn @click="clear">clear</v-btn>
           </v-form>
 
@@ -58,54 +62,58 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import axios from 'axios'
+axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
 export default {
   name: 'ChangePasswordForm',
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "", 
+      producer: "",
+      model: "",
+      fclassSeats: "0",
+      bclassSeats: "0",
+      eclassSeats: "0",
+      airline: "",
       message: "",
-      showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
       },
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      
+      cityRules: [
+        v => !!v || 'City name is required',
+        v => (v && v.length <= 50) || 'City name must be shorter than 50 chars',
+        v => /[A-Z]+/.test(v) || 'City must be valid'
       ],
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+
+      intRules: [
+        v => !!v || 'Number of seats required',
+        v => (v && v.length <= 4) || 'max 4 digit number expected',
+        v => /[0-9]/.test(v) || 'Number must be valid'
       ],
       valid: true
     }
   },
   methods: {
     add(){
-      axios.post('/api/add_user', {
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email,
-            password: this.password
+      axios.post('/api/add_airplane', {
+            producer: this.producer,
+            model: this.model,
+            fclass_seats: this.fclassSeats,
+            bclass_seats: this.bclassSeats,
+            eclass_seats: this.eclassSeats,
+            airline: this.airline
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "New user was successfully inserted";
+              this.message = "New airplane was successfully inserted";
             } else {
               this.message = "Error - inserting failed";
             }
           })
           .catch((error) => {
             this.message = "Error - inserting failed";
-            if(error.status == 409){
-              this.message = "Error - user with this email already exists!";
-            }
             console.log("ERR: " + error);
           });
-      this.$refs.form.reset();
     },
     clear(){
       this.$refs.form.reset();

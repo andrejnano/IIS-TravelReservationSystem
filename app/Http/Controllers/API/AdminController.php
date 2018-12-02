@@ -107,9 +107,9 @@ class AdminController extends Controller
         $this->abort_if_no_admin();
         if(!$request->input('producer') ||
             !$request->input('model') ||
-            !$request->input('fclass_seats') ||
-            !$request->input('bclass_seats') ||
-            !$request->input('eclass_seats') ||
+            (!$request->input('fclass_seats') && $request->input('fclass_seats') !== "0") ||
+            (!$request->input('bclass_seats') && $request->input('bclass_seats') !== "0") ||
+            (!$request->input('eclass_seats') && $request->input('eclass_seats') !== "0") ||
             !$request->input('airline') ) {
             abort(400, "Missing argument. Can not add this airplane.");
         }

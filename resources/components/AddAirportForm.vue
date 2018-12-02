@@ -2,41 +2,29 @@
   <v-card class="layout column" light>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> Add new user</p>
+            <p class="subheading font-weight-regular"> Add new airport</p>
           </main>
 
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
-                  v-model="firstName"
-                  :rules="nameRules"
-                  label="First name"
+                  v-model="airportCode"
+                  :rules="airportCodeRules"
+                  label="Airport code"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="lastName"
-                  :rules="nameRules"
-                  label="Last name"
+                  v-model="city"
+                  :rules="cityRules"
+                  label="City"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="email"
-                  :rules="emailRules"
-                  label="E-mail"
+                  v-model="country"
+                  :rules="cityRules"
+                  label="Country"
                   required
                 ></v-text-field>
-                <v-text-field
-                  v-model="password"
-                  :append-icon="showPasswordField ? 'visibility_off' : 'visibility'"
-                  :rules="[rules.required, rules.min]"
-                  :type="showPasswordField ? 'text' : 'password'"
-                  name="password-input"
-                  label="Password"
-                  hint="At least 8 characters"
-                  counter
-                  @click:append="showPasswordField = !showPasswordField"
-                  required
-                ></v-text-field>
-                <v-btn :disabled="!valid" @click="add">add user</v-btn>
+                <v-btn :disabled="!valid" @click="add">add airport</v-btn>
                 <v-btn @click="clear">clear</v-btn>
           </v-form>
 
@@ -63,49 +51,45 @@ export default {
   name: 'ChangePasswordForm',
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "", 
+      airportCode: "",
+      city: "",
+      country: "",
       message: "",
-      showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
       },
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      
+      cityRules: [
+        v => !!v || 'City name is required',
+        v => (v && v.length <= 50) || 'City name must be shorter than 50 chars',
+        v => /[A-Z]+/.test(v) || 'City must be valid'
       ],
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+      airportCodeRules: [
+        v => !!v || 'Airport code is required',
+        v => (v && v.length == 3) || 'Airport code must be 3 characters',
+        v => /[A-Z]{3}/.test(v) || 'Airport code must be valid'
       ],
       valid: true
     }
   },
   methods: {
     add(){
-      axios.post('/api/add_user', {
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email,
-            password: this.password
+      axios.post('/api/add_airport', {
+            airport_code: this.airportCode,
+            city: this.city,
+            country: this.country
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "New user was successfully inserted";
+              this.message = "New airport was successfully inserted";
             } else {
               this.message = "Error - inserting failed";
             }
           })
           .catch((error) => {
             this.message = "Error - inserting failed";
-            if(error.status == 409){
-              this.message = "Error - user with this email already exists!";
-            }
             console.log("ERR: " + error);
           });
-      this.$refs.form.reset();
     },
     clear(){
       this.$refs.form.reset();
