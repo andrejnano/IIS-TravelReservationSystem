@@ -157,24 +157,30 @@ export default {
       query += `origin=${formValues.origin.airport_code}`;
       query += `&destination=${formValues.destination.airport_code}`;
 
-      if (formValues.departureDate != null)
+      if (formValues.departureDate != null && formValues.departureDate != '')
       {
         query += `&departure_date=${formValues.departureDate}`;
       }
 
-      if (formValues.arrivalDate != null)
+      if (formValues.arrivalDate != '' && formValues.arrivalDate != null )
       {
         query += `&arrival_date=${formValues.arrivalDate}`;
+        query += `&min_t=0`;
       }
 
-      if (formValues.priceMax != null)
+      if (formValues.priceMax != null && formValues.priceMax != '' )
       {
         query += `&max_price=${formValues.priceMax}`;
       }
 
-      if (formValues.priceMin != null)
+      if (formValues.priceMin != null && formValues.priceMin != '' )
       {
         query += `&min_price=${formValues.priceMin}`;
+      }
+
+      if (formValues.setClass != null && formValues.setClass != '' )
+      {
+        query += `&class=${formValues.setClass}`;
       }
 
       console.log({query});

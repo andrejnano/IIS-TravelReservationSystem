@@ -138,16 +138,12 @@
       <!-- SUBMIT BUTTON  -->
       <v-card-text class="text-xs-center">
         <v-btn
-          :loading="loadingSubmit"
-          :disabled="loadingSubmit"
           color="info"
           @click="searchSubmit"
           large
+          ripple
         >
-          Search
-          <span slot="submitLoader" class="custom-loader">
-            <v-icon light>cached</v-icon>
-          </span>
+          <v-icon light>mdi-magnify</v-icon> Search
         </v-btn>
       </v-card-text>
 
@@ -199,7 +195,7 @@ export default {
       loadingSubmit: false,
       departureDateMenu: false,
       arrivalDateMenu: false,
-      toggleRoundTrip: this.arrivalDate != null ? 0 : 1, // depending on the existence of arrival date
+      toggleRoundTrip: this.arrivalDate != '' ? 0 : 1,
       toggleClass: this.setClass != null ? this.setClass : 0,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
@@ -215,7 +211,7 @@ export default {
         height: 8,
         dotSize: 16,
         min: 0,
-        max: 3000,
+        max: 5000,
         disabled: false,
         show: true,
         useKeyboard: true,
@@ -304,14 +300,15 @@ export default {
       },
     searchSubmit() {
       // convert class to a string format from toggle
+
       this.$emit('searchSubmited', {
         origin: {airport_code: this.FORMorigin.airport_code, city: this.FORMorigin.city, country: this.FORMorigin.country},
         destination: {airport_code: this.FORMdestination.airport_code, city: this.FORMdestination.city, country: this.FORMdestination.country},
         departureDate: this.FORMdepartureDate,
-        arrivalDate: this.FORMarrivalDate,
+        arrivalDate: this.toggleRoundTrip == 0 ? this.FORMarrivalDate : null,
         priceMin: this.priceSlider.value[0],
         priceMax: this.priceSlider.value[1],
-        class: this.toggleClass,
+        setClass: this.toggleClass,
       });
 
       this.$router.push({
@@ -322,10 +319,10 @@ export default {
           destinationCode: this.FORMdestination.airport_code,
           destinationFull: this.FORMdestination.city,
           departureDate: this.FORMdepartureDate,
-          arrivalDate: this.FORMarrivalDate,
+          arrivalDate: this.toggleRoundTrip == 0 ? this.FORMarrivalDate : null,
           priceMin: this.priceSlider.value[0],
           priceMax: this.priceSlider.value[1],
-          class: this.toggleClass,
+          setClass: this.toggleClass,
         },
       });
     }
