@@ -100,11 +100,11 @@
               <span v-html="expandedBottomDescription"></span>
               <v-spacer></v-spacer>
               <v-btn
-                ripple
-                dark
-                color="purple"
-                @click="reserveFlight"
-                large
+              ripple
+              color="purple"
+              @click="reserveFlight"
+              :disabled="!loggedIn"
+              large
               >
                 Create reservation for this flight
               </v-btn>
@@ -136,6 +136,8 @@ export default {
       },
       result: {},
       loaded: false,
+      loggedIn: false,
+      reservationID: null,
     }
   },
   methods: {
@@ -190,6 +192,17 @@ export default {
   },
   created() {
     this.getFlight(this.flightParams);
+
+    axios.post('/api/reservation').then((response) => {
+      if (response.status == 200) {
+          console.log('%c LOGGED IN, RESERVATION ID CREATED! ', 'background: #00ff00; color: #ffffff');
+          this.loggedIn = true;
+          this.reservationID = response.data.new_reservation_id;
+        } else {
+          console.log('%c NOT LOGGED IN! ', 'background: #ff0000; color: #ffffff');
+          this.loggedIn = false;
+        }
+    });
   },
   computed: {
     smallDescription: function() {
