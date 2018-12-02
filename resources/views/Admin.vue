@@ -229,8 +229,10 @@
       'add-flight-form': AddFlightForm,
       'add-airline-form': AddAirlineForm,
       'add-airport-form': AddAirportForm,
-      'add-airplane-form': AddAirplaneForm,
-      'search-user-form': SearchUserForm,
+      // 'add-airplane-form': AddAirplaneForm,
+      // 'search-airline-form': SearchUserForm,
+      // 'search-airplane-form': SearchUserForm,
+      // 'search-airport-form': SearchUserForm,
       Loading
     }
 

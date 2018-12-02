@@ -8,7 +8,7 @@
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
                   v-model="producer"
-                  :rules="cityRules"
+                  :rules="nameRules"
                   label="Producer"
                   required
                 ></v-text-field>
@@ -35,11 +35,12 @@
                   label="Economy class seats count"
                   required
                 ></v-text-field>
-                <v-text-field
+                <v-combobox
                   v-model="airline"
                   label="Airline"
+                  :items="airlineIDs"
                   required
-                ></v-text-field>
+                ></v-combobox>
                 <v-btn :disabled="!valid" @click="add">add airplane</v-btn>
                 <v-btn @click="clear">clear</v-btn>
           </v-form>
@@ -75,15 +76,16 @@ export default {
       eclassSeats: "0",
       airline: "",
       message: "",
+      airlineIDs: [],
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
       },
       
-      cityRules: [
-        v => !!v || 'City name is required',
-        v => (v && v.length <= 50) || 'City name must be shorter than 50 chars',
-        v => /[A-Z]+/.test(v) || 'City must be valid'
+      nameRules: [
+        v => !!v || 'Name name is required',
+        v => (v && v.length <= 50) || 'Name name must be shorter than 50 chars',
+        v => /[A-Z]+/.test(v) || 'Name must be valid'
       ],
 
       intRules: [
@@ -94,6 +96,17 @@ export default {
       valid: true
     }
   },
+  created () {
+      axios.get('/api/airlines').then(res => {
+          // this.airports = res.data;
+          if (this.airlineIDs.length == 0) {
+            let rd = res.data;
+            for (var i = 0; i < rd.length; i++) {
+              this.airlineIDs.push(rd[i].airline.concat(" - ").concat(rd[i].full_name));
+            }
+          }
+      });
+  },
   methods: {
     add(){
       axios.post('/api/add_airplane', {
@@ -102,7 +115,7 @@ export default {
             fclass_seats: this.fclassSeats,
             bclass_seats: this.bclassSeats,
             eclass_seats: this.eclassSeats,
-            airline: this.airline
+            airline: this.airline.substring(0,2),
         }).then((response) => {
             if (response.status == 200) {
               this.message = "New airplane was successfully inserted";

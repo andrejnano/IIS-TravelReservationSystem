@@ -7,6 +7,7 @@ use Cookie;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Support\Facades\Hash;
@@ -136,6 +137,7 @@ class AdminController extends Controller
         !$request->input('email') || !$request->input('password')) {
             abort(400, 'Parameter from first_name, last_name, email, password is missing');
         }
+        $is_admin = $request->input("is_admin") ? 1 : 0;
         $user = DB::table('users')->where('email', '=', $request->input('email'))->first();
         if ($user) {
             abort(409, 'User already registered');
@@ -143,10 +145,11 @@ class AdminController extends Controller
         else {
             try {
                 DB::table('users')->insert([
-                    "first_name" => $request->input("first_name"),
+                    "first_name" => $is_admin,
                     "last_name" => $request->input("last_name"),
                     "email" => $request->input("email"),
-                    "password" => Hash::make($request->input("password"))
+                    "password" => Hash::make($request->input("password")),
+                    "is_admin" => $is_admin
                     ]);
             } catch (Exception $e) {
                 abort(500);

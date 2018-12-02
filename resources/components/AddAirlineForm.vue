@@ -6,10 +6,11 @@
           </main>
 
           <v-form ref="form" v-model="valid" lazy-validation>
+                
                 <v-text-field
                   v-model="airline"
                   :rules="airlineRules"
-                  label="Airline ID"
+                  label="Airline"
                   required
                 ></v-text-field>
                 <v-text-field
@@ -24,13 +25,13 @@
                   label="Headquarter country"
                   required
                 ></v-text-field>
-                <v-text-field
+                <v-combobox
                   v-model="hub"
-                  :rules="airportRules"
+                  :items="airports"
                   label="Hub airport"
                   required
-                ></v-text-field>
-                <v-btn :disabled="!valid" @click="add">add airport</v-btn>
+                ></v-combobox>
+                <v-btn :disabled="!valid" @click="add">add airline</v-btn>
                 <v-btn @click="clear">clear</v-btn>
           </v-form>
 
@@ -63,6 +64,8 @@ export default {
       nationality: "",
       message: "",
       hub: "",
+      airports: [],
+      airlineIDs: [],
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
@@ -76,26 +79,50 @@ export default {
       airlineRules: [
         v => !!v || 'Airline code is required',
         v => (v && v.length == 2) || 'Airline code must be 2 characters',
-        v => /[A-Z]{2}/.test(v) || 'Airline code must be valid'
+        v => /[A-Z]{2}/.test(v) || 'Airline code must be valid',
+        v => !this.airlineIDs.includes(v) || 'Already taken',
+
       ],
       airportRules: [
-        v => !!v || 'Airport code is required',
-        v => (v && v.length == 3) || 'Airport code must be 3 characters',
-        v => /[A-Z]{3}/.test(v) || 'Airport code must be valid'
+        v => !!v || 'Airline code is required',
+        v => (v && v.length == 3) || 'Airline code must be 3 characters',
+        v => /[A-Z]{3}/.test(v) || 'Airline code must be valid'
       ],
       valid: true
     }
   },
+  created () {
+      axios.get('/api/airports').then(res => {
+          // this.airports = res.data;
+          if (this.airports.length == 0) {
+            let rd = res.data;
+            for (var i = 0; i < rd.length; i++) {
+              this.airports.push(rd[i].airport_code.concat(" - ").concat(rd[i].city));
+            }
+          }
+      });
+
+      axios.get('/api/airlines').then(res => {
+          // this.airports = res.data;
+          if (this.airlineIDs.length == 0) {
+            let rd = res.data;
+            for (var i = 0; i < rd.length; i++) {
+              this.airlineIDs.push(rd[i].airline);
+            }
+          }
+      });
+  },
   methods: {
     add(){
+      this.airlineIDs.push(this.airline);
       axios.post('/api/add_airline', {
           airline: this.airline,
           full_name: this.fullName,
           nationality: this.nationality,
-          hub: this.hub
+          hub: this.hub.substring(0,3),
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "New airport was successfully inserted";
+              this.message = "New airline was successfully inserted";
             } else {
               this.message = "Error - inserting failed";
             }

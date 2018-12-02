@@ -62583,6 +62583,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -62591,6 +62593,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       isLoggedIn: false,
+      isAdmin: false,
       firstName: '',
       lastName: ''
     };
@@ -62611,6 +62614,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (response.status == 200) {
         console.log('session OK');
         _this.isLoggedIn = true;
+        if (response.data.is_admin) _this.isAdmin = true;
         _this.firstName = response.data.first_name ? response.data.first_name : 'Unknown';
         _this.lastName = response.data.last_name ? response.data.last_name : 'Unknown';
       } else {
@@ -63552,8 +63556,6 @@ var render = function() {
         [
           _c("v-btn", { attrs: { flat: "", to: "/about" } }, [_vm._v("About")]),
           _vm._v(" "),
-          _c("v-btn", { attrs: { flat: "", to: "/admin" } }, [_vm._v("Admin")]),
-          _vm._v(" "),
           _c("v-btn", { attrs: { flat: "", to: "/contact" } }, [
             _vm._v("Contact")
           ])
@@ -63568,6 +63570,18 @@ var render = function() {
           ? _c(
               "v-toolbar-items",
               [
+                _vm.isAdmin
+                  ? _c(
+                      "v-toolbar-items",
+                      [
+                        _c("v-btn", { attrs: { flat: "", to: "/admin" } }, [
+                          _vm._v("Edit database")
+                        ])
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
                 _c("v-btn", { attrs: { flat: "", to: "/profile" } }, [
                   _vm._v("Logged in as " + _vm._s(_vm.fullName))
                 ]),
@@ -75438,8 +75452,10 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
     'add-flight-form': __WEBPACK_IMPORTED_MODULE_6__components_AddFlightForm_vue___default.a,
     'add-airline-form': __WEBPACK_IMPORTED_MODULE_9__components_AddAirlineForm_vue___default.a,
     'add-airport-form': __WEBPACK_IMPORTED_MODULE_7__components_AddAirportForm_vue___default.a,
-    'add-airplane-form': __WEBPACK_IMPORTED_MODULE_8__components_AddAirplaneForm_vue___default.a,
-    'search-user-form': __WEBPACK_IMPORTED_MODULE_10__components_SearchUserForm_vue___default.a,
+    // 'add-airplane-form': AddAirplaneForm,
+    // 'search-airline-form': SearchUserForm,
+    // 'search-airplane-form': SearchUserForm,
+    // 'search-airport-form': SearchUserForm,
     Loading: __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay___default.a
   }
 
@@ -75601,6 +75617,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -75622,6 +75645,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       email: "",
       password: "",
       message: "",
+      admin: false,
       showPasswordField: false,
       rules: {
         required: function required(value) {
@@ -75650,11 +75674,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     add: function add() {
       var _this = this;
 
+      // console.log(this.admin);
+      // console.log(this.admin === "true" ? 1 : 0);
       __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/add_user', {
         first_name: this.firstName,
         last_name: this.lastName,
         email: this.email,
-        password: this.password
+        password: this.password,
+        is_admin: this.admin === "true" ? 1 : 0
       }).then(function (response) {
         if (response.status == 200) {
           _this.message = "New user was successfully inserted";
@@ -75712,6 +75739,22 @@ var render = function() {
           }
         },
         [
+          _c("v-checkbox", {
+            attrs: {
+              "true-value": "true",
+              "false-value": "false",
+              label: "Is admin",
+              required: ""
+            },
+            model: {
+              value: _vm.admin,
+              callback: function($$v) {
+                _vm.admin = $$v
+              },
+              expression: "admin"
+            }
+          }),
+          _vm._v(" "),
           _c("v-text-field", {
             attrs: { rules: _vm.nameRules, label: "First name", required: "" },
             model: {
@@ -75958,6 +76001,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -75981,6 +76030,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       airplane: '',
       airline: '',
       message: '',
+      airportIDs: [],
+      airlineIDs: [],
+      airplaneIDs: [],
       showPasswordField: false,
       rules: {
         required: function required(value) {
@@ -76004,26 +76056,56 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       valid: true
     };
   },
+  created: function created() {
+    var _this = this;
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/airports').then(function (res) {
+      if (_this.airportIDs.length == 0) {
+        var rd = res.data;
+        for (var i = 0; i < rd.length; i++) {
+          _this.airportIDs.push(rd[i].airport_code.concat(" - ").concat(rd[i].city));
+        }
+      }
+    });
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/airlines').then(function (res) {
+      if (_this.airlineIDs.length == 0) {
+        var rd = res.data;
+        for (var i = 0; i < rd.length; i++) {
+          _this.airlineIDs.push(rd[i].airline.concat(" - ").concat(rd[i].full_name));
+        }
+      }
+    });
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/airplanes').then(function (res) {
+      if (_this.airplaneIDs.length == 0) {
+        var rd = res.data;
+        for (var i = 0; i < rd.length; i++) {
+          _this.airplaneIDs.push(rd[i].id.toString().concat(" - ").concat(rd[i].producer).concat(" ").concat(rd[i].model));
+        }
+      }
+    });
+  },
 
   methods: {
     add: function add() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/add_flight', {
-        airplane: this.airplane,
-        airline: this.airline,
+        airplane: parseInt(this.airplane),
+        airline: this.airline.substring(0, 2),
         departure_time: this.departure_time,
         arrival_time: this.arrival_time,
-        origin: this.origin,
-        destination: this.destination
+        origin: this.origin.substring(0, 3),
+        destination: this.destination.substring(0, 3)
       }).then(function (response) {
         if (response.status == 200) {
-          _this.message = "New flight was successfully inserted";
+          _this2.message = "New flight was successfully inserted";
         } else {
-          _this.message = "Error - inserting failed";
+          _this2.message = "Error - inserting failed";
         }
       }).catch(function (error) {
-        _this.message = "Error - inserting failed";
+        _this2.message = "Error - inserting failed";
         console.log("ERR: " + error);
       });
     },
@@ -76069,8 +76151,12 @@ var render = function() {
           }
         },
         [
-          _c("v-text-field", {
-            attrs: { label: "Origin airport code (e.g. LHR)", required: "" },
+          _c("v-combobox", {
+            attrs: {
+              label: "Origin airport code",
+              items: _vm.airportIDs,
+              required: ""
+            },
             model: {
               value: _vm.origin,
               callback: function($$v) {
@@ -76080,9 +76166,10 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-text-field", {
+          _c("v-combobox", {
             attrs: {
-              label: "Destination airport code (e.g. JFK)",
+              label: "Destination airport code",
+              items: _vm.airportIDs,
               required: ""
             },
             model: {
@@ -76122,8 +76209,12 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-text-field", {
-            attrs: { label: "Airplane ID (e.g. 9)", required: "" },
+          _c("v-combobox", {
+            attrs: {
+              label: "Airplane ID (e.g. 9)",
+              required: "",
+              items: _vm.airplaneIDs
+            },
             model: {
               value: _vm.airplane,
               callback: function($$v) {
@@ -76133,8 +76224,8 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-text-field", {
-            attrs: { label: "Airline (e.g. AY)", required: "" },
+          _c("v-combobox", {
+            attrs: { label: "Airline", items: _vm.airlineIDs, required: "" },
             model: {
               value: _vm.airline,
               callback: function($$v) {
@@ -76333,11 +76424,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ChangePasswordForm',
   data: function data() {
+    var _this = this;
+
     return {
       airportCode: "",
       city: "",
       country: "",
       message: "",
+      airportIDs: [],
       rules: {
         required: function required(value) {
           return !!value || 'Required.';
@@ -76362,27 +76456,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }, function (v) {
         return (/[A-Z]{3}/.test(v) || 'Airport code must be valid'
         );
+      }, function (v) {
+        return !_this.airportIDs.includes(v) || 'Already taken';
       }],
       valid: true
     };
   },
+  created: function created() {
+    var _this2 = this;
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/airports').then(function (res) {
+      // this.airports = res.data;
+      if (_this2.airportIDs.length == 0) {
+        var rd = res.data;
+        for (var i = 0; i < rd.length; i++) {
+          _this2.airportIDs.push(rd[i].airport_code);
+        }
+      }
+    });
+  },
 
   methods: {
     add: function add() {
-      var _this = this;
+      var _this3 = this;
 
+      this.airportIDs.push(this.airportCode);
       __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/add_airport', {
         airport_code: this.airportCode,
         city: this.city,
         country: this.country
       }).then(function (response) {
         if (response.status == 200) {
-          _this.message = "New airport was successfully inserted";
+          _this3.message = "New airport was successfully inserted";
         } else {
-          _this.message = "Error - inserting failed";
+          _this3.message = "Error - inserting failed";
         }
       }).catch(function (error) {
-        _this.message = "Error - inserting failed";
+        _this3.message = "Error - inserting failed";
         console.log("ERR: " + error);
       });
     },
@@ -76655,6 +76765,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -76679,6 +76790,7 @@ __WEBPACK_IMPORTED_MODULE_5_axios___default.a.defaults.headers.post['Content-Typ
       eclassSeats: "0",
       airline: "",
       message: "",
+      airlineIDs: [],
       rules: {
         required: function required(value) {
           return !!value || 'Required.';
@@ -76688,12 +76800,12 @@ __WEBPACK_IMPORTED_MODULE_5_axios___default.a.defaults.headers.post['Content-Typ
         }
       },
 
-      cityRules: [function (v) {
-        return !!v || 'City name is required';
+      nameRules: [function (v) {
+        return !!v || 'Name name is required';
       }, function (v) {
-        return v && v.length <= 50 || 'City name must be shorter than 50 chars';
+        return v && v.length <= 50 || 'Name name must be shorter than 50 chars';
       }, function (v) {
-        return (/[A-Z]+/.test(v) || 'City must be valid'
+        return (/[A-Z]+/.test(v) || 'Name must be valid'
         );
       }],
 
@@ -76708,10 +76820,23 @@ __WEBPACK_IMPORTED_MODULE_5_axios___default.a.defaults.headers.post['Content-Typ
       valid: true
     };
   },
+  created: function created() {
+    var _this = this;
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/airlines').then(function (res) {
+      // this.airports = res.data;
+      if (_this.airlineIDs.length == 0) {
+        var rd = res.data;
+        for (var i = 0; i < rd.length; i++) {
+          _this.airlineIDs.push(rd[i].airline.concat(" - ").concat(rd[i].full_name));
+        }
+      }
+    });
+  },
 
   methods: {
     add: function add() {
-      var _this = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/add_airplane', {
         producer: this.producer,
@@ -76719,15 +76844,15 @@ __WEBPACK_IMPORTED_MODULE_5_axios___default.a.defaults.headers.post['Content-Typ
         fclass_seats: this.fclassSeats,
         bclass_seats: this.bclassSeats,
         eclass_seats: this.eclassSeats,
-        airline: this.airline
+        airline: this.airline.substring(0, 2)
       }).then(function (response) {
         if (response.status == 200) {
-          _this.message = "New airplane was successfully inserted";
+          _this2.message = "New airplane was successfully inserted";
         } else {
-          _this.message = "Error - inserting failed";
+          _this2.message = "Error - inserting failed";
         }
       }).catch(function (error) {
-        _this.message = "Error - inserting failed";
+        _this2.message = "Error - inserting failed";
         console.log("ERR: " + error);
       });
     },
@@ -76774,7 +76899,7 @@ var render = function() {
         },
         [
           _c("v-text-field", {
-            attrs: { rules: _vm.cityRules, label: "Producer", required: "" },
+            attrs: { rules: _vm.nameRules, label: "Producer", required: "" },
             model: {
               value: _vm.producer,
               callback: function($$v) {
@@ -76840,8 +76965,8 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-text-field", {
-            attrs: { label: "Airline", required: "" },
+          _c("v-combobox", {
+            attrs: { label: "Airline", items: _vm.airlineIDs, required: "" },
             model: {
               value: _vm.airline,
               callback: function($$v) {
@@ -77033,6 +77158,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -77048,13 +77174,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ChangePasswordForm',
   data: function data() {
-    var _ref;
+    var _this = this,
+        _ref;
 
     return _ref = {
       airline: "",
       fullName: "",
       nationality: ""
-    }, _defineProperty(_ref, 'nationality', ""), _defineProperty(_ref, 'message', ""), _defineProperty(_ref, 'hub', ""), _defineProperty(_ref, 'rules', {
+    }, _defineProperty(_ref, 'nationality', ""), _defineProperty(_ref, 'message', ""), _defineProperty(_ref, 'hub', ""), _defineProperty(_ref, 'airports', []), _defineProperty(_ref, 'airlineIDs', []), _defineProperty(_ref, 'rules', {
       required: function required(value) {
         return !!value || 'Required.';
       },
@@ -77075,33 +77202,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, function (v) {
       return (/[A-Z]{2}/.test(v) || 'Airline code must be valid'
       );
+    }, function (v) {
+      return !_this.airlineIDs.includes(v) || 'Already taken';
     }]), _defineProperty(_ref, 'airportRules', [function (v) {
-      return !!v || 'Airport code is required';
+      return !!v || 'Airline code is required';
     }, function (v) {
-      return v && v.length == 3 || 'Airport code must be 3 characters';
+      return v && v.length == 3 || 'Airline code must be 3 characters';
     }, function (v) {
-      return (/[A-Z]{3}/.test(v) || 'Airport code must be valid'
+      return (/[A-Z]{3}/.test(v) || 'Airline code must be valid'
       );
     }]), _defineProperty(_ref, 'valid', true), _ref;
+  },
+  created: function created() {
+    var _this2 = this;
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/airports').then(function (res) {
+      // this.airports = res.data;
+      if (_this2.airports.length == 0) {
+        var rd = res.data;
+        for (var i = 0; i < rd.length; i++) {
+          _this2.airports.push(rd[i].airport_code.concat(" - ").concat(rd[i].city));
+        }
+      }
+    });
+
+    __WEBPACK_IMPORTED_MODULE_5_axios___default.a.get('/api/airlines').then(function (res) {
+      // this.airports = res.data;
+      if (_this2.airlineIDs.length == 0) {
+        var rd = res.data;
+        for (var i = 0; i < rd.length; i++) {
+          _this2.airlineIDs.push(rd[i].airline);
+        }
+      }
+    });
   },
 
   methods: {
     add: function add() {
-      var _this = this;
+      var _this3 = this;
 
+      this.airlineIDs.push(this.airline);
       __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/add_airline', {
         airline: this.airline,
         full_name: this.fullName,
         nationality: this.nationality,
-        hub: this.hub
+        hub: this.hub.substring(0, 3)
       }).then(function (response) {
         if (response.status == 200) {
-          _this.message = "New airport was successfully inserted";
+          _this3.message = "New airline was successfully inserted";
         } else {
-          _this.message = "Error - inserting failed";
+          _this3.message = "Error - inserting failed";
         }
       }).catch(function (error) {
-        _this.message = "Error - inserting failed";
+        _this3.message = "Error - inserting failed";
         console.log("ERR: " + error);
       });
     },
@@ -77148,11 +77301,7 @@ var render = function() {
         },
         [
           _c("v-text-field", {
-            attrs: {
-              rules: _vm.airlineRules,
-              label: "Airline ID",
-              required: ""
-            },
+            attrs: { rules: _vm.airlineRules, label: "Airline", required: "" },
             model: {
               value: _vm.airline,
               callback: function($$v) {
@@ -77188,12 +77337,8 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-text-field", {
-            attrs: {
-              rules: _vm.airportRules,
-              label: "Hub airport",
-              required: ""
-            },
+          _c("v-combobox", {
+            attrs: { items: _vm.airports, label: "Hub airport", required: "" },
             model: {
               value: _vm.hub,
               callback: function($$v) {
@@ -77206,7 +77351,7 @@ var render = function() {
           _c(
             "v-btn",
             { attrs: { disabled: !_vm.valid }, on: { click: _vm.add } },
-            [_vm._v("add airport")]
+            [_vm._v("add airline")]
           ),
           _vm._v(" "),
           _c("v-btn", { on: { click: _vm.clear } }, [_vm._v("clear")])

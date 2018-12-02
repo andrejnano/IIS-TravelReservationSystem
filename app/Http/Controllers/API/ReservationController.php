@@ -16,13 +16,13 @@ class ReservationController extends Controller
      *
      * @return void
      */
-    public function new_reservation() {
+    public function new_reservation(Request $request) {
         if (!UserController::logged_in()) {
             abort(403);
         }
         try {
             $r = DB::table('reservations')->insert(
-                ['created_by' => $_SESSION["uid"], 'payment_status' => 0, 'created_at' => Carbon::now()]
+                ['created_by' => $_SESSION["uid"], 'payment_status' => 0, 'created_at' => Carbon::now(), 'total_price' => $request['total_price']]
             );
             return json_encode(['new_reservation_id' => DB::getPdo()->lastInsertId()]);
         } catch (Exception $e) {
@@ -109,6 +109,14 @@ class ReservationController extends Controller
     }
 
 
+    protected function obj_rep_reservation($reservation) {
+        $tickets = DB::table('tickets')->where('reservation', '=', $reservation->id)->get();
+        foreach ($tickets as $t) {
+            $t->flight = DB::table('flights')->where('flight_number', '=', $t->flight)->first();
+        }
+        $reservation->tickets = $tickets;
+        return $reservation;
+    }
     /**
      * Returns all actual reservations created by current user
      */
@@ -134,7 +142,7 @@ class ReservationController extends Controller
             ");
             $reservation_arr_filled = array();
             foreach ($reservations as $reservation) {
-                array_push($reservation_arr_filled, $reservation);
+                array_push($reservation_arr_filled, $this->obj_rep_reservation($reservation));
             }
             $empty = DB::select("
             SELECT reservations.id, reservations.created_at
@@ -147,7 +155,7 @@ class ReservationController extends Controller
             ");
             $reservation_arr_empty = array();
             foreach ($empty as $empty_r) {
-                array_push($reservation_arr_empty, $empty_r);
+                array_push($reservation_arr_empty, $this->obj_rep_reservation($empty_r));
             }
 
             $dict['filled'] = $reservation_arr_filled;
