@@ -1,8 +1,8 @@
 <template>
-  <v-card class="layout column" light>
+  <v-card class="layout column">
 
       <!-- TOOLBAR -->
-      <v-toolbar card prominent color="info" dark>
+      <v-toolbar card prominent>
         <v-toolbar-title><v-icon>search</v-icon>Search for flights</v-toolbar-title>
       </v-toolbar>
 

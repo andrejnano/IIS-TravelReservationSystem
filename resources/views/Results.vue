@@ -37,7 +37,7 @@
             <v-layout row>
               <v-flex xs12>
                 <v-card class="layout column">
-                  <v-toolbar card prominent color="info" dark>
+                  <v-toolbar card prominent>
                     <v-toolbar-title>Found these results:</v-toolbar-title>
                     <v-spacer></v-spacer>
 
