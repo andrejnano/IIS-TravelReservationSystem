@@ -82,6 +82,10 @@
 
 
 -- DELIMITER ;
+
+ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
   SET FOREIGN_KEY_CHECKS=0;
   DROP TABLE IF EXISTS users;
   DROP TABLE IF EXISTS reservations;
@@ -92,6 +96,7 @@
   DROP TABLE IF EXISTS airlines;
   DROP TABLE IF EXISTS passengers;
   DROP TABLE IF EXISTS search_records;
+  DROP TABLE IF EXISTS my_start;
   SET FOREIGN_KEY_CHECKS=1;
 
 /* CREATE ALL TABLES */
@@ -179,21 +184,29 @@ DELIMITER ;
     CONSTRAINT flight_destination_airport_fk  FOREIGN KEY (destination) REFERENCES airports(airport_code)
   );
 
+  
+  CREATE TABLE my_start (
+    id INT NOT NULL PRIMARY KEY
+  );
 
+  INSERT INTO my_start (id) VALUES (1001);
 
   DROP TRIGGER IF EXISTS flights_trig;
-  SET @start = 1000;
-
+  
   DELIMITER $$
       CREATE TRIGGER flights_trig BEFORE INSERT ON flights
       FOR EACH ROW BEGIN
         SET NEW.flight_number = concat(
               'AA',
-              CAST(( @start := @start + 1) AS CHAR(4))
+              CAST(( SELECT id FROM my_start) AS CHAR(4))
              );
         IF (NOT NEW.flight_number REGEXP '[0-9a-zA-Z]{2}[0-9]{4}') THEN
               SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Wrong expression type at flight insertion, expected regex [0-9a-zA-Z]{2}[0-9]{4}';
         END IF;
+
+        SET @old_my_start := (SELECT id FROM my_start);
+        UPDATE my_start
+        SET id = @old_my_start + 1;
 
         SET NEW.fclass_seats_free =
         (SELECT fclass_seats

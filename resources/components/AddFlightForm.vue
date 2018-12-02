@@ -6,16 +6,19 @@
           </main>
 
           <v-form ref="form" v-model="valid" lazy-validation>
-                <v-text-field
+
+                <v-combobox
                   v-model="origin"
-                  label="Origin airport code (e.g. LHR)"
+                  label="Origin airport code"
+                  :items="airportIDs"
                   required
-                ></v-text-field>
-                <v-text-field
+                ></v-combobox>
+                <v-combobox
                   v-model="destination"
-                  label="Destination airport code (e.g. JFK)"
+                  label="Destination airport code"
+                  :items="airportIDs"
                   required
-                ></v-text-field>
+                ></v-combobox>
                 <v-text-field
                   v-model="departure_time"
                   label="Departure time (e.g. 2018-12-28 09:30:00)"
@@ -26,16 +29,19 @@
                   label="Arrival time (e.g. 2018-12-28 15:10:00)"
                   required
                 ></v-text-field>
-                <v-text-field
+                <v-combobox
                   v-model="airplane"
                   label="Airplane ID (e.g. 9)"
                   required
-                ></v-text-field>
-                <v-text-field
+                  :items="airplaneIDs"
+                ></v-combobox>
+                <v-combobox
                   v-model="airline"
-                  label="Airline (e.g. AY)"
+                  label="Airline"
+                  :items="airlineIDs"
                   required
-                ></v-text-field>
+                ></v-combobox>
+
                 <v-btn :disabled="!valid" @click="add">add flight</v-btn>
                 <v-btn @click="clear">clear</v-btn>
               </v-form>
@@ -70,6 +76,9 @@ export default {
       airplane: '',
       airline: '', 
       message: '',
+      airportIDs: [],
+      airlineIDs: [],
+      airplaneIDs: [],
       showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
@@ -86,15 +95,43 @@ export default {
       valid: true
     }
   },
+  created () {
+      axios.get('/api/airports').then(res => {
+          if (this.airportIDs.length == 0) {
+            let rd = res.data;
+            for (var i = 0; i < rd.length; i++) {
+              this.airportIDs.push(rd[i].airport_code.concat(" - ").concat(rd[i].city));
+            }
+          }
+      });
+
+      axios.get('/api/airlines').then(res => {
+          if (this.airlineIDs.length == 0) {
+            let rd = res.data;
+            for (var i = 0; i < rd.length; i++) {
+              this.airlineIDs.push(rd[i].airline.concat(" - ").concat(rd[i].full_name));
+            }
+          }
+      });
+
+      axios.get('/api/airplanes').then(res => {
+          if (this.airplaneIDs.length == 0) {
+            let rd = res.data;
+            for (var i = 0; i < rd.length; i++) {
+              this.airplaneIDs.push(rd[i].id.toString().concat(" - ").concat(rd[i].producer).concat(" ").concat(rd[i].model));
+            }
+          }
+      });
+  },
   methods: {
     add(){
       axios.post('/api/add_flight', {
-            airplane: this.airplane,
-            airline: this.airline,
+            airplane: parseInt(this.airplane),
+            airline: this.airline.substring(0,2),
             departure_time: this.departure_time,
             arrival_time: this.arrival_time,
-            origin: this.origin,
-            destination: this.destination
+            origin: this.origin.substring(0,3),
+            destination: this.destination.substring(0,3),
         }).then((response) => {
             if (response.status == 200) {
               this.message = "New flight was successfully inserted";

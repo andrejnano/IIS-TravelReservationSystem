@@ -7,6 +7,7 @@ use Cookie;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Support\Facades\Hash;

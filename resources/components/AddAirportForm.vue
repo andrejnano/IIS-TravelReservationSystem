@@ -55,6 +55,7 @@ export default {
       city: "",
       country: "",
       message: "",
+      airportIDs: [],
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
@@ -68,13 +69,26 @@ export default {
       airportCodeRules: [
         v => !!v || 'Airport code is required',
         v => (v && v.length == 3) || 'Airport code must be 3 characters',
-        v => /[A-Z]{3}/.test(v) || 'Airport code must be valid'
+        v => /[A-Z]{3}/.test(v) || 'Airport code must be valid',
+        v => !this.airportIDs.includes(v) || 'Already taken',
       ],
       valid: true
     }
   },
+  created () {
+      axios.get('/api/airports').then(res => {
+          // this.airports = res.data;
+          if (this.airportIDs.length == 0) {
+            let rd = res.data;
+            for (var i = 0; i < rd.length; i++) {
+              this.airportIDs.push(rd[i].airport_code);
+            }
+          }
+      });
+  },
   methods: {
     add(){
+      this.airportIDs.push(this.airportCode);
       axios.post('/api/add_airport', {
             airport_code: this.airportCode,
             city: this.city,
