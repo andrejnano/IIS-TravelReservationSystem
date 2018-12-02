@@ -65,13 +65,13 @@
       city: 'Vienna'
     },
     destination: {
-      airport_code: '',
-      city: ''
+      airport_code: 'JFK',
+      city: 'New York'
     },
     departureDate: new Date().toISOString().substr(0,10),
     arrivalDate: new Date().addDays(7).toISOString().substr(0,10),
-    priceMin: 200,
-    priceMax: 1200,
+    priceMin: 50,
+    priceMax: 3000,
     setClass: 0
   };
 
