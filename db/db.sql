@@ -251,6 +251,7 @@ DELIMITER ;
     payment_status  INT NOT NULL CHECK(payment_status = 0 or payment_status = 1), -- true or false
     created_at      DATETIME NOT NULL,
     created_by      INT,
+    total_price     INT NOT NULL,
 
     CONSTRAINT reservation_creator_fk FOREIGN KEY (created_by) REFERENCES users(id)
   );
