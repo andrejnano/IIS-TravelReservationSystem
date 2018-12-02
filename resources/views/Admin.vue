@@ -73,9 +73,13 @@
           </v-flex>
 
           <v-flex xs12 sm12 md12 lg12>
+            <add-airline-form v-if="adminState == 13"/>
+          </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
             <add-airplane-form v-if="adminState == 14"/>
           </v-flex>
-          
+            
             <v-flex xs12 sm12 md12 lg12>
             <add-airport-form v-if="adminState == 15"/>
             </v-flex>
@@ -111,6 +115,7 @@
   import AddFlightForm from '../components/AddFlightForm.vue';
   import AddAirportForm from '../components/AddAirportForm.vue';
   import AddAirplaneForm from '../components/AddAirplaneForm.vue';
+  import AddAirlineForm from '../components/AddAirlineForm.vue';
 
   import SearchUserForm from '../components/SearchUserForm.vue';
 
@@ -222,6 +227,7 @@
       'font-awesome-icon': FontAwesomeIcon,
       'add-user-form': AddUserForm,
       'add-flight-form': AddFlightForm,
+      'add-airline-form': AddAirlineForm,
       'add-airport-form': AddAirportForm,
       'add-airplane-form': AddAirplaneForm,
       'search-user-form': SearchUserForm,

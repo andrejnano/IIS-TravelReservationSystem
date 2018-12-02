@@ -522,7 +522,7 @@ class SearchController extends Controller
         $return_arr = array();
         $tmp_obj = $this->create_object_representation($flight_there, $request);
         $curr_price = $tmp_obj['total_price'];
-        array_push($return_arr, $tmp_obj);
+        $return_arr['there'] = $tmp_obj;
         if (isset($request['fb_1'])) {
             $flight_back = array();
             $tmp = $this->select_flight($request['fb_1']);
@@ -537,7 +537,7 @@ class SearchController extends Controller
             }
             $tmp_obj = $this->create_object_representation($flight_back, $request);
             $curr_price += $tmp_obj['total_price'];
-            array_push($return_arr, $tmp_obj);
+            $return_arr['back'] = $tmp_obj;
         }
         $return_arr['total_price'] = $curr_price;
         return $return_arr;
@@ -607,15 +607,15 @@ class SearchController extends Controller
     public function tmp_ticket($flight_arr, $request) {
         try {
             $f2 = DB::getPdo()->lastInsertId();
-            $tmp_ticket = $this->insert_tickets($flight_arr[0], $request);
+            $tmp_ticket = $this->insert_tickets($flight_arr['there'], $request);
             if (!$tmp_ticket)
                 abort(409);
-            $flight_arr[0]["ticket_ids"] = $tmp_ticket;
+            $flight_arr['there']["ticket_ids"] = $tmp_ticket;
             if (isset($flight_arr[1])) {
-                $tmp_ticket = $this->insert_tickets($flight_arr[1], $request);
+                $tmp_ticket = $this->insert_tickets($flight_arr['back'], $request);
                 if (!$tmp_ticket)
                     abort(409);
-                $flight_arr[1]["ticket_ids"] = $tmp_ticket;
+                $flight_arr['back']["ticket_ids"] = $tmp_ticket;
             }
             return [$flight_arr];
         } catch (Exception $e) {
