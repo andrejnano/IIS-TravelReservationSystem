@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-layout justify-center column>
         <v-flex xs12>
-          <v-card>
+          <v-card v-if="loaded">
             <v-card-title
               class="headline grey lighten-2"
               primary-title
@@ -102,10 +102,11 @@
               <v-btn
                 ripple
                 dark
-                color="success"
+                color="purple"
+                @click="reserveFlight"
                 large
               >
-                Create reservation for this flight &nbsp; <strong> {{ result.total_price }} €</strong>
+                Create reservation for this flight
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -133,11 +134,14 @@ export default {
         fb_1: this.$route.query.fb_1 != null ? this.$route.query.fb_1 : null,
         fb_2: this.$route.query.fb_2 != null ? this.$route.query.fb_2 : null,
       },
-      result: {}
+      result: {},
+      loaded: false,
     }
   },
   methods: {
     getFlight(params) {
+
+      this.loaded = false;
 
       let query = `/api/flight?`;
 
@@ -173,10 +177,15 @@ export default {
         let responseResults = response.data;
 
         responseResults.forEach(flight => {
-          this.result = flight;
+          this.result = Object.assign({}, flight);
         });
 
+        this.loaded = true;
+
       });
+    },
+    reserveFlight() {
+      alert('Creating reservation!');
     }
   },
   created() {

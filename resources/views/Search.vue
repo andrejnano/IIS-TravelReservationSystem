@@ -12,6 +12,20 @@
             <p class="subheading font-weight-regular"> Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum?
               Sit sequi commodi culpa autem eum ad omnis.</p>
+            <h2>Flight search shortcuts</h2>
+            <v-btn
+              large
+              color="error"
+              href="/searched?originCode=BUD&originFull=Budapest&destinationCode=VIE&destinationFull=Vienna&departureDate=2019-01-16&arrivalDate=2019-01-21&priceMin&priceMax&setClass=0">
+              Budapest to Vienna
+            </v-btn>
+            <v-btn
+              large
+              color="purple"
+              dark
+              href="/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York">
+              Vienna to New York
+            </v-btn>
           </main>
         </v-flex>
       </v-layout>

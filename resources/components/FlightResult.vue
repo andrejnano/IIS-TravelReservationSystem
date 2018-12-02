@@ -35,6 +35,7 @@
             <v-subheader>Departing flights</v-subheader>
 
             <v-divider inset></v-divider>
+
             <v-list-tile avatar>
               <v-list-tile-avatar>
                 <img :src="logoThere0">
@@ -71,10 +72,14 @@
 
             <template v-if="result.hasOwnProperty('back')">
 
+              <v-list-tile>
+              </v-list-tile>
 
               <v-subheader>Returning flights</v-subheader>
 
-              <v-list-tile v-if="result.back.hasOwnProperty('0')">
+              <v-divider inset></v-divider>
+
+              <v-list-tile avatar v-if="result.back.hasOwnProperty('0')">
                 <v-list-tile-avatar>
                   <img :src="logoBack0">
                 </v-list-tile-avatar>
@@ -85,7 +90,7 @@
                 </v-list-tile-content>
               </v-list-tile>
 
-              <v-divider></v-divider>
+              <v-divider inset></v-divider>
 
               <v-list-tile v-if="result.back.hasOwnProperty('1')">
                 <v-list-tile-content>
@@ -93,9 +98,9 @@
                 </v-list-tile-content>
               </v-list-tile>
 
-              <v-divider></v-divider>
+              <v-divider inset></v-divider>
 
-              <v-list-tile v-if="result.back.hasOwnProperty('1')">
+              <v-list-tile avatar v-if="result.back.hasOwnProperty('1')">
                 <v-list-tile-avatar>
                   <img :src="logoBack1">
                 </v-list-tile-avatar>

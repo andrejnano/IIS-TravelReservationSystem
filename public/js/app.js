@@ -63681,6 +63681,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -70047,19 +70061,57 @@ var render = function() {
                 "v-flex",
                 { attrs: { "ma-2": "", xs12: "", sm6: "", md7: "", lg4: "" } },
                 [
-                  _c("main", { attrs: { role: "main" } }, [
-                    _c(
-                      "h1",
-                      { staticClass: "display-2 font-weight-bold mb-3" },
-                      [_vm._v("Frontpage Headline")]
-                    ),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "subheading font-weight-regular" }, [
-                      _vm._v(
-                        " Lorem ipsum dolor sit, amet consectetur adipisicing elit.\n            Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum?\n            Sit sequi commodi culpa autem eum ad omnis."
+                  _c(
+                    "main",
+                    { attrs: { role: "main" } },
+                    [
+                      _c(
+                        "h1",
+                        { staticClass: "display-2 font-weight-bold mb-3" },
+                        [_vm._v("Frontpage Headline")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        { staticClass: "subheading font-weight-regular" },
+                        [
+                          _vm._v(
+                            " Lorem ipsum dolor sit, amet consectetur adipisicing elit.\n            Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum?\n            Sit sequi commodi culpa autem eum ad omnis."
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("h2", [_vm._v("Flight search shortcuts")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            large: "",
+                            color: "error",
+                            href:
+                              "/searched?originCode=BUD&originFull=Budapest&destinationCode=VIE&destinationFull=Vienna&departureDate=2019-01-16&arrivalDate=2019-01-21&priceMin&priceMax&setClass=0"
+                          }
+                        },
+                        [_vm._v("\n            Budapest to Vienna\n          ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            large: "",
+                            color: "purple",
+                            dark: "",
+                            href:
+                              "/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York"
+                          }
+                        },
+                        [_vm._v("\n            Vienna to New York\n          ")]
                       )
-                    ])
-                  ])
+                    ],
+                    1
+                  )
                 ]
               )
             ],
@@ -70474,6 +70526,11 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -72638,7 +72695,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -72651,6 +72708,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
 //
 //
 //
@@ -72786,13 +72844,16 @@ function onlyHoursMinutes(dateString) {
         fb_1: this.$route.query.fb_1 != null ? this.$route.query.fb_1 : null,
         fb_2: this.$route.query.fb_2 != null ? this.$route.query.fb_2 : null
       },
-      result: {}
+      result: {},
+      loaded: false
     };
   },
 
   methods: {
     getFlight: function getFlight(params) {
       var _this = this;
+
+      this.loaded = false;
 
       var query = '/api/flight?';
 
@@ -72824,9 +72885,14 @@ function onlyHoursMinutes(dateString) {
         var responseResults = response.data;
 
         responseResults.forEach(function (flight) {
-          _this.result = flight;
+          _this.result = Object.assign({}, flight);
         });
+
+        _this.loaded = true;
       });
+    },
+    reserveFlight: function reserveFlight() {
+      alert('Creating reservation!');
     }
   },
   created: function created() {
@@ -73080,106 +73146,38 @@ var render = function() {
                 "v-flex",
                 { attrs: { xs12: "" } },
                 [
-                  _c(
-                    "v-card",
-                    [
-                      _c("v-card-title", {
-                        staticClass: "headline grey lighten-2",
-                        attrs: { "primary-title": "" },
-                        domProps: { innerHTML: _vm._s(_vm.expandedTitle) }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-text",
+                  _vm.loaded
+                    ? _c(
+                        "v-card",
                         [
+                          _c("v-card-title", {
+                            staticClass: "headline grey lighten-2",
+                            attrs: { "primary-title": "" },
+                            domProps: { innerHTML: _vm._s(_vm.expandedTitle) }
+                          }),
+                          _vm._v(" "),
                           _c(
-                            "v-list",
-                            { attrs: { "three-line": "", subheader: "" } },
+                            "v-card-text",
                             [
-                              _c("v-divider"),
-                              _vm._v(" "),
-                              _c("v-subheader", [_vm._v("Departing flights")]),
-                              _vm._v(" "),
-                              _c("v-divider", { attrs: { inset: "" } }),
-                              _vm._v(" "),
                               _c(
-                                "v-list-tile",
-                                { attrs: { avatar: "" } },
+                                "v-list",
+                                { attrs: { "three-line": "", subheader: "" } },
                                 [
-                                  _c("v-list-tile-avatar", [
-                                    _c("img", {
-                                      attrs: { src: _vm.logoThere0 }
-                                    })
+                                  _c("v-divider"),
+                                  _vm._v(" "),
+                                  _c("v-subheader", [
+                                    _vm._v("Departing flights")
                                   ]),
                                   _vm._v(" "),
+                                  _c("v-divider", { attrs: { inset: "" } }),
+                                  _vm._v(" "),
                                   _c(
-                                    "v-list-tile-content",
-                                    [
-                                      _c("v-list-tile-sub-title", {
-                                        domProps: {
-                                          innerHTML: _vm._s(
-                                            _vm.expandedTopThere0
-                                          )
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c("v-list-tile-title", {
-                                        domProps: {
-                                          innerHTML: _vm._s(
-                                            _vm.expandedTitleThere0
-                                          )
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c("v-list-tile-sub-title", {
-                                        domProps: {
-                                          innerHTML: _vm._s(
-                                            _vm.expandedSubTitleThere0
-                                          )
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-divider", { attrs: { inset: "" } }),
-                              _vm._v(" "),
-                              _vm.result.there.hasOwnProperty("1")
-                                ? _c(
-                                    "v-list-tile",
-                                    { attrs: { color: "purple" } },
-                                    [
-                                      _c(
-                                        "v-list-tile-content",
-                                        [
-                                          _c("v-list-tile-sub-title", {
-                                            domProps: {
-                                              innerHTML: _vm._s(
-                                                _vm.layoverThere
-                                              )
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("v-divider", { attrs: { inset: "" } }),
-                              _vm._v(" "),
-                              _vm.result.there.hasOwnProperty("1")
-                                ? _c(
                                     "v-list-tile",
                                     { attrs: { avatar: "" } },
                                     [
                                       _c("v-list-tile-avatar", [
                                         _c("img", {
-                                          attrs: { src: _vm.logoThere1 }
+                                          attrs: { src: _vm.logoThere0 }
                                         })
                                       ]),
                                       _vm._v(" "),
@@ -73189,7 +73187,7 @@ var render = function() {
                                           _c("v-list-tile-sub-title", {
                                             domProps: {
                                               innerHTML: _vm._s(
-                                                _vm.expandedTopThere1
+                                                _vm.expandedTopThere0
                                               )
                                             }
                                           }),
@@ -73197,7 +73195,7 @@ var render = function() {
                                           _c("v-list-tile-title", {
                                             domProps: {
                                               innerHTML: _vm._s(
-                                                _vm.expandedTitleThere1
+                                                _vm.expandedTitleThere0
                                               )
                                             }
                                           }),
@@ -73205,7 +73203,7 @@ var render = function() {
                                           _c("v-list-tile-sub-title", {
                                             domProps: {
                                               innerHTML: _vm._s(
-                                                _vm.expandedSubTitleThere1
+                                                _vm.expandedSubTitleThere0
                                               )
                                             }
                                           })
@@ -73214,181 +73212,270 @@ var render = function() {
                                       )
                                     ],
                                     1
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("v-divider", { attrs: { inset: "" } }),
-                              _vm._v(" "),
-                              _vm.result.hasOwnProperty("back")
-                                ? [
-                                    _c("v-subheader", [
-                                      _vm._v("Returning flights")
-                                    ]),
-                                    _vm._v(" "),
-                                    _vm.result.back.hasOwnProperty("0")
-                                      ? _c(
-                                          "v-list-tile",
-                                          [
-                                            _c("v-list-tile-avatar", [
-                                              _c("img", {
-                                                attrs: { src: _vm.logoBack0 }
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider", { attrs: { inset: "" } }),
+                                  _vm._v(" "),
+                                  _vm.result.there.hasOwnProperty("1")
+                                    ? _c(
+                                        "v-list-tile",
+                                        { attrs: { color: "purple" } },
+                                        [
+                                          _c(
+                                            "v-list-tile-content",
+                                            [
+                                              _c("v-list-tile-sub-title", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    _vm.layoverThere
+                                                  )
+                                                }
                                               })
-                                            ]),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-list-tile-content",
-                                              [
-                                                _c("v-list-tile-sub-title", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.expandedTopBack0
-                                                    )
-                                                  }
-                                                }),
-                                                _vm._v(" "),
-                                                _c("v-list-tile-title", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.expandedTitleBack0
-                                                    )
-                                                  }
-                                                }),
-                                                _vm._v(" "),
-                                                _c("v-list-tile-sub-title", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.expandedSubTitleBack0
-                                                    )
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _c("v-divider"),
-                                    _vm._v(" "),
-                                    _vm.result.back.hasOwnProperty("1")
-                                      ? _c(
-                                          "v-list-tile",
-                                          [
-                                            _c(
-                                              "v-list-tile-content",
-                                              [
-                                                _c("v-list-tile-sub-title", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.layoverBack
-                                                    )
-                                                  }
-                                                })
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _c("v-divider"),
-                                    _vm._v(" "),
-                                    _vm.result.back.hasOwnProperty("1")
-                                      ? _c(
-                                          "v-list-tile",
-                                          [
-                                            _c("v-list-tile-avatar", [
-                                              _c("img", {
-                                                attrs: { src: _vm.logoBack1 }
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c("v-divider", { attrs: { inset: "" } }),
+                                  _vm._v(" "),
+                                  _vm.result.there.hasOwnProperty("1")
+                                    ? _c(
+                                        "v-list-tile",
+                                        { attrs: { avatar: "" } },
+                                        [
+                                          _c("v-list-tile-avatar", [
+                                            _c("img", {
+                                              attrs: { src: _vm.logoThere1 }
+                                            })
+                                          ]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-list-tile-content",
+                                            [
+                                              _c("v-list-tile-sub-title", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    _vm.expandedTopThere1
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-list-tile-title", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    _vm.expandedTitleThere1
+                                                  )
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("v-list-tile-sub-title", {
+                                                domProps: {
+                                                  innerHTML: _vm._s(
+                                                    _vm.expandedSubTitleThere1
+                                                  )
+                                                }
                                               })
-                                            ]),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-list-tile-content",
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c("v-divider", { attrs: { inset: "" } }),
+                                  _vm._v(" "),
+                                  _vm.result.hasOwnProperty("back")
+                                    ? [
+                                        _c("v-subheader", [
+                                          _vm._v("Returning flights")
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm.result.back.hasOwnProperty("0")
+                                          ? _c(
+                                              "v-list-tile",
                                               [
-                                                _c("v-list-tile-sub-title", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.expandedTopBack1
-                                                    )
-                                                  }
-                                                }),
+                                                _c("v-list-tile-avatar", [
+                                                  _c("img", {
+                                                    attrs: {
+                                                      src: _vm.logoBack0
+                                                    }
+                                                  })
+                                                ]),
                                                 _vm._v(" "),
-                                                _c("v-list-tile-title", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.expandedTitleBack1
+                                                _c(
+                                                  "v-list-tile-content",
+                                                  [
+                                                    _c(
+                                                      "v-list-tile-sub-title",
+                                                      {
+                                                        domProps: {
+                                                          innerHTML: _vm._s(
+                                                            _vm.expandedTopBack0
+                                                          )
+                                                        }
+                                                      }
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("v-list-tile-title", {
+                                                      domProps: {
+                                                        innerHTML: _vm._s(
+                                                          _vm.expandedTitleBack0
+                                                        )
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-list-tile-sub-title",
+                                                      {
+                                                        domProps: {
+                                                          innerHTML: _vm._s(
+                                                            _vm.expandedSubTitleBack0
+                                                          )
+                                                        }
+                                                      }
                                                     )
-                                                  }
-                                                }),
-                                                _vm._v(" "),
-                                                _c("v-list-tile-sub-title", {
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.expandedSubTitleBack1
-                                                    )
-                                                  }
-                                                })
+                                                  ],
+                                                  1
+                                                )
                                               ],
                                               1
                                             )
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e()
-                                  ]
-                                : _vm._e()
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _c("v-divider"),
+                                        _vm._v(" "),
+                                        _vm.result.back.hasOwnProperty("1")
+                                          ? _c(
+                                              "v-list-tile",
+                                              [
+                                                _c(
+                                                  "v-list-tile-content",
+                                                  [
+                                                    _c(
+                                                      "v-list-tile-sub-title",
+                                                      {
+                                                        domProps: {
+                                                          innerHTML: _vm._s(
+                                                            _vm.layoverBack
+                                                          )
+                                                        }
+                                                      }
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _c("v-divider"),
+                                        _vm._v(" "),
+                                        _vm.result.back.hasOwnProperty("1")
+                                          ? _c(
+                                              "v-list-tile",
+                                              [
+                                                _c("v-list-tile-avatar", [
+                                                  _c("img", {
+                                                    attrs: {
+                                                      src: _vm.logoBack1
+                                                    }
+                                                  })
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-list-tile-content",
+                                                  [
+                                                    _c(
+                                                      "v-list-tile-sub-title",
+                                                      {
+                                                        domProps: {
+                                                          innerHTML: _vm._s(
+                                                            _vm.expandedTopBack1
+                                                          )
+                                                        }
+                                                      }
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("v-list-tile-title", {
+                                                      domProps: {
+                                                        innerHTML: _vm._s(
+                                                          _vm.expandedTitleBack1
+                                                        )
+                                                      }
+                                                    }),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-list-tile-sub-title",
+                                                      {
+                                                        domProps: {
+                                                          innerHTML: _vm._s(
+                                                            _vm.expandedSubTitleBack1
+                                                          )
+                                                        }
+                                                      }
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    : _vm._e()
+                                ],
+                                2
+                              )
                             ],
-                            2
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c("v-spacer"),
+                            1
+                          ),
                           _vm._v(" "),
-                          _c("span", {
-                            domProps: {
-                              innerHTML: _vm._s(_vm.expandedBottomDescription)
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-spacer"),
+                          _c("v-divider"),
                           _vm._v(" "),
                           _c(
-                            "v-btn",
-                            {
-                              attrs: {
-                                ripple: "",
-                                dark: "",
-                                color: "success",
-                                large: ""
-                              }
-                            },
+                            "v-card-actions",
                             [
-                              _vm._v(
-                                "\n              Create reservation for this flight   "
-                              ),
-                              _c("strong", [
-                                _vm._v(
-                                  " " + _vm._s(_vm.result.total_price) + " €"
-                                )
-                              ])
-                            ]
+                              _c("v-spacer"),
+                              _vm._v(" "),
+                              _c("span", {
+                                domProps: {
+                                  innerHTML: _vm._s(
+                                    _vm.expandedBottomDescription
+                                  )
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-spacer"),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: {
+                                    ripple: "",
+                                    dark: "",
+                                    color: "purple",
+                                    large: ""
+                                  },
+                                  on: { click: _vm.reserveFlight }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n              Create reservation for this flight\n            "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
                           )
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
+                    : _vm._e()
                 ],
                 1
               )
@@ -73851,10 +73938,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_AddAirportForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_AddAirportForm_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_AddAirplaneForm_vue__ = __webpack_require__(282);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_AddAirplaneForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_AddAirplaneForm_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_SearchUserForm_vue__ = __webpack_require__(287);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_SearchUserForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_SearchUserForm_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_AddAirlineForm_vue__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_AddAirlineForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_AddAirlineForm_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_SearchUserForm_vue__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_SearchUserForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_SearchUserForm_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_axios__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_axios__);
 //
 //
 //
@@ -73947,6 +74036,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -74063,9 +74157,10 @@ __WEBPACK_IMPORTED_MODULE_2__fortawesome_fontawesome_svg_core__["b" /* dom */].w
     'font-awesome-icon': __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__["a" /* FontAwesomeIcon */],
     'add-user-form': __WEBPACK_IMPORTED_MODULE_5__components_AddUserForm_vue___default.a,
     'add-flight-form': __WEBPACK_IMPORTED_MODULE_6__components_AddFlightForm_vue___default.a,
+    'add-airline-form': __WEBPACK_IMPORTED_MODULE_9__components_AddAirlineForm_vue___default.a,
     'add-airport-form': __WEBPACK_IMPORTED_MODULE_7__components_AddAirportForm_vue___default.a,
     'add-airplane-form': __WEBPACK_IMPORTED_MODULE_8__components_AddAirplaneForm_vue___default.a,
-    'search-user-form': __WEBPACK_IMPORTED_MODULE_9__components_SearchUserForm_vue___default.a,
+    'search-user-form': __WEBPACK_IMPORTED_MODULE_10__components_SearchUserForm_vue___default.a,
     Loading: __WEBPACK_IMPORTED_MODULE_0_vue_loading_overlay___default.a
   }
 
@@ -74314,6 +74409,13 @@ var render = function() {
                     "v-flex",
                     { attrs: { xs12: "", sm12: "", md12: "", lg12: "" } },
                     [_vm.adminState == 12 ? _c("add-flight-form") : _vm._e()],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "", md12: "", lg12: "" } },
+                    [_vm.adminState == 13 ? _c("add-airline-form") : _vm._e()],
                     1
                   ),
                   _vm._v(" "),
@@ -74589,11 +74691,16 @@ var render = function() {
                       _vm._v(" "),
                       _vm.result.hasOwnProperty("back")
                         ? [
+                            _c("v-list-tile"),
+                            _vm._v(" "),
                             _c("v-subheader", [_vm._v("Returning flights")]),
+                            _vm._v(" "),
+                            _c("v-divider", { attrs: { inset: "" } }),
                             _vm._v(" "),
                             _vm.result.back.hasOwnProperty("0")
                               ? _c(
                                   "v-list-tile",
+                                  { attrs: { avatar: "" } },
                                   [
                                     _c("v-list-tile-avatar", [
                                       _c("img", {
@@ -74635,7 +74742,7 @@ var render = function() {
                                 )
                               : _vm._e(),
                             _vm._v(" "),
-                            _c("v-divider"),
+                            _c("v-divider", { attrs: { inset: "" } }),
                             _vm._v(" "),
                             _vm.result.back.hasOwnProperty("1")
                               ? _c(
@@ -74657,11 +74764,12 @@ var render = function() {
                                 )
                               : _vm._e(),
                             _vm._v(" "),
-                            _c("v-divider"),
+                            _c("v-divider", { attrs: { inset: "" } }),
                             _vm._v(" "),
                             _vm.result.back.hasOwnProperty("1")
                               ? _c(
                                   "v-list-tile",
+                                  { attrs: { avatar: "" } },
                                   [
                                     _c("v-list-tile-avatar", [
                                       _c("img", {
@@ -76647,6 +76755,358 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-627784a8", module.exports)
+  }
+}
+
+/***/ }),
+/* 292 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(293)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(295)
+/* template */
+var __vue_template__ = __webpack_require__(296)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/components/AddAirlineForm.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3cb53572", Component.options)
+  } else {
+    hotAPI.reload("data-v-3cb53572", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 293 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(294);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("227e3a48", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3cb53572\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAirlineForm.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3cb53572\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddAirlineForm.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 294 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/* Enter and leave animations can use different */\n/* durations and timing functions.              */\n.slide-fade-enter-active {\n  transition: all .3s ease;\n}\n.slide-fade-leave-active {\n  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);\n}\n.slide-fade-enter, .slide-fade-leave-to {\n  transform: translateX(10px);\n  opacity: 0;\n}\n.custom-loader {\n  animation: loader 1s infinite;\n  display: flex;\n}\n@-moz-keyframes loader {\nfrom {\n    transform: rotate(0);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n@-webkit-keyframes loader {\nfrom {\n    transform: rotate(0);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n@-o-keyframes loader {\nfrom {\n    transform: rotate(0);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n@keyframes loader {\nfrom {\n    transform: rotate(0);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 295 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mdi_font_css_materialdesignicons_css__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mdi_font_css_materialdesignicons_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mdi_font_css_materialdesignicons_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DebugBox_vue__ = __webpack_require__(211);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__DebugBox_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__DebugBox_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fortawesome_fontawesome_svg_core__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_axios__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'ChangePasswordForm',
+  data: function data() {
+    var _ref;
+
+    return _ref = {
+      airline: "",
+      fullName: "",
+      nationality: ""
+    }, _defineProperty(_ref, 'nationality', ""), _defineProperty(_ref, 'message', ""), _defineProperty(_ref, 'hub', ""), _defineProperty(_ref, 'rules', {
+      required: function required(value) {
+        return !!value || 'Required.';
+      },
+      min: function min(v) {
+        return v && v.length >= 8 || 'Min 8 characters';
+      }
+    }), _defineProperty(_ref, 'nameRules', [function (v) {
+      return !!v || 'Name is required';
+    }, function (v) {
+      return v && v.length <= 50 || 'Name must be shorter than 50 chars';
+    }, function (v) {
+      return (/[A-Z]+/.test(v) || 'Name must be valid'
+      );
+    }]), _defineProperty(_ref, 'airlineRules', [function (v) {
+      return !!v || 'Airline code is required';
+    }, function (v) {
+      return v && v.length == 2 || 'Airline code must be 2 characters';
+    }, function (v) {
+      return (/[A-Z]{2}/.test(v) || 'Airline code must be valid'
+      );
+    }]), _defineProperty(_ref, 'airportRules', [function (v) {
+      return !!v || 'Airport code is required';
+    }, function (v) {
+      return v && v.length == 3 || 'Airport code must be 3 characters';
+    }, function (v) {
+      return (/[A-Z]{3}/.test(v) || 'Airport code must be valid'
+      );
+    }]), _defineProperty(_ref, 'valid', true), _ref;
+  },
+
+  methods: {
+    add: function add() {
+      var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_5_axios___default.a.post('/api/add_airline', {
+        airline: this.airline,
+        full_name: this.fullName,
+        nationality: this.nationality,
+        hub: this.hub
+      }).then(function (response) {
+        if (response.status == 200) {
+          _this.message = "New airport was successfully inserted";
+        } else {
+          _this.message = "Error - inserting failed";
+        }
+      }).catch(function (error) {
+        _this.message = "Error - inserting failed";
+        console.log("ERR: " + error);
+      });
+    },
+    clear: function clear() {
+      this.$refs.form.reset();
+    }
+  },
+  components: {
+    'debug-box': __WEBPACK_IMPORTED_MODULE_2__DebugBox_vue___default.a,
+    'font-awesome-icon': __WEBPACK_IMPORTED_MODULE_4__fortawesome_vue_fontawesome__["a" /* FontAwesomeIcon */]
+  }
+});
+
+/***/ }),
+/* 296 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-card",
+    { staticClass: "layout column", attrs: { light: "" } },
+    [
+      _c("main", { attrs: { role: "main" } }, [
+        _c("p", { staticClass: "subheading font-weight-regular" }, [
+          _vm._v(" Add new airline")
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "v-form",
+        {
+          ref: "form",
+          attrs: { "lazy-validation": "" },
+          model: {
+            value: _vm.valid,
+            callback: function($$v) {
+              _vm.valid = $$v
+            },
+            expression: "valid"
+          }
+        },
+        [
+          _c("v-text-field", {
+            attrs: {
+              rules: _vm.airlineRules,
+              label: "Airline ID",
+              required: ""
+            },
+            model: {
+              value: _vm.airline,
+              callback: function($$v) {
+                _vm.airline = $$v
+              },
+              expression: "airline"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-text-field", {
+            attrs: { rules: _vm.nameRules, label: "Full name", required: "" },
+            model: {
+              value: _vm.fullName,
+              callback: function($$v) {
+                _vm.fullName = $$v
+              },
+              expression: "fullName"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-text-field", {
+            attrs: {
+              rules: _vm.nameRules,
+              label: "Headquarter country",
+              required: ""
+            },
+            model: {
+              value: _vm.nationality,
+              callback: function($$v) {
+                _vm.nationality = $$v
+              },
+              expression: "nationality"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-text-field", {
+            attrs: {
+              rules: _vm.airportRules,
+              label: "Hub airport",
+              required: ""
+            },
+            model: {
+              value: _vm.hub,
+              callback: function($$v) {
+                _vm.hub = $$v
+              },
+              expression: "hub"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            { attrs: { disabled: !_vm.valid }, on: { click: _vm.add } },
+            [_vm._v("add airport")]
+          ),
+          _vm._v(" "),
+          _c("v-btn", { on: { click: _vm.clear } }, [_vm._v("clear")])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("main", { attrs: { role: "main" } }, [
+        _c("p", { staticClass: "subheading font-weight-regular" }, [
+          _vm._v(" " + _vm._s(this.message))
+        ])
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3cb53572", module.exports)
   }
 }
 
