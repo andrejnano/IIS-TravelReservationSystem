@@ -1,6 +1,22 @@
 <template>
   <v-card class="layout column" light>
 
+        <!-- SEARCH FORM -->
+        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser == 0">
+          <v-btn-toggle v-model="toggleSearch" mandatory>
+            <v-btn flat>First name</v-btn>
+            <v-btn flat>Last name</v-btn>
+            <v-btn flat>E-mail</v-btn>
+          </v-btn-toggle>
+          <v-form ref="form" v-model="valid" lazy-validation>
+                <v-text-field
+                  v-model="searchString"
+                  label="contains"
+                ></v-text-field>
+                <v-btn @click="search">search</v-btn>
+          </v-form>
+        </v-flex>
+
         <!-- EDIT FORM -->
         <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser != 0">
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -70,6 +86,8 @@ export default {
       actualUser: 0,
       fullName: "",
       users: [],
+      toggleSearch: 0,
+      searchString: "",
       showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
@@ -107,6 +125,42 @@ export default {
       this.firstName = editedUser.first_name;
       this.lastName = editedUser.last_name;
       this.email = editedUser.email;
+    },
+    search() {
+      axios.get('/api/users', {
+        }).then((response) => {
+            if (response.status == 200) {
+                this.users = [];
+                if(this.toggleSearch == 0) {
+                  response.data.forEach(user => {
+                    if(user.first_name.search(this.searchString) > -1){
+                      this.users.push(user);
+                    }
+                  });
+                  this.message = "Users containing '" + this.searchString + "' in first name";
+                } else if (this.toggleSearch == 1) {
+                  response.data.forEach(user => {
+                    if(user.last_name.search(this.searchString) > -1){
+                      this.users.push(user);
+                    }
+                  });
+                  this.message = "Users containing '" + this.searchString + "' in last name";
+                } else {
+                  response.data.forEach(user => {
+                    if(user.email.search(this.searchString) > -1){
+                      this.users.push(user);
+                    }
+                  });
+                  this.message = "Users containing '" + this.searchString + "' in email";
+                }
+            } else {
+              this.message = "Error - not able to get users";
+            }
+          })
+          .catch((error) => {
+            this.message = "Error - not able to get users";
+            console.log("ERR: " + error);
+          });
     },
     save() {
       axios.post('/api/update_user', {
