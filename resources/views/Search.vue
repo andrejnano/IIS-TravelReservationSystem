@@ -6,8 +6,11 @@
         <v-flex ma-2 xs12 sm5 md4 lg4>
           <flight-search-form v-bind="formValuesToPass" />
         </v-flex>
-        <v-flex ma-2 xs12 sm6 md7 lg4>
+        <v-flex ma-2 xs12 sm6 md7 lg8>
           <main role="main">
+            <v-card>
+              <v-img src="https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=0d424e0c724d80f5f3b23c02201b8648&auto=format&fit=crop&w=1949&q=80" contain></v-img>
+            </v-card>
             <h1 class="display-2 font-weight-bold mb-3">Frontpage Headline</h1>
             <p class="subheading font-weight-regular"> Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum?
