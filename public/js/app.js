@@ -63658,7 +63658,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-app",
-    { attrs: { id: "app" } },
+    { attrs: { id: "app", dark: "" } },
     [
       _c("navigation"),
       _vm._v(" "),
@@ -73113,7 +73113,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -73430,8 +73430,22 @@ function onlyHoursMinutes(dateString) {
     clear: function clear() {
       this.$refs.form.reset();
     },
-    getFlight: function getFlight(params) {
+    getReservation: function getReservation() {
       var _this = this;
+
+      __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/reservation', { total_price: this.totalPrice }).then(function (response) {
+        if (response.status == 200) {
+          _this.loggedIn = true;
+          _this.reservationID = response.data.new_reservation_id;
+          console.log('%c LOGGED IN, RESERVATION w/ ID: ' + _this.reservationID + ' & price: ' + _this.totalPrice + ' CREATED! ', 'background: #00ff00; color: #ffffff');
+        } else {
+          console.log('%c NOT LOGGED IN! ', 'background: #ff0000; color: #ffffff');
+          _this.loggedIn = false;
+        }
+      });
+    },
+    getFlight: function getFlight(params) {
+      var _this2 = this;
 
       this.loaded = false;
 
@@ -73467,14 +73481,14 @@ function onlyHoursMinutes(dateString) {
         var responseResults = response.data;
 
         responseResults.forEach(function (flight) {
-          _this.result = Object.assign({}, flight);
+          _this2.result = Object.assign({}, flight);
         });
 
-        var ticket_ids = _this.result.there.ticket_ids;
+        var ticket_ids = _this2.result.there.ticket_ids;
         var i = 0;
 
         // iterate ticket_ids and create new passengers
-        if (_this.result.hasOwnProperty('back')) {
+        if (_this2.result.hasOwnProperty('back')) {
           // round trip passengers have 2 ids assigned
           for (i = 0; i < ticket_ids.length; i += 2) {
 
@@ -73485,7 +73499,7 @@ function onlyHoursMinutes(dateString) {
               last_name: '',
               email: ''
             };
-            _this.passengers.push(newPassenger);
+            _this2.passengers.push(newPassenger);
           }
         } else {
           for (i = 0; i < ticket_ids.length; i++) {
@@ -73496,17 +73510,19 @@ function onlyHoursMinutes(dateString) {
               last_name: '',
               email: ''
             };
-            _this.passengers.push(_newPassenger);
+            _this2.passengers.push(_newPassenger);
           }
         }
 
-        _this.summary.push({ name: "Passengers", value: _this.passengers.length + "x" });
-        _this.summary.push({ name: "Single ticket price", value: _this.result.total_price + "€" });
-        _this.summary.push({ name: "", value: _this.passengers.length + " x " + _this.result.total_price + "€" });
-        _this.summary.push({ name: "Total price", value: _this.totalPrice + "€" });
+        _this2.summary.push({ name: "Passengers", value: _this2.passengers.length });
+        _this2.summary.push({ name: "Single ticket price", value: _this2.result.total_price + "€" });
+        _this2.summary.push({ name: "", value: _this2.passengers.length + " x " + _this2.result.total_price + "€" });
+        _this2.summary.push({ name: "Total price", value: _this2.totalPrice + "€" });
 
-        _this.loaded = true;
-        _this.isLoading = false;
+        _this2.loaded = true;
+        _this2.isLoading = false;
+
+        _this2.getReservation();
       });
     },
     reserveFlight: function reserveFlight() {
@@ -73576,20 +73592,7 @@ function onlyHoursMinutes(dateString) {
     }
   },
   created: function created() {
-    var _this2 = this;
-
     this.getFlight(this.flightParams);
-
-    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/reservation', { total_price: this.totalPrice }).then(function (response) {
-      if (response.status == 200) {
-        _this2.loggedIn = true;
-        _this2.reservationID = response.data.new_reservation_id;
-        console.log('%c LOGGED IN, RESERVATION w/ ID: ' + _this2.reservationID + ' & price: ' + _this2.totalPrice + ' CREATED! ', 'background: #00ff00; color: #ffffff');
-      } else {
-        console.log('%c NOT LOGGED IN! ', 'background: #ff0000; color: #ffffff');
-        _this2.loggedIn = false;
-      }
-    });
   },
 
   computed: {

@@ -294,6 +294,18 @@ export default {
     clear () {
       this.$refs.form.reset();
     },
+    getReservation() {
+      axios.post('/api/reservation', {total_price: this.totalPrice }).then((response) => {
+      if (response.status == 200) {
+          this.loggedIn = true;
+          this.reservationID = response.data.new_reservation_id;
+          console.log('%c LOGGED IN, RESERVATION w/ ID: ' + this.reservationID + ' & price: ' + this.totalPrice + ' CREATED! ', 'background: #00ff00; color: #ffffff');
+        } else {
+          console.log('%c NOT LOGGED IN! ', 'background: #ff0000; color: #ffffff');
+          this.loggedIn = false;
+        }
+    });
+    },
     getFlight(params) {
 
       this.loaded = false;
@@ -371,19 +383,19 @@ export default {
           }
         }
 
-        this.summary.push({ name: "Passengers", value: this.passengers.length + "x"});
+        this.summary.push({ name: "Passengers", value: this.passengers.length});
         this.summary.push({ name: "Single ticket price", value: this.result.total_price + "€"});
         this.summary.push({ name: "", value: this.passengers.length + " x " + this.result.total_price + "€"});
         this.summary.push({ name: "Total price", value: this.totalPrice + "€"});
 
         this.loaded = true;
         this.isLoading = false;
+
+        this.getReservation();
       });
     },
     reserveFlight() {
       if (this.$refs.form.validate()) {
-
-
 
         // Round Trip
         if (this.result.hasOwnProperty('back')) {
@@ -455,17 +467,6 @@ export default {
   },
   created() {
     this.getFlight(this.flightParams);
-
-    axios.post('/api/reservation', {total_price: this.totalPrice }).then((response) => {
-      if (response.status == 200) {
-          this.loggedIn = true;
-          this.reservationID = response.data.new_reservation_id;
-          console.log('%c LOGGED IN, RESERVATION w/ ID: ' + this.reservationID + ' & price: ' + this.totalPrice + ' CREATED! ', 'background: #00ff00; color: #ffffff');
-        } else {
-          console.log('%c NOT LOGGED IN! ', 'background: #ff0000; color: #ffffff');
-          this.loggedIn = false;
-        }
-    });
   },
   computed: {
     totalPrice: function() {
