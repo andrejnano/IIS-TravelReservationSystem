@@ -70,10 +70,9 @@
 
             <v-divider inset></v-divider>
 
-            <template v-if="result.hasOwnProperty('back')">
+            <v-divider></v-divider>
 
-              <v-list-tile>
-              </v-list-tile>
+            <template v-if="result.hasOwnProperty('back')">
 
               <v-subheader>Returning flights</v-subheader>
 
