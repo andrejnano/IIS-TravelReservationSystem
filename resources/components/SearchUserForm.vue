@@ -1,6 +1,11 @@
 <template>
   <v-card class="layout column" light>
 
+      <!-- TOOLBAR -->
+      <v-toolbar card prominent>
+        <v-toolbar-title><v-icon>mdi-account</v-icon>&nbsp;&nbsp;Users table</v-toolbar-title>
+      </v-toolbar>
+
         <!-- SEARCH FORM -->
         <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser == 0">
           <v-btn-toggle v-model="toggleSearch" mandatory>
@@ -20,6 +25,11 @@
         <!-- EDIT FORM -->
         <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser != 0">
           <v-form ref="form" v-model="valid" lazy-validation>
+                <v-checkbox
+                  v-model="isAdmin"
+                  label="Is admin"
+                  required
+                ></v-checkbox>
                 <v-text-field
                   v-model="firstName"
                   :rules="nameRules"
@@ -87,6 +97,7 @@ export default {
       firstName: "",
       lastName: "",
       email: "", 
+      isAdmin: false,
       message: "",
       searchMessage: "",
       actualUser: 0,
@@ -130,6 +141,7 @@ export default {
       this.firstName = editedUser.first_name;
       this.lastName = editedUser.last_name;
       this.email = editedUser.email;
+      this.isAdmin = editedUser.is_admin == 1 ? true : false;
     },
     search() {
       axios.get('/api/users', {
@@ -171,14 +183,29 @@ export default {
           });
     },
     save() {
+      console.log(this.isAdmin === true ? 1 : 0);
+      console.log(this.isAdmin);
       axios.post('/api/update_user', {
             id: this.actualUser,
             first_name: this.firstName,
             last_name: this.lastName,
-            email: this.email
+            email: this.email,
+            is_admin: this.isAdmin === true ? 1 : 0
         }).then((response) => {
             if (response.status == 200) {
               this.message = "User information was successfully saved!";
+              axios.get('/api/users', {
+                }).then((response) => {
+                    if (response.status == 200) {
+                      this.users = response.data;
+                    } else {
+                      this.message = "Error - not able to get users";
+                    }
+                  })
+                  .catch((error) => {
+                    this.message = "Error - not able to get users";
+                    console.log("ERR: " + error);
+                  });  
             } else {
               this.message = "Error - information was not saved";
             }
@@ -186,19 +213,7 @@ export default {
           .catch((error) => {
             this.message = "Error - information was not saved";
             console.log("ERR: " + error);
-          });
-      axios.get('/api/users', {
-        }).then((response) => {
-            if (response.status == 200) {
-              this.users = response.data;
-            } else {
-              this.message = "Error - not able to get users";
-            }
-          })
-          .catch((error) => {
-            this.message = "Error - not able to get users";
-            console.log("ERR: " + error);
-          });      
+          });    
     },
     cancel() {
       this.$refs.form.reset();

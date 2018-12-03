@@ -9,7 +9,6 @@
     <v-toolbar-items>
       <v-btn flat to="/about">About</v-btn>
       <v-btn flat to="/contact">Contact</v-btn>
-      <v-btn flat to="/admin" v-if="isAdmin">Admin page</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <template>

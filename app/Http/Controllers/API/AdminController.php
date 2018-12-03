@@ -211,7 +211,7 @@ class AdminController extends Controller
             if($request->input('password')){
                 DB::table('users')->where('id', $request->input('id'))->update(['password' => $request->input('password')]);
             }
-            if($request->input('is_admin') && $_SESSION["user"] == "admin"){
+            if(($request->input('is_admin') == 0 || $request->input('is_admin') == 1) && $_SESSION["user"] == "admin"){
                 DB::table('users')->where('id', $request->input('id'))->update(['is_admin' => $request->input('is_admin')]);
             }
         } catch (Exception $e) {

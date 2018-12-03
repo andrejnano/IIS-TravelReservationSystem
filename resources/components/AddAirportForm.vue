@@ -1,9 +1,10 @@
 <template>
   <v-card class="layout column" light>
 
-          <main role="main">
-            <p class="subheading font-weight-regular"> Add new airport</p>
-          </main>
+      <!-- TOOLBAR -->
+      <v-toolbar card prominent>
+        <v-toolbar-title><v-icon>mdi-airplane-landing</v-icon>&nbsp;&nbsp;Add new airport</v-toolbar-title>
+      </v-toolbar>
 
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field

@@ -1,6 +1,11 @@
 <template>
   <v-card class="layout column" light>
 
+      <!-- TOOLBAR -->
+      <v-toolbar card prominent>
+        <v-toolbar-title><v-icon>mdi-airplane-landing</v-icon>&nbsp;&nbsp;Airports table</v-toolbar-title>
+      </v-toolbar>
+
         <!-- SEARCH FORM -->
         <v-flex ma-2 xs11 sm8 md6 lg4>
           <v-btn-toggle v-model="toggleSearch" mandatory>
