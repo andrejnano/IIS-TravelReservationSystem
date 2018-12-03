@@ -70,6 +70,7 @@
             slot="activator"
             :value="computedDepartureDateFormatted"
             clearable
+            @click:clear="clearDepartureDate"
             label="Date of departure"
             prepend-icon="mdi-calendar"
             readonly
@@ -306,6 +307,10 @@ export default {
     }
   },
   methods: {
+    clearDepartureDate () {
+      this.FORMdepartureDate = "";
+      console.log("Clear date");
+    },
     querySelections (v) {
         this.loadingOrigin = true
         // Simulated ajax query
@@ -322,7 +327,7 @@ export default {
       this.$emit('searchSubmited', {
         origin: {airport_code: this.FORMorigin.airport_code, city: this.FORMorigin.city, country: this.FORMorigin.country},
         destination: {airport_code: this.FORMdestination.airport_code, city: this.FORMdestination.city, country: this.FORMdestination.country},
-        departureDate: this.FORMdepartureDate,
+        departureDate: this.FORMdepartureDate != "" ? this.FORMdepartureDate : null,
         arrivalDate: this.toggleRoundTrip == 0 ? this.FORMarrivalDate : null,
         priceMin: this.priceSlider.value[0],
         priceMax: this.priceSlider.value[1],
