@@ -22,7 +22,7 @@
                 </v-container>
               </v-img>
             <v-card-title>
-              <p class="subheading font-weight-regular"> Your perfect vacation is waiting for you! With our page you can flight all around the world. Just choose city and date and explore new places!</p>
+              <p class="subheading font-weight-regular"> Your fabulous vacation is waiting for you! With our page you can flight all around the world. Just choose city and date and explore new places!</p>
               <h2>Select from these example flights</h2>
             </v-card-title>
             <v-card-text>

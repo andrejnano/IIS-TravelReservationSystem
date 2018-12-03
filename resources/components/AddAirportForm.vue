@@ -3,7 +3,7 @@
 
       <!-- TOOLBAR -->
       <v-toolbar card prominent>
-        <v-toolbar-title><v-icon>mdi-airplane-landing</v-icon>&nbsp;&nbsp;Add new airport</v-toolbar-title>
+        <v-toolbar-title><v-icon>mdi-airport</v-icon>&nbsp;&nbsp;Add new airport</v-toolbar-title>
       </v-toolbar>
 
           <v-form ref="form" v-model="valid" lazy-validation>
