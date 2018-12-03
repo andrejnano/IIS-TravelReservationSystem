@@ -22,7 +22,7 @@
     <v-dialog v-model="dialog" width="900">
       <v-card>
         <v-card-title
-          class="headline grey lighten-2"
+          class="headline"
           primary-title
           v-html="expandedTitle"
         >
@@ -428,8 +428,23 @@ export default {
         }
       }
 
-      query.class = there.seat_class;
-      query.tickets = 1;
+      if (there['0'].seat_class == "economy")
+      {
+        query.class = 0;
+      }
+      else if (there['0'].seat_class == "business")
+      {
+        query.class = 1;
+      }
+      else if (there['0'].seat_class == "first")
+      {
+        query.class = 2;
+      }
+
+      if (this.$route.query.tickets != '')
+      {
+        query.tickets = Number(this.$route.query.tickets);
+      }
 
       this.$router.push({path: '/flight', query: query});
     },
@@ -448,7 +463,7 @@ export default {
   font-weight: bold;
   color: #fff;
   padding: 0.2em 0.4em;
-  opacity: 0.5;
+  opacity: 0.8;
   border-radius: 5px;
 }
 

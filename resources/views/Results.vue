@@ -37,7 +37,7 @@
             <v-layout row>
               <v-flex xs12>
                 <v-card class="layout column">
-                  <v-toolbar card prominent color="info" dark>
+                  <v-toolbar card prominent>
                     <v-toolbar-title>Found these results:</v-toolbar-title>
                     <v-spacer></v-spacer>
 
@@ -119,9 +119,10 @@ export default {
         destination: {airport_code: this.$route.query.destinationCode, city: this.$route.query.destinationFull},
         departureDate: this.$route.query.departureDate,
         arrivalDate: this.$route.query.arrivalDate != '' ? this.$route.query.arrivalDate : null,
-        priceMin: this.$route.query.priceMin ? JSON.parse(this.$route.query.priceMin) : null,
-        priceMax: this.$route.query.priceMax ? JSON.parse(this.$route.query.priceMax) : null,
-        setClass: this.$route.query.class ? JSON.parse(this.$route.query.class) : null,
+        priceMin: this.$route.query.priceMin ? Number(this.$route.query.priceMin) : null,
+        priceMax: this.$route.query.priceMax ? Number(this.$route.query.priceMax) : null,
+        setClass: this.$route.query.setClass ? Number(this.$route.query.setClass) : null,
+        tickets: this.$route.query.tickets ? Number(this.$route.query.tickets) : null,
       },
     }
   },
@@ -168,19 +169,35 @@ export default {
         query += `&min_t=0`;
       }
 
-      if (formValues.priceMax != null && formValues.priceMax != '' )
+      if (formValues.priceMax != null)
       {
         query += `&max_price=${formValues.priceMax}`;
       }
 
-      if (formValues.priceMin != null && formValues.priceMin != '' )
+      if (formValues.priceMin != null)
       {
         query += `&min_price=${formValues.priceMin}`;
       }
 
-      if (formValues.setClass != null && formValues.setClass != '' )
+      if (formValues.setClass != null)
       {
-        query += `&class=${formValues.setClass}`;
+        if(formValues.setClass == 0)
+        {
+          query += `&class=economy`;
+        }
+        else if(formValues.setClass == 1)
+        {
+          query += `&class=business`;
+        }
+        else if(formValues.setClass == 2)
+        {
+          query += `&class=first`;
+        }
+      }
+
+      if (formValues.hasOwnProperty('tickets'))
+      {
+        query += `&tickets=${formValues.tickets}`;
       }
 
       console.log({query});

@@ -1,6 +1,11 @@
 <template>
   <v-card class="layout column" light>
 
+      <!-- TOOLBAR -->
+      <v-toolbar card prominent>
+        <v-toolbar-title><v-icon>mdi-account</v-icon>&nbsp;&nbsp;Users table</v-toolbar-title>
+      </v-toolbar>
+
         <!-- SEARCH FORM -->
         <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser == 0">
           <v-btn-toggle v-model="toggleSearch" mandatory>
@@ -13,13 +18,18 @@
                   v-model="searchString"
                   label="contains"
                 ></v-text-field>
-                <v-btn @click="search">search</v-btn>
+                <v-btn @click="search"><v-icon light>mdi-magnify</v-icon>search</v-btn>
           </v-form>
         </v-flex>
 
         <!-- EDIT FORM -->
         <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser != 0">
           <v-form ref="form" v-model="valid" lazy-validation>
+                <v-checkbox
+                  v-model="isAdmin"
+                  label="Is admin"
+                  required
+                ></v-checkbox>
                 <v-text-field
                   v-model="firstName"
                   :rules="nameRules"
@@ -40,12 +50,17 @@
                 ></v-text-field>
                 <v-btn :disabled="!valid" @click="save">save</v-btn>
                 <v-btn @click="cancel">cancel</v-btn>
-                <v-btn color="red" @click="deleteUser">delete user</v-btn>
+                <v-btn color="red" @click="deleteUser">
+                  <v-icon light>mdi-delete</v-icon>delete user
+                </v-btn>
           </v-form>
         </v-flex>
 
           <main role="main">
             <p class="subheading font-weight-regular"> {{this.message}}</p>
+          </main>
+          <main role="main">
+            <p class="subheading font-weight-regular"> {{this.searchMessage}}</p>
           </main>
 
             <!-- USER LIST -->
@@ -82,13 +97,14 @@ export default {
       firstName: "",
       lastName: "",
       email: "", 
+      isAdmin: false,
       message: "",
+      searchMessage: "",
       actualUser: 0,
       fullName: "",
       users: [],
       toggleSearch: 0,
       searchString: "",
-      showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
@@ -109,7 +125,7 @@ export default {
         }).then((response) => {
             if (response.status == 200) {
               this.users = response.data;
-              this.message = "Users";
+              this.searchMessage = "All users";
             } else {
               this.message = "Error - not able to get users";
             }
@@ -125,6 +141,7 @@ export default {
       this.firstName = editedUser.first_name;
       this.lastName = editedUser.last_name;
       this.email = editedUser.email;
+      this.isAdmin = editedUser.is_admin == 1 ? true : false;
     },
     search() {
       axios.get('/api/users', {
@@ -137,21 +154,24 @@ export default {
                       this.users.push(user);
                     }
                   });
-                  this.message = "Users containing '" + this.searchString + "' in first name";
+                  this.searchMessage = "Users containing '" + this.searchString + "' in first name";
                 } else if (this.toggleSearch == 1) {
                   response.data.forEach(user => {
                     if(user.last_name.search(this.searchString) > -1){
                       this.users.push(user);
                     }
                   });
-                  this.message = "Users containing '" + this.searchString + "' in last name";
+                  this.searchMessage = "Users containing '" + this.searchString + "' in last name";
                 } else {
                   response.data.forEach(user => {
                     if(user.email.search(this.searchString) > -1){
                       this.users.push(user);
                     }
                   });
-                  this.message = "Users containing '" + this.searchString + "' in email";
+                  this.searchMessage = "Users containing '" + this.searchString + "' in email";
+                }
+                if(this.searchString == ""){
+                  this.searchMessage = "All users";
                 }
             } else {
               this.message = "Error - not able to get users";
@@ -163,14 +183,29 @@ export default {
           });
     },
     save() {
+      console.log(this.isAdmin === true ? 1 : 0);
+      console.log(this.isAdmin);
       axios.post('/api/update_user', {
             id: this.actualUser,
             first_name: this.firstName,
             last_name: this.lastName,
-            email: this.email
+            email: this.email,
+            is_admin: this.isAdmin === true ? 1 : 0
         }).then((response) => {
             if (response.status == 200) {
               this.message = "User information was successfully saved!";
+              axios.get('/api/users', {
+                }).then((response) => {
+                    if (response.status == 200) {
+                      this.users = response.data;
+                    } else {
+                      this.message = "Error - not able to get users";
+                    }
+                  })
+                  .catch((error) => {
+                    this.message = "Error - not able to get users";
+                    console.log("ERR: " + error);
+                  });  
             } else {
               this.message = "Error - information was not saved";
             }
@@ -178,19 +213,7 @@ export default {
           .catch((error) => {
             this.message = "Error - information was not saved";
             console.log("ERR: " + error);
-          });
-      axios.get('/api/users', {
-        }).then((response) => {
-            if (response.status == 200) {
-              this.users = response.data;
-            } else {
-              this.message = "Error - not able to get users";
-            }
-          })
-          .catch((error) => {
-            this.message = "Error - not able to get users";
-            console.log("ERR: " + error);
-          });      
+          });    
     },
     cancel() {
       this.$refs.form.reset();

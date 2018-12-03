@@ -1,9 +1,10 @@
 <template>
   <v-card class="layout column" light>
 
-          <main role="main">
-            <p class="subheading font-weight-regular"> Add new user</p>
-          </main>
+      <!-- TOOLBAR -->
+      <v-toolbar card prominent>
+        <v-toolbar-title><v-icon>mdi-account</v-icon>&nbsp;&nbsp;Add new user</v-toolbar-title>
+      </v-toolbar>
 
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-checkbox
@@ -95,7 +96,7 @@ export default {
   methods: {
     add(){
       // console.log(this.admin);
-      // console.log(this.admin === "true" ? 1 : 0);
+      console.log(this.admin === "true" ? 1 : 0);
       axios.post('/api/add_user', {
             first_name: this.firstName,
             last_name: this.lastName,

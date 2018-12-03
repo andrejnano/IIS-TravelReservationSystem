@@ -6,27 +6,52 @@
         <v-flex ma-2 xs12 sm5 md4 lg4>
           <flight-search-form v-bind="formValuesToPass" />
         </v-flex>
-        <v-flex ma-2 xs12 sm6 md7 lg4>
-          <main role="main">
-            <h1 class="display-2 font-weight-bold mb-3">Frontpage Headline</h1>
-            <p class="subheading font-weight-regular"> Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum?
-              Sit sequi commodi culpa autem eum ad omnis.</p>
-            <h2>Flight search shortcuts</h2>
-            <v-btn
-              large
-              color="error"
-              href="/searched?originCode=BUD&originFull=Budapest&destinationCode=VIE&destinationFull=Vienna&departureDate=2019-01-16&arrivalDate=2019-01-21&priceMin&priceMax&setClass=0">
-              Budapest to Vienna
-            </v-btn>
-            <v-btn
-              large
-              color="purple"
-              dark
-              href="/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York">
-              Vienna to New York
-            </v-btn>
-          </main>
+        <v-flex ma-2 xs12 sm6 md7 lg8>
+            <v-card>
+              <v-img
+                class="white--text"
+                height="400px"
+                src="https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=0d424e0c724d80f5f3b23c02201b8648&auto=format&fit=crop&w=1949&q=80"
+                >
+                <v-container fill-height fluid>
+                  <v-layout align-end justify-start row fill-height>
+                    <v-flex xs12>
+                      <span class="headline">Find your perfect adventure!</span>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-img>
+            <v-card-title>
+              <p class="subheading font-weight-regular"> Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum?
+                Sit sequi commodi culpa autem eum ad omnis.</p>
+              <h2>Flight search shortcuts</h2>
+            </v-card-title>
+            <v-card-actions>
+              <v-container>
+                <v-btn
+                large
+                color="error"
+                href="/searched?originCode=BUD&originFull=Budapest&destinationCode=VIE&destinationFull=Vienna&departureDate=2019-01-16&arrivalDate=2019-01-21&priceMin&priceMax&setClass=0">
+                Budapest to Vienna
+                </v-btn>
+                <v-btn
+                  large
+                  color="purple"
+                  dark
+                  href="/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York&tickets=1&setClass=0">
+                  Vienna to New York
+                </v-btn>
+                <v-btn
+                  large
+                  color="success"
+                  dark
+                  href="/searched?originCode=HEL&originFull=Helsinki&destinationCode=KUL&destinationFull=Kuala%20Lumpur&tickets=2&setClass=1">
+                  Madrid to Kuala Lumpur
+                </v-btn>
+              </v-container>
+            </v-card-actions>
+          </v-card>
         </v-flex>
       </v-layout>
     </v-container>
@@ -86,7 +111,8 @@
     arrivalDate: new Date().addDays(7).toISOString().substr(0,10),
     priceMin: 50,
     priceMax: 3000,
-    setClass: 0
+    setClass: 0,
+    tickets: 1,
   };
 
   export default {

@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 // Setup Vue.js
 window.Vue = require('vue');
 
@@ -7,14 +8,26 @@ Vue.config.performance = true;
 // Setup Vue Router
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-import '@mdi/font/css/materialdesignicons.css'
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
+import '@mdi/font/css/materialdesignicons.css';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+
+import colors from 'vuetify/es5/util/colors';
+import VueHtml2Canvas from 'vue-html2canvas';
+
+Vue.use(VueHtml2Canvas);
 
 Vue.use(VueRouter);
 Vue.use(Vuetify, {
-  iconfont: 'mdi'
+  iconfont: 'mdi',
+  theme: {
+    primary: '#100D23',
+    secondary: '#FF4081',
+    accent: '#372963',
+    success: '#00FF9C',
+    error: '#FF4081'
+  }
 });
 
 Vue.use(VueResource);

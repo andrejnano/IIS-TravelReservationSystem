@@ -11,7 +11,7 @@
         dark
       >
         <v-card-text>
-          Loading flight information...
+           {{ loadingMsg }}
           <v-progress-linear
             indeterminate
             color="white"
@@ -25,14 +25,14 @@
         <v-flex xs12>
           <v-card v-if="loaded">
             <v-card-title
-              class="headline grey lighten-2"
+              class="headline"
               primary-title
               v-html="expandedTitle"
             >
             </v-card-title>
 
-            <v-card-text>
-              <v-list three-line subheader>
+            <v-card-text ref="printMe" >
+              <v-list three-line subheader :light="printingNow">
 
                 <v-divider></v-divider>
                 <v-subheader>Departing flights</v-subheader>
@@ -156,22 +156,27 @@
       </v-layout>
     </v-container>
 
-    <v-container v-if="!loggedIn">
-    <div class='headline text-xs-center'>
-      You must be logged in to create a reservation
-    </div>
-    <login>
-    </login>
+    <v-container v-if="!loggedIn && !createdReservation && loaded" fluid>
+      <div class='headline text-xs-center'>
+        You must be logged in to create a reservation
+      </div>
+      <v-layout justify-center column>
+        <v-flex xs12>
+          <login>
+          </login>
+          <div class='headline text-xs-center'>
+            or
+          </div>
+        </v-flex>
 
-    <div class='headline text-xs-center'>
-      or
-    </div>
-
-    <register>
-    </register>
+       <v-flex xs12>
+          <register>
+          </register>
+       </v-flex>
+      </v-layout>
     </v-container>
 
-    <v-container fluid>
+    <v-container fluid >
       <v-layout justify-center align-center>
         <v-flex xs6 v-if="loggedIn && loaded" ma-2>
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -242,10 +247,39 @@
          </v-flex>
       </v-layout>
     </v-container>
+
+    <v-dialog
+      v-model="createdReservation"
+      hide-overlay
+      persistent
+      color="success"
+      width="90%"
+      height="60%"
+    >
+      <v-card>
+        <v-card-text>
+          <v-alert
+            :value="true"
+            type="success"
+          >
+            SUCCESS!! Reservation with id <strong>{{ reservationID }}</strong> was created!
+          </v-alert>
+         Would you like to print an itinerary ?
+        </v-card-text>
+        <v-card-actions>
+          <v-btn medium color="secondary" @click="printItinerary">Print itinerary</v-btn>
+          <v-btn medium color="gray" href="/">Go back to search</v-btn>
+          <v-btn medium color="gray" href="/profile">View my reservations</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-content>
 </template>
 
 <script>
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import axios from 'axios';
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
@@ -266,13 +300,15 @@ export default {
   data() {
     return {
       isLoading: true,
+      loadingMsg: "",
       passengers: [],
       flightParams: {
         ft_1: this.$route.query.ft_1 != null ? this.$route.query.ft_1 : null,
         ft_2: this.$route.query.ft_2 != null ? this.$route.query.ft_2 : null,
         fb_1: this.$route.query.fb_1 != null ? this.$route.query.fb_1 : null,
         fb_2: this.$route.query.fb_2 != null ? this.$route.query.fb_2 : null,
-        tickets: this.$route.query.tickets != null ? this.$route.query.tickets : null,
+        class: this.$route.query.class != null ? Number(this.$route.query.class): null,
+        tickets: this.$route.query.tickets != null ? Number(this.$route.query.tickets) : null,
       },
       result: {},
       loaded: false,
@@ -288,26 +324,65 @@ export default {
         v => v.length <= 14 || 'Name must be less than 10 characters'
       ],
       summary: [],
+      output: null,
+      printingNow: false,
+      createdReservation: false,
     }
   },
   methods: {
+    printItinerary() {
+      // changes theme to light, waits for component reload, than calls PDF creation as callback
+      this.printingNow = true;
+      this.isLoading = true;
+      this.loadingMsg = "Printing itinerary...";
+      setTimeout(this.generatePDF2Canvas, 1000);
+    },
+    generatePDF2Canvas: async function(){
+
+      const el = this.$refs.printMe;
+      const options = {
+        type: 'dataURL',
+        windowWidth: 1300,
+        windowHeight: 760,
+      }
+      this.output = await this.$html2canvas(el, options);
+
+      let doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+      });
+      doc.text('Itinerary for a reservation #' + this.reservationID, 10, 10);
+      doc.setFontSize(10);
+      doc.fromHTML(this.expandedTitle, 10, 20);
+      doc.addImage(this.output, 'JPEG', 10, 40, 210, 100);
+      doc.save('itinerary_' + this.reservationID + '.pdf');
+      this.printingNow = false;
+      this.isLoading = false;
+    },
     clear () {
       this.$refs.form.reset();
     },
     getReservation() {
+      this.isLoading = true;
+      this.loadingMsg = "Creating temporary reservation...";
       axios.post('/api/reservation', {total_price: this.totalPrice }).then((response) => {
-      if (response.status == 200) {
-          this.loggedIn = true;
-          this.reservationID = response.data.new_reservation_id;
-          console.log('%c LOGGED IN, RESERVATION w/ ID: ' + this.reservationID + ' & price: ' + this.totalPrice + ' CREATED! ', 'background: #00ff00; color: #ffffff');
-        } else {
-          console.log('%c NOT LOGGED IN! ', 'background: #ff0000; color: #ffffff');
-          this.loggedIn = false;
-        }
-    });
+        if (response.status == 200) {
+            this.loggedIn = true;
+            this.reservationID = response.data.new_reservation_id;
+            console.log('%c LOGGED IN, RESERVATION w/ ID: ' + this.reservationID + ' & price: ' + this.totalPrice + ' CREATED! ', 'background: #00ff00; color: #ffffff');
+            this.isLoading = false;
+          } else {
+            console.log('%c NOT LOGGED IN! ', 'background: #ff0000; color: #ffffff');
+            this.loggedIn = false;
+            this.isLoading = false;
+          }
+      }).catch((error) => { this.isLoading = false; });
     },
     getFlight(params) {
 
+      this.isLoading = true;
+      this.loadingMsg = "Loading flight information...";
       this.loaded = false;
 
       let query = `/api/flight?`;
@@ -333,7 +408,21 @@ export default {
         query += `&tickets=${params.tickets}`;
       }
 
-      query += `&class=0`;
+      if (params.class != null)
+      {
+        if (params.class == 0)
+        {
+          query += `&class=economy`;
+        }
+        else if (params.class == 1)
+        {
+          query += `&class=business`;
+        }
+        else if (params.class == 2)
+        {
+          query += `&class=first`;
+        }
+      }
 
       axios.get(query).then((response) => {
 
@@ -437,7 +526,7 @@ export default {
               console.log("Post request error on /api/reserve : " + error);
             });
           }
-
+          this.createdReservation = true;
         }
         else { // One Way
           var i = 0;
@@ -459,6 +548,7 @@ export default {
               console.log("Post request error on /api/reserve : " + error);
             });
           }
+          this.createdReservation = true;
         }
 
 
@@ -842,5 +932,14 @@ export default {
 </script>
 
 <style>
+
+/* for printing to PDF */
+.theme--dark.v-list .v-list__tile__sub-title {
+  display: inline-block !important;
+}
+.theme--light.v-list .v-list__tile__sub-title {
+  display: inline-block !important;
+}
+
 
 </style>
