@@ -307,7 +307,8 @@ export default {
         ft_2: this.$route.query.ft_2 != null ? this.$route.query.ft_2 : null,
         fb_1: this.$route.query.fb_1 != null ? this.$route.query.fb_1 : null,
         fb_2: this.$route.query.fb_2 != null ? this.$route.query.fb_2 : null,
-        tickets: this.$route.query.tickets != null ? this.$route.query.tickets : null,
+        class: this.$route.query.class != null ? Number(this.$route.query.class): null,
+        tickets: this.$route.query.tickets != null ? Number(this.$route.query.tickets) : null,
       },
       result: {},
       loaded: false,
@@ -407,7 +408,21 @@ export default {
         query += `&tickets=${params.tickets}`;
       }
 
-      query += `&class=0`;
+      if (params.class != null)
+      {
+        if (params.class == 0)
+        {
+          query += `&class=economy`;
+        }
+        else if (params.class == 1)
+        {
+          query += `&class=business`;
+        }
+        else if (params.class == 2)
+        {
+          query += `&class=first`;
+        }
+      }
 
       axios.get(query).then((response) => {
 

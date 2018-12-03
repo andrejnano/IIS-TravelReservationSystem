@@ -22,7 +22,7 @@ class SearchController extends Controller
                 o.airport_code AS o_airport, o.city AS o_city, o.country AS o_country,
                 d.airport_code AS d_airport, d.city AS d_city, d.country AS d_country
             FROM flights f, airports o, airports d
-            WHERE 
+            WHERE
         ";
     }
 
@@ -195,7 +195,7 @@ class SearchController extends Controller
         $row_array["flight_number"] = $r->flight_number;
         $row_array["departure_time"] = date('Y-m-d G:i:s', strtotime($r->departure_time));
         $row_array["arrival_time"] = date('Y-m-d G:i:s', strtotime($r->arrival_time));
-        
+
         [$flight_time, $flight_time_str] = $this->get_flight_time($r->arrival_time, $r->departure_time);
         $start_price = 0.55;
         $price = $start_price*200 + $start_price * ($flight_time + 1/($flight_time));
@@ -216,12 +216,12 @@ class SearchController extends Controller
         $row_array["price"] = (int)$price;
         $row_array["seat_class"] = $seat_class;
         $row_array["tickets"] = $request['tickets'];
-        $row_array["origin"] = 
+        $row_array["origin"] =
             array("airport" => $r->o_airport,
                 "city" => $r->o_city,
                 "country" => $r->o_country
             );
-        $row_array["destination"] = 
+        $row_array["destination"] =
             array("airport" => $r->d_airport,
                 "city" => $r->d_city,
                 "country" => $r->d_country
@@ -235,7 +235,7 @@ class SearchController extends Controller
      * @return array object_representation
      */
     protected function create_object_representation($r, Request $request) {
-        $all = array(); 
+        $all = array();
         $curr_price = 0;
         foreach($r as $flight) {
             $obj = $this->obj_rep_flight($flight, $request, $curr_price);
@@ -253,7 +253,7 @@ class SearchController extends Controller
         $tmp2 = $all[0]['departure_time'];
         $all['total_time'] = $this->get_flight_time($tmp1, $tmp2)[1];
         $all['total_time_mins'] = $this->get_flight_time($tmp1, $tmp2)[0];
-        
+
         if ($request['min_price'] && $curr_price <= $request['min_price']) {
             return NULL;
         }
@@ -261,7 +261,7 @@ class SearchController extends Controller
             return NULL;
         }
         $all['total_price'] = $curr_price;
-        return $all;        
+        return $all;
     }
 
     /**
@@ -275,7 +275,7 @@ class SearchController extends Controller
         $origin = $pdo->quote($request_arr['origin']);
         $destination = $pdo->quote($request_arr['destination']);
         $query = $this->get_flight_query();
-        
+
         if (!isset($request_arr['tickets'])) {
             $request_arr['tickets'] = 1;
         }
@@ -342,7 +342,7 @@ class SearchController extends Controller
             return $selected;
         } catch (Exception $e) {
             abort(500);
-        }        
+        }
     }
     /**
     * select apropriate flights also not direct possible
@@ -401,15 +401,15 @@ class SearchController extends Controller
             $max_t = $request_arr['max_t'];
         if ($request_arr['arrival_date'] || $request_arr['arrival_date'] === '0')
             $arrival_date = $request_arr['arrival_date'];
-        
+
         $results = $this->select_flights($request_arr, false, false, false);
-        
+
         $return_arr = array();
         foreach($results as $r){
             $row_array['there'] = $this->create_object_representation($r, $request_arr);
-            
-            
-            
+
+
+
 
             if (!is_null($min_t) || !is_null($max_t) || !is_null($arrival_date)) {
                 $back_request = $request_arr;
@@ -421,9 +421,9 @@ class SearchController extends Controller
                 $back_request['arrival_time'] = end($r)->arrival_time;
 
                 $returns = $this->select_flights($back_request, true, true, true);
-                
+
                 $return_flight_arr = array();
-                
+
                 foreach($returns as $ret) {
                     $back_flight = $this->create_object_representation($ret, $request_arr);
                     if ($back_flight) {
@@ -460,14 +460,17 @@ class SearchController extends Controller
         try {
             if (isset($request['class'])) {
                 switch ($request['class']) {
-                    case '2':
+                    case '0':
                         $request['class'] = 'economy';
                     break;
                     case '1':
                         $request['class'] = 'business';
                     break;
-                    case '0':
+                    case '2':
                         $request['class'] = 'first';
+                    break;
+                    default:
+                      $request['class'] = 'economy';
                     break;
                 }
             }
