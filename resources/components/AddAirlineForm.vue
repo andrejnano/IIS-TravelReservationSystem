@@ -80,8 +80,7 @@ export default {
         v => !!v || 'Airline code is required',
         v => (v && v.length == 2) || 'Airline code must be 2 characters',
         v => /[A-Z]{2}/.test(v) || 'Airline code must be valid',
-        v => !this.airlineIDs.includes(v) || 'Already taken',
-
+        //v => !this.airlineIDs.includes(v) || 'Already taken'
       ],
       airportRules: [
         v => !!v || 'Airline code is required',

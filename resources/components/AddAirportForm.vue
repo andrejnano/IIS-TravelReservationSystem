@@ -10,19 +10,19 @@
                 <v-text-field
                   v-model="airportCode"
                   :rules="airportCodeRules"
-                  label="Airport code"
+                  label="Airport code (e.g. 'PRG')"
                   required
                 ></v-text-field>
                 <v-text-field
                   v-model="city"
                   :rules="cityRules"
-                  label="City"
+                  label="City (e.g. 'Prague')"
                   required
                 ></v-text-field>
                 <v-text-field
                   v-model="country"
                   :rules="cityRules"
-                  label="Country"
+                  label="Country (e.g. 'Czech Republic')"
                   required
                 ></v-text-field>
                 <v-btn :disabled="!valid" @click="add">add airport</v-btn>
@@ -63,9 +63,9 @@ export default {
       },
       
       cityRules: [
-        v => !!v || 'City name is required',
-        v => (v && v.length <= 50) || 'City name must be shorter than 50 chars',
-        v => /[A-Z]+/.test(v) || 'City must be valid'
+        v => !!v || 'Name is required',
+        v => (v && v.length <= 50) || 'Name must be shorter than 50 chars',
+        v => /[A-Z]+/.test(v) || 'Name must be valid'
       ],
       airportCodeRules: [
         v => !!v || 'Airport code is required',

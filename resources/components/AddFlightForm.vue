@@ -72,8 +72,8 @@ export default {
     return {
       origin: '',
       destination: '',
-      departure_time: '',
-      arrival_time: '',
+      departure_time: '2019-01-01 00:00:00',
+      arrival_time: '2019-01-01 00:00:00',
       airplane: '',
       airline: '', 
       message: '',
@@ -81,18 +81,6 @@ export default {
       airlineIDs: [],
       airplaneIDs: [],
       showPasswordField: false,
-      rules: {
-          required: value => !!value || 'Required.',
-          min: v => (v && v.length >= 8) || 'Min 8 characters'
-      },
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
-      ],
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
-      ],
       valid: true
     }
   },
