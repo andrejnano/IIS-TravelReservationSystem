@@ -99,6 +99,10 @@
           </v-flex>
 
           <v-flex xs12 sm12 md12 lg12>
+            <search-flight-form v-if="adminState == 22"/>
+          </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
             <search-airline-form v-if="adminState == 23"/>
           </v-flex>
 
@@ -140,7 +144,7 @@
   import AddAirlineForm from '../components/AddAirlineForm.vue';
 
   import SearchUserForm from '../components/SearchUserForm.vue';
-
+  import SearchFlightForm from '../components/SearchFlightForm.vue';
   import SearchAirlineForm from '../components/SearchAirlineForm.vue';
   import SearchAirplaneForm from '../components/SearchAirplaneForm.vue';
   import SearchAirportForm from '../components/SearchAirportForm.vue';
@@ -257,6 +261,7 @@
       'add-airport-form': AddAirportForm,
       'add-airplane-form': AddAirplaneForm,
       'search-user-form': SearchUserForm,
+      'search-flight-form': SearchFlightForm,
       'search-airline-form': SearchAirlineForm,
       'search-airplane-form': SearchAirplaneForm,
       'search-airport-form': SearchAirportForm,
