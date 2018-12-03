@@ -12,8 +12,8 @@
   "devDependencies": {
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-pro": "^5.5.0",
-    "@mdi/font": "^3.0.39",
-    "axios": "^0.18",
+    "@mdi/font": "^3.2.89",
+    "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.1",
@@ -22,7 +22,7 @@
     "lodash": "^4.17.5",
     "popper.js": "^1.12",
     "style-loader": "^0.23.1",
-    "vue": "^2.5.7"
+    "vue": "^2.5.17"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",

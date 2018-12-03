@@ -6,6 +6,40 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <title>Air Tickets Reservation</title>
 <style type="text/css">
+  html {
+    font-family:
+      system-ui,
+      /* macOS 10.11-10.12 */ -apple-system,
+      /* Windows 6+ */ Segoe UI,
+      /* Android 4+ */ Roboto,
+      /* Ubuntu 10.10+ */ Ubuntu,
+      /* Gnome 3+ */ Cantarell,
+      /* KDE Plasma 4+ */ Oxygen,
+      /* fallback */ sans-serif,
+      /* macOS emoji */ "Apple Color Emoji",
+      /* Windows emoji */ "Segoe UI Emoji",
+      /* Windows emoji */ "Segoe UI Symbol",
+      /* Linux emoji */ "Noto Color Emoji";
+    tab-size: 4;
+    word-break: break-all;
+  }
+  body {
+    text-rendering: optimizelegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+  }
+  h1 {
+    letter-spacing: -1.5px;
+    font-weight: 300;
+  }
+
+  h2 {
+    letter-spacing: -0.5px;
+    font-weight: 300;
+  }
+
 	table { border-collapse: collapse; }
 	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
 	dt { font-weight: bold; margin-top: 0.5em; }
@@ -13,23 +47,23 @@
 </head>
 <body>
 
-<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu 
+<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu
  podle použitého editoru -->
 
 <h1>Flight Ticket Reservation System</h1> <!-- Nahradte názvem svého zadání -->
 
 <dl>
 	<dt>Authors</dt>
-	<dd>Andrej Naňo <!-- Nahra�te skute�n�m jm�nem a e-mailem autora a popisem �innosti -->
+	<dd>Andrej Naňo
 	    <a href="mailto:xnanoa00@stud.fit.vutbr.cz">xnanoa00@stud.fit.vutbr.cz</a> -
-		frontend, aplication interface design, flight itinerary creation, javascript, vue
+		frontend, view--view-model, aplication interface design, flight itinerary creation, javascript, vue
 	</dd>
-	<dd>Stanislav Mechl <!-- Nahra�te skute�n�m jm�nem a e-mailem autora a popisem �innosti -->
-	    <a href="mailto:xmechl00@stud.fit.vutbr.cz">xmechl00@stud.fit.vutbr.cz</a> -
+	<dd>Peter Marko
+	    <a href="mailto:xmarko15@stud.fit.vutbr.cz">xmarko15@stud.fit.vutbr.cz</a> -
     	backend, database from IDS adjustment, create session for logged user, search flight by parameters, php, mysql
 	</dd>
-  <dd>Peter Marko <!-- Nahra�te skute�n�m jm�nem a e-mailem autora a popisem �innosti -->
-	    <a href="mailto:xmarko15@stud.fit.vutbr.cz">xmarko15@stud.fit.vutbr.cz</a> -
+	<dd>Stanislav Mechl
+	    <a href="mailto:xmechl00@stud.fit.vutbr.cz">xmechl00@stud.fit.vutbr.cz</a> -
     backend, user login implementation, API for database insertion, frontend for search tables, vue, php
 	</dd>
 	<dt>URL of the application</dt>
@@ -48,21 +82,31 @@
 </table>
 
 <h2>Implementation</h2>
-<p>
-	The application is divided into to main parts, frontend and backend. We have used this division so the 
-	two parts could be implemented simultaneously without conflicts. One student can implement frontend and 
-	other backend without conflicts and everybody can do what suits him better. Between this two main parts 
-	is application interface API, which was defined at the beginning of the project. API consists of 
-	multiple definitions of routes and their usages and return values. Frontend can access resources from 
-	backend using two types of requests GET or POST. Backend returns JSON containing information from the 
-	database as response. Frontend then parses JSON and shows information to user.
-</p>
-<p>
-	For implementation we have used two frameworks, Laravel for backend php implementation and Vue for 
-	frontend javascript implementation. With this frameworks we have been able to create more user friendly application and simple things were automated by the framework.
-</p>
+  <p>
+    The application's architecture is heavily inspired by the well known MVC (Model View Controller) architecture.
+    But to make things simpler, we decided to divide our application into just two segments, frontend and backend.
+    This allowed us to develop both user interface and business logic functionality simultaneously without conflicts.
+    Another advantage of this separation of concerns was that we could choose those parts of the project, that suited us better.
+  </p>
+  <p>
+    However, to make the application work as whole system, these two parts need to communicate and react to each other.
+    For this, we designed and implemented an Application Programming Interface (API).
+    The API consists of multiple definitions of routes and their usages and return values.
+  </p>
+  <p>
+    Frontend can access resources from backend using two types of requests GET or POST. Backend returns JSON containing information from the
+    database as a response. Frontend then parses JSON and shows information to user.
+  </p>
+  <p>
+    For implementation we have used two frameworks, Laravel for the backend PHP implementation and Vue.js for frontend javascript implementation.
+    Vue framework allowed us to create a modern, Single Page Application that is usable by both desktop and mobile devices.
+    Laravel made reocurring tasks a lot simpler, by automating and already bootstraping a whole range of functionality out-of-the-box.
+    With this frameworks we have been able to create more user friendly application.
+  </p>
 <h2>Architecture</h2>
-<img src="architecture.jpg" alt="Architecture of information system">
+<div>
+  <img src="architecture.jpg" alt="Architecture of information system">
+</div>
 
 <h2>Backend</h2>
 <ul>
@@ -74,12 +118,40 @@
 
 <h2>Frontend</h2>
 <ul>
-	<li>Node.js</li>
-	<li>Gulp (code processing, minimizing, optimization, live reload, transpiling/compilation)</li>
-	<li>SASS -> CSS</li>
-	<li>HTML</li>
-	<li>Javascript</li>
-	<li>Vue</li>
+  <li><strong>JavaScript (ECMAScript 6)</strong></li>
+  <li><strong>Vue.js framework</strong></li>
+  <li><strong>Vuetify</strong></li>
+  <li>Dependencies:
+    <ul>
+      <li> "@babel/polyfill": "^7.0.0", </li>
+      <li> "@fortawesome/fontawesome-svg-core": "^1.2.8",</li>
+      <li> "@fortawesome/free-solid-svg-icons": "^5.5.0",</li>
+      <li> "@fortawesome/vue-fontawesome": "^0.1.2",</li>
+      <li> "html2canvas": "^1.0.0-alpha.12",</li>
+      <li> "i": "^0.3.6",</li>
+      <li> "jspdf": "^1.4.1",</li>
+      <li> "jspdf-autotable": "^2.3.5",</li>
+      <li> "material-design-icons-iconfont": "^4.0.2",</li>
+      <li> "moment": "^2.22.2",</li>
+      <li> "npm": "^6.4.1",</li>
+      <li> "vue-html2canvas": "0.0.4",</li>
+      <li> "vue-loading-overlay": "^3.1.0",</li>
+      <li> "vue-resource": "^1.5.1",</li>
+      <li> "vue-router": "^3.0.1",</li>
+      <li> "vue-search-select": "^2.7.0",</li>
+      <li> "vue-slider-component": "^2.8.2",</li>
+      <li> "vuejs-datepicker": "^1.5.4",</li>
+      <li> "vuetify": "^1.3.11",</li>
+      <li> "webfontloader": "^1.6.28"</li>
+    </ul>
+  </li>
+	<li>Developement
+    <ul>
+      <li>Webpack</li>
+      <li>Node.js</li>
+      <li>Webpack</li>
+    </ul>
+  </li>
 </ul>
 <h2>
 	Application Interface

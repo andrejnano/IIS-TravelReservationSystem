@@ -5,12 +5,28 @@
       <v-layout row justify-center>
         <v-flex xs10 sm8 md6 lg4 pa-4 ma-4>
           <v-card>
-            <v-card-title class="headline">Contact page</v-card-title>
-            <v-card-text>Adipisicing aute consequat excepteur aliquip quis labore Lorem sunt. In aute mollit esse consequat. Deserunt tempor cillum minim do Lorem exercitation laborum sint aliqua laboris ea deserunt elit. Adipisicing tempor nostrud sint dolore dolor fugiat consectetur.
-
-Anim ad ipsum adipisicing proident anim qui Lorem id ut amet dolore deserunt et eiusmod. Esse id aliquip dolor sit ipsum aliquip non aliqua do elit commodo sint incididunt eiusmod. Adipisicing proident anim consequat sint ut sit.
-
-Excepteur occaecat eiusmod voluptate fugiat. Anim qui cillum nulla labore voluptate enim deserunt culpa amet ipsum eu dolore amet dolor. Occaecat nisi exercitation consequat pariatur voluptate nulla in occaecat eu. Nostrud id voluptate minim cupidatat esse cillum sunt do irure proident ex Lorem velit. Sint qui Lorem fugiat pariatur. Exercitation incididunt cupidatat proident eu cillum non dolor irure adipisicing laborum. Cupidatat exercitation proident sunt adipisicing laborum nostrud exercitation id elit aliquip sunt do ut.
+            <v-card-title class="headline">Andrej Nano</v-card-title>
+            <v-card-text>
+              <span class='mdi mdi-email-outline'/> <big>xnanoa00@stud.fit.vutbr.cz</big> <br><br>
+              frontend, aplication interface design, flight itinerary creation, javascript, vue
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs10 sm8 md6 lg4 pa-4 ma-4>
+          <v-card>
+            <v-card-title class="headline">Peter Marko</v-card-title>
+            <v-card-text>
+              <span class='mdi mdi-email-outline'/> <big>xmarko15@stud.fit.vutbr.cz</big> <br><br>
+              backend, database from IDS adjustment, create session for logged user, search flight by parameters, php, mysql
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs10 sm8 md6 lg4 pa-4 ma-4>
+          <v-card>
+            <v-card-title class="headline">Stanislav Mechl</v-card-title>
+            <v-card-text>
+              <span class='mdi mdi-email-outline'/> <big>xmechl00@stud.fit.vutbr.cz</big> <br><br>
+              backend, user login implementation, API for database insertion, frontend for search tables, vue, php
             </v-card-text>
           </v-card>
         </v-flex>
