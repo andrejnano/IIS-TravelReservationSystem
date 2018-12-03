@@ -7,21 +7,25 @@
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-btn flat to="/about">About</v-btn>
-      <v-btn flat to="/contact">Contact</v-btn>
+      <v-btn flat to="/about"><v-icon>mdi-information</v-icon>&nbsp;About</v-btn>
+      <v-divider vertical></v-divider>
+      <v-btn flat to="/contact"><v-icon>mdi-account-box</v-icon>&nbsp;Contact</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <template>
       <v-toolbar-items v-if="isLoggedIn">
       <v-toolbar-items v-if="isAdmin">
-        <v-btn flat to="/admin">Edit database</v-btn>
+        <v-btn flat to="/admin"><v-icon>mdi-database-edit</v-icon>&nbsp;Edit database</v-btn>
+        <v-divider vertical></v-divider>
       </v-toolbar-items>
-        <v-btn flat to="/profile">Logged in as {{ fullName }}</v-btn>
-        <v-btn @click="logout" flat>Log out</v-btn>
+        <v-btn flat to="/profile"><v-icon>mdi-account</v-icon>&nbsp;Logged in as {{ fullName }}</v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn @click="logout" flat><v-icon>mdi-logout</v-icon>&nbsp;Log out</v-btn>
       </v-toolbar-items>
       <v-toolbar-items v-else>
-        <v-btn to="/login" flat>Sign In</v-btn>
-        <v-btn to="/register" flat color='accent'>Register</v-btn>
+        <v-btn to="/login" flat><v-icon>mdi-account</v-icon>&nbsp;Sign In</v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn to="/register" flat color='accent'><v-icon>mdi-account-plus</v-icon>&nbsp;Register</v-btn>
       </v-toolbar-items>
     </template>
   </v-toolbar>

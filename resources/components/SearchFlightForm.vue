@@ -3,7 +3,7 @@
 
       <!-- TOOLBAR -->
       <v-toolbar card prominent>
-        <v-toolbar-title><v-icon>mdi-airplane-takeoff</v-icon>&nbsp;&nbsp;Flights table</v-toolbar-title>
+        <v-toolbar-title><v-icon>mdi-airplane-takeoff</v-icon>&nbsp;&nbsp;Flights table (200 newest flights)</v-toolbar-title>
       </v-toolbar>
 
         <!-- SEARCH FORM -->
@@ -114,7 +114,7 @@ export default {
     }
   },
   created () {
-    axios.get('/api/flights', {
+    axios.get('/api/new_flights', {
         }).then((response) => {
             if (response.status == 200) {
               this.flights = response.data;
@@ -148,7 +148,7 @@ export default {
   methods: {
     search() {
       console.log(this.searchAirline + " " + this.searchOrigin + " " + this.searchDestination);
-      axios.get('/api/flights', {
+      axios.get('/api/new_flights', {
         }).then((response) => {
             if (response.status == 200) {
                 this.flights = [];
