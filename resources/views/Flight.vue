@@ -22,7 +22,7 @@
     </v-dialog>
     <v-container fluid>
       <v-layout justify-center column>
-        <v-flex xs12>
+        <v-flex xs12 sm12 md10 lg8>
           <v-card v-if="loaded">
             <v-card-title
               class="headline"

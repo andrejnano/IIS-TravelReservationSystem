@@ -2,11 +2,11 @@
   <v-content>
     <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
     <v-container fluid>
-      <v-layout ma-2 row align-start>
-        <v-flex ma-2 xs12 sm5 md4 lg4>
+      <v-layout row wrap justify-center>
+        <v-flex ma-2 xs12 sm5 md5 lg4>
           <flight-search-form v-bind="formValuesToPass" />
         </v-flex>
-        <v-flex ma-2 xs12 sm6 md7 lg8>
+        <v-flex ma-2 xs12 sm6 md6 lg7>
             <v-card>
               <v-img
                 class="white--text"
