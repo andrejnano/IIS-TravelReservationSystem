@@ -62,7 +62,7 @@
 	frontend javascript implementation. With this frameworks we have been able to create more user friendly application and simple things were automated by the framework.
 </p>
 <h2>
-	Aplication Interface
+	Application Interface
 </h2>
 <table>
 <tbody>
@@ -75,163 +75,153 @@
 <tr></tr>
 <td>/api/search</td>
 <td>get</td>
-<td></td>
-<td></td>
+<td>origin, destination, tickets, class, min_price, max_price, departure_date, arrival_date</td>
+<td>Returns JSON containing flights, which satisfies the condition</td>
 <tr></tr>
 <td>/api/flight</td>
 <td>get</td>
-<td></td>
-<td></td>
+<td>ft_1, ft_2, fb_1, fb_2, tickets, class</td>
+<td>Returns detail flight information about max for flights, which will be booked as reservation</td>
 <tr></tr>
 <td>/api/reservation</td>
 <td>post</td>
 <td></td>
-<td></td>
+<td>creates new empty reservation for currently logged in user</td>
 <tr></tr>
 <td>/api/reserve</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>res_id, ticket_id, email, first_name, last_name</td>
+<td>Assigns ticket to reservation</td>
 <tr></tr>
 <td>/api/delete_reservation</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>res_id</td>
+<td>Removes specified reservation, user can remove only his reservations</td>
 <tr></tr>
 <td>/api/login</td>
 <td>post</td>
-<td></td>
-<td></td>
-<tr></tr>
+<td>email</td>
+<td>password</td>
+<tr>Will set session parameters for user</tr>
 <td>/api/logout</td>
 <td>post</td>
 <td></td>
-<td></td>
-<tr></tr>
-<td>/api/logout</td>
-<td>get</td>
-<td></td>
-<td></td>
+<td>Will clear session</td>
 <tr></tr>
 <td>/api/session</td>
 <td>get</td>
 <td></td>
-<td></td>
+<td>Returns current session parameters and data about user</td>
 <tr></tr>
 <td>/api/register</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>email, password, first_name, last_name</td>
+<td>Will create new user and log him in</td>
 <tr></tr>
 <td>/api/new_password</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>new_password</td>
+<td>Changes password of current user</td>
 <tr></tr>
 <td>/api/update_information</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>first_name, last_name, email</td>
+<td>Updates information about current user</td>
 <tr></tr>
 <td>/api/add_flight</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>airplane, airline, departure_time, arrival_time, origin, destination</td>
+<td>Create new flight, can be only used by admin</td>
 <tr></tr>
 <td>/api/add_airline</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>airline, full_name, nationality, hub</td>
+<td>Create new airline in database, can be only used by admin</td>
 <tr></tr>
 <td>/api/add_airport</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>airport_code, city, country</td>
+<td>Create new airport, can be only used by admin</td>
 <tr></tr>
 <td>/api/add_airplane</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>producer, model, fclass_seats, bclass_seats, eclass_seats, airline</td>
+<td>Create new airplane in DB, can be only used by admin</td>
 <tr></tr>
 <td>/api/add_user</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>first_name, last_name, email, password</td>
+<td>Create new user, can be only used by admin</td>
 <tr></tr>
 <td>/api/update_airline</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>full_name, nationality, hub, id_logo</td>
+<td>Updates information about airline, can be only used by admin</td>
 <tr></tr>
 <td>/api/update_user</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>first_name, last_name, email, password</td>
+<td>Updates information about user, can be only used by admin</td>
 <tr></tr>
 <td>/api/delete_user</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>id</td>
+<td>Removes user from DB, can be used by admin user</td>
 <tr></tr>
 <td>/api/my_reservations</td>
 <td>post</td>
 <td></td>
-<td></td>
-<tr></tr>
-<td>/api/reservation_tickets</td>
-<td>post</td>
-<td></td>
-<td></td>
+<td>Show all reservations of current user</td>
 <tr></tr>
 <td>/api/return_ticket</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>ticket</td>
+<td>Deletes ticket from database</td>
 <tr></tr>
 <td>/api/delete_flight</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>flight_number</td>
+<td>Removes selected flight from DB, can be used by admin user</td>
 <tr></tr>
 <td>/api/delete_airplane</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>airplane</td>
+<td>Removes selected airplane from DB, can be used by admin user</td>
 <tr></tr>
 <td>/api/delete_airline</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>airline</td>
+<td>Removes selected airline from DB, can be used by admin user</td>
 <tr></tr>
 <td>/api/airports</td>
 <td>get</td>
 <td></td>
-<td></td>
+<td>Returns information about all airports in DB</td>
 <tr></tr>
 <td>/api/flights</td>
 <td>get</td>
 <td></td>
-<td></td>
+<td>Returns information about all flights in DB</td>
 <tr></tr>
 <td>/api/airplanes</td>
 <td>get</td>
 <td></td>
-<td></td>
+<td>Returns information about all airplanes in DB</td>
 <tr></tr>
 <td>/api/airlines</td>
 <td>get</td>
 <td></td>
-<td></td>
+<td>Returns information about all airlines in DB</td>
 <tr></tr>
 <td>/api/users</td>
 <td>get</td>
 <td></td>
-<td></td>
+<td>Returns information about all users in DB</td>
 <tr></tr>
 <td>/api/pay</td>
 <td>post</td>
-<td></td>
-<td></td>
+<td>res_id</td>
+<td>User can pay his reservation</td>
 </tbody></table>
 
 <h2>Instalation</h2>
