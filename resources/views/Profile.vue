@@ -3,87 +3,97 @@
   <v-content>
     <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
     <v-container fluid>
-          <reservations-component v-if="1"/>
-      <v-layout ma-2 row align-start>
-        <v-flex ma-2 xs11 sm9 md7 lg5>
-          <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
-            <h1 class="display-2 font-weight-bold mb-3">User information</h1><br>
-            <p class="subheading font-weight-regular"> First name:   <b>{{this.user.first_name}}</b></p>
-            <p class="subheading font-weight-regular"> Last name:   <b>{{this.user.last_name}}</b></p>
-            <p class="subheading font-weight-regular"> E-mail:   <b>{{this.user.email}}</b></p>
-          </main>
-          <v-card-text class="text-xs-center">
-            <v-btn color="info" @click="updateInformation" large>
-              Update information
-              <span slot="submitLoader" class="custom-loader">
-                <v-icon light>cached</v-icon>
-              </span>
-            </v-btn>
-          </v-card-text>
-          <v-card-text class="text-xs-center">
-            <v-btn color="info" @click="newPassword" large>
-              Change password
-              <span slot="submitLoader" class="custom-loader">
-                <v-icon light>cached</v-icon>
-              </span>
-            </v-btn>
-          </v-card-text>
+      <reservations-component v-if="1"/>
+      <v-layout ma-2 row>
+        <v-flex ma-2 xs10 sm8 md6 lg6>
+          <v-card role="main">
+            <v-alert v-if="message.length > 0" type="info">
+              {{this.message}}
+            </v-alert>
+            <v-card-title class="display-2 font-weight-bold mb-3">User information</v-card-title>
+            <v-card-text class="subheading font-weight-regular"> First name:   <strong>{{this.user.first_name}}</strong></v-card-text>
+            <v-card-text  class="subheading font-weight-regular"> Last name:   <strong>{{this.user.last_name}}</strong></v-card-text>
+            <v-card-text class="subheading font-weight-regular"> E-mail:   <strong>{{this.user.email}}</strong></v-card-text>
+          </v-card>
+          <v-card>
+            <v-card-text class="text-xs-center">
+              <v-btn color="info" @click="updateInformation" large>
+                Update information
+                <span slot="submitLoader" class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </v-btn>
+            </v-card-text>
+            <v-card-text class="text-xs-center">
+              <v-btn color="info" @click="newPassword" large>
+                Change password
+                <span slot="submitLoader" class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </v-btn>
+            </v-card-text>
+          </v-card>
         </v-flex>
 
-        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="passwordFormVisible">
-          <main role="main">
-            <p class="subheading font-weight-regular"> Change password for user {{this.user.first_name}} {{this.user.last_name}}</p>
-          </main>
-
-          <v-form ref="form" v-model="valid" lazy-validation>
-                <v-text-field
-                  v-model="password"
-                  :append-icon="showPasswordField ? 'visibility_off' : 'visibility'"
-                  :rules="[rules.required, rules.min]"
-                  :type="showPasswordField ? 'text' : 'password'"
-                  name="password-input"
-                  label="Enter your new password"
-                  hint="At least 8 characters"
-                  counter
-                  @click:append="showPasswordField = !showPasswordField"
-                  required
-                ></v-text-field>
-                <v-btn :disabled="!valid" @click="savePassword">save</v-btn>
-                <v-btn @click="cancelPassword">cancel</v-btn>
-              </v-form>
-
-          <v-card-text class="text-xs-center">
-          </v-card-text>
+        <v-flex ma-2 xs10 sm8 md6 lg6 v-if="passwordFormVisible">
+          <v-card pa-2 role="main">
+            <v-card-title class="subheading font-weight-regular"> Change password for user {{this.user.first_name}} {{this.user.last_name}}</v-card-title>
+            <v-card-text>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                  <v-text-field
+                    v-model="password"
+                    :append-icon="showPasswordField ? 'visibility_off' : 'visibility'"
+                    :rules="[rules.required, rules.min]"
+                    :type="showPasswordField ? 'text' : 'password'"
+                    name="password-input"
+                    label="Enter your new password"
+                    hint="At least 8 characters"
+                    counter
+                    @click:append="showPasswordField = !showPasswordField"
+                    required
+                    color="secondary"
+                  ></v-text-field>
+                  <v-btn :disabled="!valid" @click="savePassword">save</v-btn>
+                  <v-btn @click="cancelPassword">cancel</v-btn>
+                </v-form>
+            </v-card-text>
+            <v-card-text class="text-xs-center">
+            </v-card-text>
+          </v-card>
         </v-flex>
 
-        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="informationFormVisible">
-          <main role="main">
-            <p class="subheading font-weight-regular"> Change user information</p>
-          </main>
+        <v-flex ma-2 xs10 sm8 md6 lg6  v-if="informationFormVisible">
+          <v-card pa-2 role="main">
+            <v-card-title class="subheading font-weight-regular"> Change user information</v-card-title>
 
-          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-card-text>
+              <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
                   v-model="firstName"
                   :rules="nameRules"
                   label="First name"
                   required
+                  color="secondary"
                 ></v-text-field>
                 <v-text-field
                   v-model="lastName"
                   :rules="nameRules"
                   label="Last name"
                   required
+                  color="secondary"
                 ></v-text-field>
                 <v-text-field
                   v-model="email"
                   :rules="emailRules"
                   label="E-mail"
                   required
+                  color="secondary"
                 ></v-text-field>
                 <v-btn :disabled="!valid" @click="saveInformation">save</v-btn>
                 <v-btn @click="cancelInformation">cancel</v-btn>
-          </v-form>
+              </v-form>
+            </v-card-text>
+          </v-card>
 
           <template v-if="sortToggle == 0">
           </template>

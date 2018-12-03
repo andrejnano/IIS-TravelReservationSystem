@@ -1,4 +1,10 @@
+/**
+ * Flight Reservation System
+ */
+
+
 import '@babel/polyfill'
+
 // Setup Vue.js
 window.Vue = require('vue');
 
@@ -18,16 +24,24 @@ import VueHtml2Canvas from 'vue-html2canvas';
 
 Vue.use(VueHtml2Canvas);
 
+var theme_1 = {
+  primary: '#3A55FF',
+  secondary: '#E3E834',
+  accent: '#100D23',
+};
+
+var theme_2 = {
+  primary: '#100D23',
+  secondary: '#00E676',
+  accent: '#FF4081',
+  success: '#00E676',
+  error: '#F44336'
+};
+
 Vue.use(VueRouter);
 Vue.use(Vuetify, {
   iconfont: 'mdi',
-  theme: {
-    primary: '#100D23',
-    secondary: '#FF4081',
-    accent: '#372963',
-    success: '#00FF9C',
-    error: '#FF4081'
-  }
+  theme: theme_2,
 });
 
 Vue.use(VueResource);

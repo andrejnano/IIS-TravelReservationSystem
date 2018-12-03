@@ -35,7 +35,7 @@ export default {
       <router-view></router-view>
     </transition>
 
-    <v-footer color="primary darken-2">
+    <v-footer>
       <v-container fluid pa-1>
         <v-layout row justify-start>
           <v-flex xs6 class="text-white">

@@ -34,6 +34,7 @@
         persistent-hint
         return-object
         prepend-icon="mdi-airplane-takeoff"
+        color="secondary"
         >
         </v-autocomplete>
       </v-card-text>
@@ -52,6 +53,7 @@
         persistent-hint
         return-object
         prepend-icon="mdi-airplane-landing"
+        color="secondary"
         >
         </v-autocomplete>
       </v-card-text>
@@ -73,11 +75,14 @@
             @click:clear="clearDepartureDate"
             label="Date of departure"
             prepend-icon="mdi-calendar"
+            color="secondary"
             readonly
           ></v-text-field>
           <v-date-picker
             v-model="FORMdepartureDate"
             @change="departureDateMenu = false"
+            color="secondary"
+            light
           ></v-date-picker>
         </v-menu>
       </v-card-text>
@@ -95,11 +100,15 @@
             clearable
             label="Date of arrival"
             prepend-icon="mdi-calendar"
+            color="secondary"
             readonly
           ></v-text-field>
           <v-date-picker
             v-model="FORMarrivalDate"
             @change="arrivalDateMenu = false"
+            color="secondary"
+            light
+            :min="FORMdepartureDate"
           ></v-date-picker>
         </v-menu>
       </v-card-text>
@@ -108,32 +117,35 @@
 
       <v-card-text class="text-xs-center">
         <v-container>
-          <v-layout row>
-            <v-flex xs6>
-              <v-card-title>Seating class</v-card-title>
-              <v-btn-toggle v-model="toggleClass" mandatory>
-                <v-btn flat>
-                  Economy
-                </v-btn>
-                <v-btn flat>
-                  Business
-                </v-btn>
-                <v-btn flat>
-                  First
-                </v-btn>
-              </v-btn-toggle>
-            </v-flex>
-            <v-flex xs6>
-                <v-card-title>Number of passengers</v-card-title>
-                <v-select
-                :items="numberOfPassengers"
-                label="Number of passengers"
-                v-model="FORMtickets"
-                solo
-                prepend-icon="mdi-account"
-              ></v-select>
-            </v-flex>
-          </v-layout>
+          <v-card-title>Seating class</v-card-title>
+          <v-btn-toggle dense v-model="toggleClass" mandatory>
+            <v-btn flat>
+              Economy
+            </v-btn>
+            <v-btn flat>
+              Business
+            </v-btn>
+            <v-btn flat>
+              First
+            </v-btn>
+          </v-btn-toggle>
+        </v-container>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-text class="text-xs-center">
+        <v-container>
+          <v-card-title>Number of passengers</v-card-title>
+          <v-select
+            dense
+            :items="numberOfPassengers"
+            label="Number of passengers"
+            v-model="FORMtickets"
+            solo
+            color="secondary"
+            prepend-icon="mdi-account"
+          ></v-select>
         </v-container>
       </v-card-text>
 
@@ -153,12 +165,12 @@
       <!-- SUBMIT BUTTON  -->
       <v-card-text class="text-xs-center">
         <v-btn
-          color="info"
+          color="secondary"
           @click="searchSubmit"
           large
           ripple
         >
-          <v-icon light>mdi-magnify</v-icon> Search
+          <v-icon light>mdi-magnify</v-icon><span class="display">Search for flights</span>
         </v-btn>
       </v-card-text>
 
