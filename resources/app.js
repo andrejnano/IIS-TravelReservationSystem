@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 // Setup Vue.js
 window.Vue = require('vue');
 
@@ -13,6 +14,9 @@ import '@mdi/font/css/materialdesignicons.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 
 import colors from 'vuetify/es5/util/colors';
+import VueHtml2Canvas from 'vue-html2canvas';
+
+Vue.use(VueHtml2Canvas);
 
 Vue.use(VueRouter);
 Vue.use(Vuetify, {

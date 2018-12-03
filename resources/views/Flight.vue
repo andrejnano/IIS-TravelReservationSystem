@@ -31,8 +31,8 @@
             >
             </v-card-title>
 
-            <v-card-text>
-              <v-list three-line subheader>
+            <v-card-text ref="printMe" >
+              <v-list three-line subheader :light="printingNow">
 
                 <v-divider></v-divider>
                 <v-subheader>Departing flights</v-subheader>
@@ -150,6 +150,7 @@
               <v-spacer></v-spacer>
               <span v-html="expandedBottomDescription"></span>
               <v-spacer></v-spacer>
+              <v-btn medium color="secondary" @click="printItinerary">Print itinerary</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -246,6 +247,8 @@
 </template>
 
 <script>
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import axios from 'axios';
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
@@ -288,9 +291,38 @@ export default {
         v => v.length <= 14 || 'Name must be less than 10 characters'
       ],
       summary: [],
+      output: null,
+      printingNow: false,
     }
   },
   methods: {
+    printItinerary() {
+      // changes theme to light, waits for component reload, than calls PDF creation as callback
+      this.printingNow = true;
+      setTimeout(this.generatePDF2Canvas, 1000);
+    },
+    generatePDF2Canvas: async function(){
+
+      const el = this.$refs.printMe;
+      const options = {
+        type: 'dataURL',
+        windowWidth: 1300,
+        windowHeight: 768,
+      }
+      this.output = await this.$html2canvas(el, options);
+
+      let doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+      });
+      doc.text('Itinerary for a reservation #' + this.reservationID, 10, 10);
+      doc.setFontSize(10);
+      doc.fromHTML(this.expandedTitle, 10, 20);
+      doc.addImage(this.output, 'JPEG', 10, 30, 210, 124);
+      doc.save('itinerary_' + this.reservationID + '.pdf');
+      this.printingNow = false;
+    },
     clear () {
       this.$refs.form.reset();
     },
@@ -842,5 +874,14 @@ export default {
 </script>
 
 <style>
+
+/* for printing to PDF */
+.theme--dark.v-list .v-list__tile__sub-title {
+  display: inline-block !important;
+}
+.theme--light.v-list .v-list__tile__sub-title {
+  display: inline-block !important;
+}
+
 
 </style>
