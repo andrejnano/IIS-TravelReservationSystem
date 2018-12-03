@@ -1,7 +1,9 @@
+
 <template>
   <v-content>
     <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
     <v-container fluid>
+          <reservations-component v-if="1"/>
       <v-layout ma-2 row align-start>
         <v-flex ma-2 xs11 sm9 md7 lg5>
           <main role="main">
@@ -83,6 +85,9 @@
                 <v-btn @click="cancelInformation">cancel</v-btn>
           </v-form>
 
+          <template v-if="sortToggle == 0">
+          </template>
+
           <v-card-text class="text-xs-center">
           </v-card-text>
         </v-flex>
@@ -109,6 +114,7 @@
     dom
   } from '@fortawesome/fontawesome-svg-core'
 
+  import ReservationComponent from '../components/Reservation.vue';
   import axios from 'axios'
 
   library.add(faSpinner)
@@ -222,6 +228,7 @@
     },
     components: {
       'font-awesome-icon': FontAwesomeIcon,
+      'reservations-component': ReservationComponent,
       Loading
     }
   }

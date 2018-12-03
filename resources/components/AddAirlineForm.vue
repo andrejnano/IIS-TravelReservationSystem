@@ -97,7 +97,7 @@ export default {
           if (this.airports.length == 0) {
             let rd = res.data;
             for (var i = 0; i < rd.length; i++) {
-              this.airports.push(rd[i].airport_code.concat(" - ").concat(rd[i].city));
+              console.log(rd[i].airport_code.concat(" - ").concat(rd[i].city));
             }
           }
       });

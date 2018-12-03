@@ -75,3 +75,5 @@ Route::middleware('api')->get('/airplanes', 'API\GetTableController@get_airplane
 Route::middleware('api')->get('/airlines', 'API\GetTableController@get_airlines');
 
 Route::middleware('api')->get('/users', 'API\AdminController@get_users');
+
+Route::middleware('api')->post('/pay', 'API\UserController@pay');

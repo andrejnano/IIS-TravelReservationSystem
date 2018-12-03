@@ -166,4 +166,23 @@ class UserController extends Controller
             abort(401, "User not logged");
         } 
     }
+    /**
+     * Changes information (first_name, last_name, email) for actual logged user
+     */
+    public function pay(Request $request) {
+        if($this->logged_in()){
+            if(!$request->input('res_id') ){
+                abort(400, "Missing some information.");
+            }
+            try{
+                DB::table('reservations')->where('id', $request->input('res_id'))->update(
+                    ['payment_status' => 1]);
+            } catch (Exception $e) {
+                abort(500, "Error while inserting new information into database.");
+            }
+        }
+        else{
+            abort(401, "User not logged");
+        } 
+    }
 }
