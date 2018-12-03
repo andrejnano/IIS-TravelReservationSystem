@@ -95,7 +95,7 @@ export default {
           hub: this.hub
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "New airport was successfully inserted";
+              this.message = "New airline was successfully inserted";
             } else {
               this.message = "Error - inserting failed";
             }

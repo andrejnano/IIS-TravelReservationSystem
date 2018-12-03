@@ -2,11 +2,12 @@
   <v-card class="layout column" light>
 
         <!-- SEARCH FORM -->
-        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser == 0">
+        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualAirline == ''">
           <v-btn-toggle v-model="toggleSearch" mandatory>
-            <v-btn flat>First name</v-btn>
-            <v-btn flat>Last name</v-btn>
-            <v-btn flat>E-mail</v-btn>
+            <v-btn flat>Airline code</v-btn>
+            <v-btn flat>Full name</v-btn>
+            <v-btn flat>Nationality</v-btn>
+            <v-btn flat>Hub</v-btn>
           </v-btn-toggle>
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
@@ -18,30 +19,35 @@
         </v-flex>
 
         <!-- EDIT FORM -->
-        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualUser != 0">
+        <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualAirline != ''">
+          <main role="main">
+            <p class="subheading font-weight-regular"> {{this.actualAirline}}</p>
+          </main>
           <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
-                  v-model="firstName"
-                  :rules="nameRules"
-                  label="First name"
+                  v-model="fullName"
+                  label="Full name"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="lastName"
-                  :rules="nameRules"
-                  label="Last name"
+                  v-model="nationality"
+                  label="Nationality"
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="email"
-                  :rules="emailRules"
-                  label="E-mail"
+                  v-model="hub"
+                  label="Hub"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="idLogo"
+                  label="Logo file name"
                   required
                 ></v-text-field>
                 <v-btn :disabled="!valid" @click="save">save</v-btn>
                 <v-btn @click="cancel">cancel</v-btn>
-                <v-btn color="red" @click="deleteUser">
-                  <v-icon light>mdi-delete</v-icon>delete user
+                <v-btn color="red" @click="deleteAirline">
+                  <v-icon light>mdi-delete</v-icon>delete airline
                 </v-btn>
           </v-form>
         </v-flex>
@@ -49,20 +55,21 @@
           <main role="main">
             <p class="subheading font-weight-regular"> {{this.message}}</p>
           </main>
+
           <main role="main">
             <p class="subheading font-weight-regular"> {{this.searchMessage}}</p>
           </main>
 
-            <!-- USER LIST -->
-            <v-list-tile v-for="user in users" :key="user.id" avatar ripple>
+            <!-- AIRLINE LIST -->
+            <v-list-tile v-for="airline in airlines" :key="airline.airline" avatar ripple>
               <v-list-tile-content>
-                <v-list-tile-title> {{ user.id }}  | {{ user.first_name }} {{ user.last_name }} {{ user.is_admin ? "[admin]" : ""}}</v-list-tile-title>
-                <v-list-tile-sub-title > {{ user.email }} </v-list-tile-sub-title>
+                <v-list-tile-title> {{ airline.airline }}  | {{ airline.full_name }} | hub: {{ airline.hub }} </v-list-tile-title>
+                <v-list-tile-sub-title > {{ airline.nationality }} | logo: {{ airline.id_logo }} </v-list-tile-sub-title>
               </v-list-tile-content>
               <v-spacer></v-spacer>
-              <v-btn dark color="green"
-              @click="editUser(user)"
-              large>EDIT</v-btn>
+              <v-btn dark color="green" @click="editAirline(airline)" large>
+                EDIT<v-icon light>mdi-pencil-outline</v-icon>
+              </v-btn>
             </v-list-tile>
 
   </v-card>
@@ -81,27 +88,24 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import axios from 'axios'
 
 export default {
-  name: 'ChangePasswordForm',
+  name: 'SearchAirlineForm',
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      email: "", 
+      actualAirline: "",
+      fullName: "",
+      nationality: "",
+      hub: "",
+      idLogo: "",
       message: "",
       searchMessage: "",
-      actualUser: 0,
-      fullName: "",
-      users: [],
+      airlines: [],
       toggleSearch: 0,
       searchString: "",
+      deletedName: "",
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
       },
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
-      ],
       nameRules: [
         v => !!v || 'Name is required',
         v => (v && v.length <= 10) || 'Name must be less than 10 characters'
@@ -110,117 +114,128 @@ export default {
     }
   },
   created () {
-    axios.get('/api/users', {
+    axios.get('/api/airlines', {
         }).then((response) => {
             if (response.status == 200) {
-              this.users = response.data;
-              this.searchMessage = "All users";
+              this.airlines = response.data;
+              this.searchMessage = "All airlines";
             } else {
-              this.message = "Error - not able to get users";
+              this.message = "Error - not able to get airlines";
             }
           })
           .catch((error) => {
-            this.message = "Error - not able to get users";
+            this.message = "Error - not able to get airlines";
             console.log("ERR: " + error);
           });
   },
   methods: {
-    editUser(editedUser) {
-      this.actualUser = editedUser.id;
-      this.firstName = editedUser.first_name;
-      this.lastName = editedUser.last_name;
-      this.email = editedUser.email;
+    editAirline(editedAirline) {
+      this.actualAirline = editedAirline.airline;
+      this.fullName = editedAirline.full_name;
+      this.nationality = editedAirline.nationality;
+      this.hub = editedAirline.hub;
+      this.idLogo = editedAirline.id_logo;
     },
     search() {
-      axios.get('/api/users', {
+      axios.get('/api/airlines', {
         }).then((response) => {
             if (response.status == 200) {
-                this.users = [];
+                this.airlines = [];
                 if(this.toggleSearch == 0) {
-                  response.data.forEach(user => {
-                    if(user.first_name.search(this.searchString) > -1){
-                      this.users.push(user);
+                  response.data.forEach(airline => {
+                    if(airline.airline.search(this.searchString) > -1){
+                      this.airlines.push(airline);
                     }
                   });
-                  this.searchMessage = "Users containing '" + this.searchString + "' in first name";
+                  this.searchMessage = "Airlines containing '" + this.searchString + "' in airline code";
                 } else if (this.toggleSearch == 1) {
-                  response.data.forEach(user => {
-                    if(user.last_name.search(this.searchString) > -1){
-                      this.users.push(user);
+                  response.data.forEach(airline => {
+                    if(airline.full_name.search(this.searchString) > -1){
+                      this.airlines.push(airline);
                     }
                   });
-                  this.searchMessage = "Users containing '" + this.searchString + "' in last name";
+                  this.searchMessage = "Airlines containing '" + this.searchString + "' in full name";
+                } else if (this.toggleSearch == 2) {
+                  response.data.forEach(airline => {
+                    if(airline.nationality.search(this.searchString) > -1){
+                      this.airlines.push(airline);
+                    }
+                  });
+                  this.searchMessage = "Airlines containing '" + this.searchString + "' in nationality";
                 } else {
-                  response.data.forEach(user => {
-                    if(user.email.search(this.searchString) > -1){
-                      this.users.push(user);
+                  response.data.forEach(airline => {
+                    if(airline.hub.search(this.searchString) > -1){
+                      this.airlines.push(airline);
                     }
                   });
-                  this.searchMessage = "Users containing '" + this.searchString + "' in email";
+                  this.searchMessage = "Airlines containing '" + this.searchString + "' in hub";
                 }
-                if(this.searchString == ""){
-                  this.searchMessage = "All users";
+                if(searchString == ""){
+                  this.searchMessage = "All airlines";
                 }
             } else {
-              this.message = "Error - not able to get users";
+              this.message = "Error - not able to get airlines";
             }
           })
           .catch((error) => {
-            this.message = "Error - not able to get users";
+            this.message = "Error - not able to get airlines";
             console.log("ERR: " + error);
           });
     },
     save() {
-      axios.post('/api/update_user', {
-            id: this.actualUser,
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email
+      axios.post('/api/update_airline', {
+            airline: this.actualAirline,
+            full_name: this.fullName,
+            nationality: this.nationality,
+            hub: this.hub,
+            id_logo: this.idLogo
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "User information was successfully saved!";
+              this.message = "Airline information was successfully saved!";
             } else {
               this.message = "Error - information was not saved";
             }
+            this.search(); // actualize table
           })
           .catch((error) => {
             this.message = "Error - information was not saved";
             console.log("ERR: " + error);
           });
-      axios.get('/api/users', {
+      /*axios.get('/api/airlines', {
         }).then((response) => {
             if (response.status == 200) {
-              this.users = response.data;
+              this.airlines = response.data;
             } else {
-              this.message = "Error - not able to get users";
+              this.message = "Error - not able to get airlines";
             }
           })
           .catch((error) => {
-            this.message = "Error - not able to get users";
+            this.message = "Error - not able to get airlines";
             console.log("ERR: " + error);
-          });      
+          });*/      
     },
     cancel() {
       this.$refs.form.reset();
-      this.actualUser = 0;
+      this.actualAirline = "";
     },
-    deleteUser() {
-      this.fullName = this.firstName + " " + this.lastName;
-      axios.post('/api/delete_user', {
-            id: this.actualUser,
+    deleteAirline() {
+      this.deletedName = this.fullName;
+      axios.post('/api/delete_airline', {
+            airline: this.actualAirline,
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "User " + this.fullName + " was successfully deleted";
+              this.message = "Airline " + this.deletedName + " was successfully deleted";
             } else {
-              this.message = "Error - user was not deleted";
+              this.message = "Error - airline was not deleted";
             }
           })
           .catch((error) => {
-            this.message = "Error - user was not deleted";
+            this.message = "Error - airline was not deleted";
             console.log("ERR: " + error);
           });
       this.$refs.form.reset();
-      this.actualUser = 0;
+      this.actualAirline = ""; // hide edit form
+      this.search(); // actualize table
     }
   },
   components: {

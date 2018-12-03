@@ -17,7 +17,9 @@
               <v-list-tile-title> <h2>USERS</h2> </v-list-tile-title>
             </v-list-tile-content>
             <v-btn dark color="green" @click="addUser">ADD</v-btn>    
-            <v-btn dark color="blue" @click="searchUser">SEARCH</v-btn>
+            <v-btn dark color="blue" @click="searchUser">
+                <v-icon light>mdi-magnify</v-icon>SEARCH
+            </v-btn>
           </v-list-tile>
 
           <!-- FLIGHT - x2 -->
@@ -26,7 +28,9 @@
               <v-list-tile-title> <h2>FLIGHTS</h2> </v-list-tile-title>
             </v-list-tile-content>
             <v-btn dark color="green" @click="addFlight">ADD</v-btn>    
-            <v-btn dark color="blue" @click="searchFlight">SEARCH</v-btn>
+            <v-btn dark color="blue" @click="searchFlight">
+                <v-icon light>mdi-magnify</v-icon>SEARCH
+            </v-btn>
           </v-list-tile>
 
           <!-- AIRLINE - x3 -->
@@ -35,7 +39,9 @@
               <v-list-tile-title> <h2>AIRLINES</h2> </v-list-tile-title>
             </v-list-tile-content>
             <v-btn dark color="green" @click="addAirline">ADD</v-btn>    
-            <v-btn dark color="blue" @click="searchAirline">SEARCH</v-btn>
+            <v-btn dark color="blue" @click="searchAirline">
+                <v-icon light>mdi-magnify</v-icon>SEARCH
+            </v-btn>
           </v-list-tile>
 
           <!-- AIRPLANE - x4 -->
@@ -44,7 +50,9 @@
               <v-list-tile-title> <h2>AIRPLANES</h2> </v-list-tile-title>
             </v-list-tile-content>
             <v-btn dark color="green" @click="addAirplane">ADD</v-btn>    
-            <v-btn dark color="blue" @click="searchAirplane">SEARCH</v-btn>
+            <v-btn dark color="blue" @click="searchAirplane">
+                <v-icon light>mdi-magnify</v-icon>SEARCH
+            </v-btn>
           </v-list-tile>
 
           <!-- AIRPORTS - x5 -->
@@ -53,7 +61,9 @@
               <v-list-tile-title> <h2>AIRPORTS</h2> </v-list-tile-title>
             </v-list-tile-content>
             <v-btn dark color="green" @click="addAirport">ADD</v-btn>    
-            <v-btn dark color="blue" @click="searchAirport">SEARCH</v-btn>
+            <v-btn dark color="blue" @click="searchAirport">
+                <v-icon light>mdi-magnify</v-icon>SEARCH
+            </v-btn>
           </v-list-tile>
 
         </v-layout>
@@ -80,12 +90,24 @@
             <add-airplane-form v-if="adminState == 14"/>
           </v-flex>
             
-            <v-flex xs12 sm12 md12 lg12>
+          <v-flex xs12 sm12 md12 lg12>
             <add-airport-form v-if="adminState == 15"/>
-            </v-flex>
+          </v-flex>
 
           <v-flex xs12 sm12 md12 lg12>
             <search-user-form v-if="adminState == 21"/>
+          </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
+            <search-airline-form v-if="adminState == 23"/>
+          </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
+            <search-airplane-form v-if="adminState == 24"/>
+          </v-flex>
+
+          <v-flex xs12 sm12 md12 lg12>
+            <search-airport-form v-if="adminState == 25"/>
           </v-flex>
         </v-layout>
 
@@ -118,6 +140,10 @@
   import AddAirlineForm from '../components/AddAirlineForm.vue';
 
   import SearchUserForm from '../components/SearchUserForm.vue';
+
+  import SearchAirlineForm from '../components/SearchAirlineForm.vue';
+  import SearchAirplaneForm from '../components/SearchAirplaneForm.vue';
+  import SearchAirportForm from '../components/SearchAirportForm.vue';
 
   import axios from 'axios'
 
@@ -231,6 +257,9 @@
       'add-airport-form': AddAirportForm,
       'add-airplane-form': AddAirplaneForm,
       'search-user-form': SearchUserForm,
+      'search-airline-form': SearchAirlineForm,
+      'search-airplane-form': SearchAirplaneForm,
+      'search-airport-form': SearchAirportForm,
       Loading
     }
 
