@@ -3,7 +3,7 @@
 
       <!-- TOOLBAR -->
       <v-toolbar card prominent>
-        <v-toolbar-title><v-icon>mdi-airplane-landing</v-icon>&nbsp;&nbsp;Airports table</v-toolbar-title>
+        <v-toolbar-title><v-icon>mdi-airport</v-icon>&nbsp;&nbsp;Airports table</v-toolbar-title>
       </v-toolbar>
 
         <!-- SEARCH FORM -->
