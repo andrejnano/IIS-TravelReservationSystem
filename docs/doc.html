@@ -44,7 +44,7 @@
 <table>
 <tr><th>Email</th><th>Password</th><th>Role</th></tr>
 <tr><td>a@d.min</td><td>password</td><td>Administrator</td></tr>
-<tr><td>todooooo</td><td>todooo</td><td>User</td></tr>
+<tr><td>teodorL@gmail.com</td><td>password</td><td>User</td></tr>
 </table>
 
 <h2>Implementation</h2>
@@ -61,6 +61,26 @@
 	For implementation we have used two frameworks, Laravel for backend php implementation and Vue for 
 	frontend javascript implementation. With this frameworks we have been able to create more user friendly application and simple things were automated by the framework.
 </p>
+<h2>Architecture</h2>
+<img src="architecture.jpg" alt="Architecture of information system">
+
+<h2>Backend</h2>
+<ul>
+	<li>Docker images + environment setup</li>
+	<li>Laravel / PHP</li>
+	<li>Apache configs</li>
+	<li>SQL + MySQL DB setup</li>
+</ul>
+
+<h2>Frontend</h2>
+<ul>
+	<li>Node.js</li>
+	<li>Gulp (code processing, minimizing, optimization, live reload, transpiling/compilation)</li>
+	<li>SASS -> CSS</li>
+	<li>HTML</li>
+	<li>Javascript</li>
+	<li>Vue</li>
+</ul>
 <h2>
 	Application Interface
 </h2>
@@ -224,8 +244,32 @@
 <td>User can pay his reservation</td>
 </tbody></table>
 
+<h2>Install prerequisites:</h2>
+<ul>
+	<li>Docker</li>
+	<li>Composer</li>
+	<li>Node.js</li>
+</ul>
+
 <h2>Instalation</h2>
 
+<ol>
+	<li>cd IIS-projekt</li>
+	<li>composer install to install all the required dependencies</li>
+	<li>npm install</li>
+	<li>cp .env.example .env create a new environment config based on project's default</li>
+	<li>php artisan key:generate to create new APP_KEY in your local .env (REQUIRED)</li>
+	<li>chmod -R o+rw bootstrap/ storage/ to allow Apache to edit project's files</li>
+	<li>docker-compose up --build (only for the first time or major changes) or docker-compose up</li>
+	<li>open http://localhost:8080 in a web browser</li>
+</ol>
+
 <h2>Known problems</h2>
+<ul>
+	<li>Security problems, everything sent as clear text</li>
+	<li>Sometimes when more tickets are requested unavailable tickets could be found</li>
+	<li></li>
+	<li></li>
+</ul>
 </body>
 </html>
