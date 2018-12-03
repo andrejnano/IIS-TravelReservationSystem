@@ -30,7 +30,7 @@
                 <v-layout row wrap justify-start>
                   <v-btn
                   large
-                  color="error"
+                  color="purple"
                   href="/searched?originCode=BUD&originFull=Budapest&destinationCode=VIE&destinationFull=Vienna&departureDate=2019-01-16&arrivalDate=2019-01-21&priceMin&priceMax&setClass=0">
                   Budapest to Vienna
                   </v-btn>
