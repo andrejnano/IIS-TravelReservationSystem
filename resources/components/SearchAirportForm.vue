@@ -23,7 +23,7 @@
         </v-flex>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <p class="subheading" v-html="this.formattedSearchMessage"></p>
           </main>
 
             <!-- AIRPORT LIST -->
@@ -53,11 +53,16 @@ export default {
   name: 'ChangePasswordForm',
   data() {
     return {
-      message: "",
+      searchMessage: "",
       airports: [],
       toggleSearch: 0,
       searchString: "",
       valid: true
+    }
+  },
+  computed: {
+    formattedSearchMessage() {
+      return '<font color="grey">' + this.searchMessage + '</font>';
     }
   },
   created () {
@@ -65,13 +70,13 @@ export default {
         }).then((response) => {
             if (response.status == 200) {
               this.airports = response.data;
-              this.message = "Airports";
+              this.searchMessage = "Airports";
             } else {
-              this.message = "Error - not able to get airports";
+              this.searchMessage = "Error - not able to get airports";
             }
           })
           .catch((error) => {
-            this.message = "Error - not able to get airports";
+            this.searchMessage = "Error - not able to get airports";
             console.log("ERR: " + error);
           });
   },
@@ -87,28 +92,28 @@ export default {
                       this.airports.push(airport);
                     }
                   });
-                  this.message = "Airports containing '" + this.searchString + "' in code";
+                  this.searchMessage = "Airports containing '" + this.searchString + "' in code";
                 } else if (this.toggleSearch == 1) {
                   response.data.forEach(airport => {
                     if(airport.city.search(this.searchString) > -1){
                       this.airports.push(airport);
                     }
                   });
-                  this.message = "Airports containing '" + this.searchString + "' in city";
+                  this.searchMessage = "Airports containing '" + this.searchString + "' in city";
                 } else {
                   response.data.forEach(airport => {
                     if(airport.country.search(this.searchString) > -1){
                       this.airports.push(airport);
                     }
                   });
-                  this.message = "Airports containing '" + this.searchString + "' in country";
+                  this.searchMessage = "Airports containing '" + this.searchString + "' in country";
                 }
             } else {
-              this.message = "Error - not able to get airports";
+              this.searchMessage = "Error - not able to get airports";
             }
           })
           .catch((error) => {
-            this.message = "Error - not able to get airports";
+            this.searchMessage = "Error - not able to get airports";
             console.log("ERR: " + error);
           });
     },

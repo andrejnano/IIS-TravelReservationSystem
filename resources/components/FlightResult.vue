@@ -203,6 +203,8 @@ export default {
         output += this.result.there['0'].origin.city + " → ";
         output += this.result.there['0'].destination.city;
       }
+      output += " | <small> <span class='mdi mdi-calendar'></span> ";
+      output += this.result.there['0'].departure_time.substring(0,10) + "</small>";
       return output;
     },
     backTitle: function() {
@@ -275,19 +277,19 @@ export default {
 
     expandedTopThere0: function() {
       var segment = this.result.there[0];
-      return `Flight number: <strong>${segment.flight_number}</strong>`;
+      return `Flight number: <strong>${segment.flight_number}</strong>` + " | <span class='mdi mdi-calendar'></span> " + segment.departure_time.substring(0,10);
     },
     expandedTopThere1: function() {
       var segment = this.result.there[1];
-      return `Flight number: <strong>${segment.flight_number}</strong>`;
+      return `Flight number: <strong>${segment.flight_number}</strong>` + " | <span class='mdi mdi-calendar'></span> " + segment.departure_time.substring(0,10);
     },
       expandedTopBack0: function() {
       var segment = this.result.back[0];
-      return `Flight number: <strong>${segment.flight_number}</strong>`;
+      return `Flight number: <strong>${segment.flight_number}</strong>` + " | <span class='mdi mdi-calendar'></span> " + segment.departure_time.substring(0,10);
     },
     expandedTopBack1: function() {
       var segment = this.result.back[1];
-      return `Flight number: <strong>${segment.flight_number}</strong>`;
+      return `Flight number: <strong>${segment.flight_number}</strong>` + " | <span class='mdi mdi-calendar'></span> " + segment.departure_time.substring(0,10);
     },
 
     expandedTitleThere0: function() {

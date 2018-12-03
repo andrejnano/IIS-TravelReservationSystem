@@ -22,10 +22,8 @@
                 </v-container>
               </v-img>
             <v-card-title>
-              <p class="subheading font-weight-regular"> Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Voluptatem animi esse at, labore exercitationem non tempore, eos iste ut, quisquam perspiciatis rerum?
-                Sit sequi commodi culpa autem eum ad omnis.</p>
-              <h2>Flight search shortcuts</h2>
+              <p class="subheading font-weight-regular"> Your perfect vacation is waiting for you! With our page you can flight all around the world. Just choose city and date and explore new places!</p>
+              <h2>Popular flight search</h2>
             </v-card-title>
             <v-card-actions>
               <v-container>
@@ -37,17 +35,38 @@
                 </v-btn>
                 <v-btn
                   large
-                  color="purple"
+                  color="blue"
                   dark
-                  href="/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York&tickets=1&setClass=0">
+                  href="/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York&tickets=2&setClass=0">
                   Vienna to New York
                 </v-btn>
                 <v-btn
                   large
-                  color="success"
+                  color="green"
                   dark
-                  href="/searched?originCode=HEL&originFull=Helsinki&destinationCode=KUL&destinationFull=Kuala%20Lumpur&tickets=2&setClass=1">
-                  Madrid to Kuala Lumpur
+                  href="/searched?originCode=HEL&originFull=Helsinki&destinationCode=KUL&destinationFull=Kuala%20Lumpur&tickets=2&setClass=0">
+                  Helsinky to Kuala Lumpur
+                </v-btn>
+                <v-btn
+                  large
+                  color="orange"
+                  dark
+                  href="/searched?originCode=PRG&originFull=Prague&destinationCode=BRU&destinationFull=Brussels&tickets=2&setClass=0">
+                  Prague to Brussels
+                </v-btn>
+                <v-btn
+                  large
+                  color="brown"
+                  dark
+                  href="/searched?originCode=DXB&originFull=Dubai&destinationCode=IST&destinationFull=Istanbul&tickets=2&setClass=0">
+                  Dubai to Istanbul
+                </v-btn>
+                <v-btn
+                  large
+                  color="red"
+                  dark
+                  href="/searched?originCode=CFN&originFull=Dublin&destinationCode=BRQ&destinationFull=Brno&tickets=2&setClass=0">
+                  Dublin to Brno
                 </v-btn>
               </v-container>
             </v-card-actions>

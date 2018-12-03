@@ -11,7 +11,7 @@
                 <v-text-field
                   v-model="airline"
                   :rules="airlineRules"
-                  label="Airline"
+                  label="Airline code (e.g. 'AF')"
                   required
                 ></v-text-field>
                 <v-text-field
@@ -28,8 +28,8 @@
                 ></v-text-field>
                 <v-combobox
                   v-model="hub"
-                  :items="airports"
                   label="Hub airport"
+                  :items="airportIDs"
                   required
                 ></v-combobox>
                 <v-btn :disabled="!valid" @click="add">add airline</v-btn>
@@ -37,7 +37,7 @@
           </v-form>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <p class="subheading" v-html="this.formattedMessage"></p>
           </main>
 
   </v-card>
@@ -65,8 +65,7 @@ export default {
       nationality: "",
       message: "",
       hub: "",
-      airports: [],
-      airlineIDs: [],
+      airportIDs: [],
       rules: {
           required: value => !!value || 'Required.',
           min: v => (v && v.length >= 8) || 'Min 8 characters'
@@ -92,30 +91,26 @@ export default {
       valid: true
     }
   },
+  computed: {
+    formattedMessage() {
+      if(this.message.substring(0,5) == "Error"){
+        return '<font color="red">' + this.message + '</font>';
+      }
+      return '<font color="green">' + this.message + '</font>';
+    },
+  },
   created () {
       axios.get('/api/airports').then(res => {
-          // this.airports = res.data;
-          if (this.airports.length == 0) {
+          if (this.airportIDs.length == 0) {
             let rd = res.data;
             for (var i = 0; i < rd.length; i++) {
-              console.log(rd[i].airport_code.concat(" - ").concat(rd[i].city));
-            }
-          }
-      });
-
-      axios.get('/api/airlines').then(res => {
-          // this.airports = res.data;
-          if (this.airlineIDs.length == 0) {
-            let rd = res.data;
-            for (var i = 0; i < rd.length; i++) {
-              this.airlineIDs.push(rd[i].airline);
+              this.airportIDs.push(rd[i].airport_code.concat(" - ").concat(rd[i].city));
             }
           }
       });
   },
   methods: {
     add(){
-      this.airlineIDs.push(this.airline);
       axios.post('/api/add_airline', {
           airline: this.airline,
           full_name: this.fullName,
