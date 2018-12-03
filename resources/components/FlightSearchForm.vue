@@ -110,6 +110,7 @@
       <v-divider></v-divider>
 
       <v-card-text class="text-xs-center">
+
         <v-btn-toggle v-model="toggleClass">
           <v-btn flat>
             Economy
@@ -126,13 +127,25 @@
       <v-divider></v-divider>
 
       <v-card-text>
-        <div class='flight-search-form__group'>
-          <vue-slider style="margin-top: 1rem;" v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
-        </div>
-        <div class='caption'>Set the price interval</div>
+        <v-container class="text-xs-center">
+          <div class='flight-search-form__group'>
+            <vue-slider style="margin-top: 1rem;" v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
+          </div>
+          <div class='display gray text-xs-center'>Set the price interval</div>
+        </v-container>
       </v-card-text>
 
       <v-divider></v-divider>
+
+      <v-card-text>
+        <v-select
+          :items="numberOfPassengers"
+          label="Number of passengers"
+          v-model="FORMtickets"
+          solo
+          prepend-icon="mdi-account"
+        ></v-select>
+      </v-card-text>
 
 
       <!-- SUBMIT BUTTON  -->
@@ -188,6 +201,7 @@ export default {
     priceMin: Number,
     priceMax: Number,
     setClass: Number,
+    tickets: Number,
   },
   data() {
     return {
@@ -201,6 +215,8 @@ export default {
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate,
       FORMarrivalDate: this.arrivalDate,
+      FORMtickets: this.tickets,
+      numberOfPassengers: [1,2,3,4,5,6,7,8],
       searchText: '',
       priceSlider: {
         value: [
@@ -309,6 +325,7 @@ export default {
         priceMin: this.priceSlider.value[0],
         priceMax: this.priceSlider.value[1],
         setClass: this.toggleClass,
+        tickets: this.FORMtickets,
       });
 
       this.$router.push({
@@ -323,6 +340,7 @@ export default {
           priceMin: this.priceSlider.value[0],
           priceMax: this.priceSlider.value[1],
           setClass: this.toggleClass,
+          tickets: this.FORMtickets,
         },
       });
     }
