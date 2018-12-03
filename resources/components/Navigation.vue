@@ -9,6 +9,7 @@
     <v-toolbar-items>
       <v-btn flat to="/about">About</v-btn>
       <v-btn flat to="/contact">Contact</v-btn>
+      <v-btn flat to="/admin" v-if="isAdmin">Admin page</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <template>
@@ -58,11 +59,15 @@ export default {
           this.isAdmin = true;
         this.firstName = response.data.first_name ? response.data.first_name : 'Unknown';
         this.lastName = response.data.last_name ? response.data.last_name : 'Unknown';
+        if(response.data.is_admin == 1){
+          this.isAdmin = true;
+        }
       }
       else
       {
         console.log('session NOT oK');
         this.isLoggedIn = false;
+        this.isAdmin = false;
       }
 
     }).catch((error) => {console.log(error);});
@@ -72,6 +77,7 @@ export default {
       axios.post('/api/logout').then((response) => {
         console.log(response);
         this.isLoggedIn = false;
+        this.isAdmin = false;
         this.$router.go({
           path: '/',
           force: true,
