@@ -1,68 +1,69 @@
 
 <template>
-  <v-layout row>
-    <v-flex xs12 sm6 offset-sm3>
-      <v-card>
-        <v-toolbar color="cyan" dark>
-          <v-btn v-if="tickets_active" @click="showReservations()">◀ back</v-btn>
-          <v-toolbar-title v-if="reservations_active">My reservations</v-toolbar-title>
-          <v-toolbar-title v-if="tickets_active">Tickets for reservation</v-toolbar-title>
-          <v-btn v-if="!cur_res_pay" @click="payReservation()">pay</v-btn>
+  <v-container fluid>
+    <v-layout row justify-start>
+      <v-flex xs12 sm10 md8 lg6>
+        <v-card>
+          <v-toolbar color="secondary" dark>
+            <v-btn v-if="tickets_active" @click="showReservations()">◀ back</v-btn>
+            <v-toolbar-title v-if="!reservations_active && !tickets_active">You have currently no reservations</v-toolbar-title>
+            <v-toolbar-title v-if="reservations_active">My reservations</v-toolbar-title>
+            <v-toolbar-title v-if="tickets_active">Tickets for reservation</v-toolbar-title>
+            <v-btn v-if="!cur_res_pay" @click="payReservation()">pay</v-btn>
 
-          <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
 
-        </v-toolbar>
+          </v-toolbar>
 
-        <v-list two-line>
-          <template v-if="reservations_active" v-for="(item, index) in reservations">
-            <v-list-tile
-              :key="item.created_at"
-              avatar
-              @click="updateSelected(item)"
-            >
-
-
-              <v-list-tile-content>
-                <v-list-tile-sub-title v-html="item.payment_status"></v-list-tile-sub-title>
-                <v-list-tile-sub-title v-html="item.created_at"></v-list-tile-sub-title>
-                <v-list-tile-sub-title v-html="item.total_cost"></v-list-tile-sub-title>
-                <v-list-tile-sub-title v-html="item.count"></v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <!-- <v-list-tile-content>
-                <v-list-tile-title v-html="item.payment_status"></v-list-tile-title>
-              </v-list-tile-content> -->
-            </v-list-tile>
-            <v-divider
-            ></v-divider>
-          </template>
-
-          <template v-if="tickets_active" v-for="(i, index) in cur_res.tickets">
-            <v-list-tile
-              :key="i.created_at"
-              avatar
-              @click="updateSelected(item)"
-            >
+          <v-list two-line>
+            <template v-if="reservations_active" v-for="(item, index) in reservations">
+              <v-list-tile
+                :key="item.created_at"
+                avatar
+                @click="updateSelected(item)"
+              >
 
 
-              <v-list-tile-content>
-                <v-list-tile-sub-title v-html="i.cost"></v-list-tile-sub-title>
-                <v-list-tile-sub-title v-html="i.passanger"></v-list-tile-sub-title>
-                <v-list-tile-sub-title v-html="i.flight"></v-list-tile-sub-title>
-                <v-list-tile-sub-title v-html="i.seat"></v-list-tile-sub-title>
-              </v-list-tile-content>
+                <v-list-tile-content>
+                  <v-list-tile-sub-title v-html="item.payment_status"></v-list-tile-sub-title>
+                  <v-list-tile-sub-title v-html="item.created_at"></v-list-tile-sub-title>
+                  <v-list-tile-sub-title v-html="item.total_cost"></v-list-tile-sub-title>
+                  <v-list-tile-sub-title v-html="item.count"></v-list-tile-sub-title>
+                </v-list-tile-content>
 
-              <!-- <v-list-tile-content>
-                <v-list-tile-title v-html="item.payment_status"></v-list-tile-title>
-              </v-list-tile-content> -->
-            </v-list-tile>
-            <v-divider
-            ></v-divider>
-          </template>
-        </v-list>
-      </v-card>
-    </v-flex>
-  </v-layout>
+                <!-- <v-list-tile-content>
+                  <v-list-tile-title v-html="item.payment_status"></v-list-tile-title>
+                </v-list-tile-content> -->
+              </v-list-tile>
+              <v-divider :key="index"></v-divider>
+            </template>
+
+            <template v-if="tickets_active" v-for="(i, index) in cur_res.tickets">
+              <v-list-tile
+                :key="i.created_at"
+                avatar
+                @click="updateSelected(item)"
+              >
+
+
+                <v-list-tile-content>
+                  <v-list-tile-sub-title v-html="i.cost"></v-list-tile-sub-title>
+                  <v-list-tile-sub-title v-html="i.passanger"></v-list-tile-sub-title>
+                  <v-list-tile-sub-title v-html="i.flight"></v-list-tile-sub-title>
+                  <v-list-tile-sub-title v-html="i.seat"></v-list-tile-sub-title>
+                </v-list-tile-content>
+
+                <!-- <v-list-tile-content>
+                  <v-list-tile-title v-html="item.payment_status"></v-list-tile-title>
+                </v-list-tile-content> -->
+              </v-list-tile>
+              <v-divider :key="index"></v-divider>
+            </template>
+          </v-list>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 <script>
 

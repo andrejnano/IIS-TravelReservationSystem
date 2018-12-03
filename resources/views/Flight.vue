@@ -253,8 +253,6 @@
       hide-overlay
       persistent
       color="success"
-      width="90%"
-      height="60%"
     >
       <v-card>
         <v-card-text>

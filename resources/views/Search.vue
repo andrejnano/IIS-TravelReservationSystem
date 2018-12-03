@@ -23,53 +23,55 @@
               </v-img>
             <v-card-title>
               <p class="subheading font-weight-regular"> Your perfect vacation is waiting for you! With our page you can flight all around the world. Just choose city and date and explore new places!</p>
-              <h2>Popular flight search</h2>
+              <h2>Select from these example flights</h2>
             </v-card-title>
-            <v-card-actions>
-              <v-container>
-                <v-btn
-                large
-                color="error"
-                href="/searched?originCode=BUD&originFull=Budapest&destinationCode=VIE&destinationFull=Vienna&departureDate=2019-01-16&arrivalDate=2019-01-21&priceMin&priceMax&setClass=0">
-                Budapest to Vienna
-                </v-btn>
-                <v-btn
+            <v-card-text>
+              <v-container fluid>
+                <v-layout row wrap justify-start>
+                  <v-btn
                   large
-                  color="blue"
-                  dark
-                  href="/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York&tickets=2&setClass=0">
-                  Vienna to New York
-                </v-btn>
-                <v-btn
-                  large
-                  color="green"
-                  dark
-                  href="/searched?originCode=HEL&originFull=Helsinki&destinationCode=KUL&destinationFull=Kuala%20Lumpur&tickets=2&setClass=0">
-                  Helsinky to Kuala Lumpur
-                </v-btn>
-                <v-btn
-                  large
-                  color="orange"
-                  dark
-                  href="/searched?originCode=PRG&originFull=Prague&destinationCode=BRU&destinationFull=Brussels&tickets=2&setClass=0">
-                  Prague to Brussels
-                </v-btn>
-                <v-btn
-                  large
-                  color="brown"
-                  dark
-                  href="/searched?originCode=DXB&originFull=Dubai&destinationCode=IST&destinationFull=Istanbul&tickets=2&setClass=0">
-                  Dubai to Istanbul
-                </v-btn>
-                <v-btn
-                  large
-                  color="red"
-                  dark
-                  href="/searched?originCode=CFN&originFull=Dublin&destinationCode=BRQ&destinationFull=Brno&tickets=2&setClass=0">
-                  Dublin to Brno
-                </v-btn>
+                  color="error"
+                  href="/searched?originCode=BUD&originFull=Budapest&destinationCode=VIE&destinationFull=Vienna&departureDate=2019-01-16&arrivalDate=2019-01-21&priceMin&priceMax&setClass=0">
+                  Budapest to Vienna
+                  </v-btn>
+                  <v-btn
+                    large
+                    color="blue"
+                    dark
+                    href="/searched?originCode=Vie&originFull=Vienna&destinationCode=JFK&destinationFull=New%20York&tickets=2&setClass=0">
+                    Vienna to New York
+                  </v-btn>
+                  <v-btn
+                    large
+                    color="green"
+                    dark
+                    href="/searched?originCode=HEL&originFull=Helsinki&destinationCode=KUL&destinationFull=Kuala%20Lumpur&tickets=2&setClass=0">
+                    Helsinky to Kuala Lumpur
+                  </v-btn>
+                  <v-btn
+                    large
+                    color="orange"
+                    dark
+                    href="/searched?originCode=PRG&originFull=Prague&destinationCode=BRU&destinationFull=Brussels&tickets=2&setClass=0">
+                    Prague to Brussels
+                  </v-btn>
+                  <v-btn
+                    large
+                    color="brown"
+                    dark
+                    href="/searched?originCode=DXB&originFull=Dubai&destinationCode=IST&destinationFull=Istanbul&tickets=2&setClass=0">
+                    Dubai to Istanbul
+                  </v-btn>
+                  <v-btn
+                    large
+                    color="red"
+                    dark
+                    href="/searched?originCode=CFN&originFull=Dublin&destinationCode=BRQ&destinationFull=Brno&tickets=2&setClass=0">
+                    Dublin to Brno
+                  </v-btn>
+                </v-layout>
               </v-container>
-            </v-card-actions>
+            </v-card-text>
           </v-card>
         </v-flex>
       </v-layout>
