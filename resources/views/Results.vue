@@ -55,7 +55,7 @@
 
                   <v-divider></v-divider>
 
-                  <v-list two-line>
+                  <v-list two-line v-if="results.length > 0">
 
                     <template v-if="sortToggle == 0">
                       <flight-result-component
@@ -74,6 +74,15 @@
                     </template>
 
                   </v-list>
+                  <v-container fluid>
+                    <v-alert ma-4 v-if="results.length <= 0 && !isLoading"
+                      :value="true"
+                      type="warning"
+                      transition="scale-transition"
+                    >
+                      <strong class="headline">Sorry, no flights were found :(</strong>
+                    </v-alert>
+                  </v-container>
                 </v-card>
               </v-flex>
             </v-layout>
@@ -121,7 +130,7 @@ export default {
         arrivalDate: this.$route.query.arrivalDate != '' ? this.$route.query.arrivalDate : null,
         priceMin: this.$route.query.priceMin ? Number(this.$route.query.priceMin) : null,
         priceMax: this.$route.query.priceMax ? Number(this.$route.query.priceMax) : null,
-        setClass: this.$route.query.setClass ? Number(this.$route.query.setClass) : null,
+        seat_class: this.$route.query.class ? Number(this.$route.query.class) : null,
         tickets: this.$route.query.tickets ? Number(this.$route.query.tickets) : null,
       },
     }
@@ -149,7 +158,9 @@ export default {
   },
   methods: {
     search(formValues) {
-      // perform search query to the API
+
+       // QUERY TO /api/search
+
       this.isLoading = true;
       this.results = [];  // reset the results
 
@@ -179,20 +190,9 @@ export default {
         query += `&min_price=${formValues.priceMin}`;
       }
 
-      if (formValues.setClass != null)
+      if (formValues.seat_class != null)
       {
-        if(formValues.setClass == 0)
-        {
-          query += `&class=economy`;
-        }
-        else if(formValues.setClass == 1)
-        {
-          query += `&class=business`;
-        }
-        else if(formValues.setClass == 2)
-        {
-          query += `&class=first`;
-        }
+        query += `&class=${formValues.seat_class}`; // digit format
       }
 
       if (formValues.hasOwnProperty('tickets'))

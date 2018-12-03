@@ -163,11 +163,11 @@ export default {
       var output = "";
       //class to string
       let classString = "";
-      if (this.result.there['0'].seat_class == "economy") {
+      if (this.result.there['0'].seat_class === "economy") {
         classString = "<span class='bronze'>economy class</span>";
-      } else if (this.result.there['0'].seat_class == "business") {
+      } else if (this.result.there['0'].seat_class === "business") {
         classString = "<span class='silver'>business class</span>";
-      } else if (this.result.there['0'].seat_class == "first") {
+      } else if (this.result.there['0'].seat_class === "first") {
         classString = "<span class='gold'>first class</span>";
       }
       else {
@@ -398,6 +398,8 @@ export default {
       this.dialog = false;
     },
     openFlight() {
+
+      // QUERY TO /api/flight
 
       let query = {};
 

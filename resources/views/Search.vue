@@ -111,7 +111,7 @@
     arrivalDate: new Date().addDays(7).toISOString().substr(0,10),
     priceMin: 50,
     priceMax: 3000,
-    setClass: 0,
+    seat_class: 0,
     tickets: 1,
   };
 

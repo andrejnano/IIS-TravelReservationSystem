@@ -469,9 +469,6 @@ class SearchController extends Controller
                     case '2':
                         $request['class'] = 'first';
                     break;
-                    default:
-                      $request['class'] = 'economy';
-                    break;
                 }
             }
             $return_arr = $this->search_flights($request);

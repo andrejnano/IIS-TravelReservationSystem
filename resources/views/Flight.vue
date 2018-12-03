@@ -176,7 +176,7 @@
       </v-layout>
     </v-container>
 
-    <v-container fluid >
+    <v-container fluid v-if="!isLoading">
       <v-layout justify-center align-center>
         <v-flex xs6 v-if="loggedIn && loaded" ma-2>
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -260,16 +260,44 @@
         <v-card-text>
           <v-alert
             :value="true"
-            type="success"
+            type="info"
           >
-            SUCCESS!! Reservation with id <strong>{{ reservationID }}</strong> was created!
+            <span class='headline'>SUCCESS!! Reservation with id <strong>{{ reservationID }}</strong> was created!</span>
           </v-alert>
-         Would you like to print an itinerary ?
         </v-card-text>
+        <v-card-title>
+          Would you like to print an itinerary ?
+        </v-card-title>
         <v-card-actions>
           <v-btn medium color="secondary" @click="printItinerary">Print itinerary</v-btn>
+          <v-spacer></v-spacer>
           <v-btn medium color="gray" href="/">Go back to search</v-btn>
+          <v-spacer></v-spacer>
           <v-btn medium color="gray" href="/profile">View my reservations</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="displayError"
+      hide-overlay
+      persistent
+      color="error"
+      width="500"
+      height="60%"
+    >
+      <v-card>
+        <v-card-text>
+          <v-alert
+            :value="true"
+            type="error"
+          >
+            Sorry error occured.
+          </v-alert>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn medium color="gray" @click="$router.go({path: '/', force: true,})">Try again</v-btn>
+          <v-btn medium color="gray" href="/">Try different flight</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -300,6 +328,7 @@ export default {
   data() {
     return {
       isLoading: true,
+      displayError: false,
       loadingMsg: "",
       passengers: [],
       flightParams: {
@@ -307,7 +336,7 @@ export default {
         ft_2: this.$route.query.ft_2 != null ? this.$route.query.ft_2 : null,
         fb_1: this.$route.query.fb_1 != null ? this.$route.query.fb_1 : null,
         fb_2: this.$route.query.fb_2 != null ? this.$route.query.fb_2 : null,
-        class: this.$route.query.class != null ? Number(this.$route.query.class): null,
+        seat_class: this.$route.query.class != null ? Number(this.$route.query.class): null,
         tickets: this.$route.query.tickets != null ? Number(this.$route.query.tickets) : null,
       },
       result: {},
@@ -403,22 +432,22 @@ export default {
       {
         query += `&fb_2=${params.fb_2}`;
       }
-      if (params.tickets != null && params.tickets != '' )
+      if (params.tickets != null)
       {
         query += `&tickets=${params.tickets}`;
       }
 
-      if (params.class != null)
+      if (params.seat_class != null)
       {
-        if (params.class == 0)
+        if (params.seat_class === 0)
         {
           query += `&class=economy`;
         }
-        else if (params.class == 1)
+        else if (params.seat_class === 1)
         {
           query += `&class=business`;
         }
-        else if (params.class == 2)
+        else if (params.seat_class === 2)
         {
           query += `&class=first`;
         }
@@ -481,6 +510,8 @@ export default {
         this.isLoading = false;
 
         this.getReservation();
+      }).catch((error) => {
+        this.displayError = true;
       });
     },
     reserveFlight() {
@@ -520,6 +551,7 @@ export default {
               if (response.status == 200) {
                 console.log('%c New reservation for a passenger was made! ', 'background: #00ff00; color: #ffffff');
               } else {
+                this.displayError = true;
                 console.log('%c Could not make a new reservaton for this passenger! ', 'background: #ff0000; color: #ffffff');
               }
             }).catch((error) => {

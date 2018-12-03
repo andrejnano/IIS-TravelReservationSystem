@@ -2,7 +2,7 @@
   <v-content>
     <v-container fluid>
       <v-layout row justify-center>
-        <v-flex xs10 sm8 md6 lg4 pa-4 ma-4>
+        <v-flex xs10 sm8 md8 lg6 pa-2 ma-2>
           <v-card class="elevation-2">
             <v-card-title class="headline">Log in!</v-card-title>
             <v-card-text>

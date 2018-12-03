@@ -8,7 +8,7 @@
 
       <!-- ROUNDTRIP/ONEWAY TOGGLE -->
       <v-card-text class="text-xs-center">
-        <v-btn-toggle v-model="toggleRoundTrip">
+        <v-btn-toggle v-model="toggleRoundTrip" mandatory>
           <v-btn flat>
             Round Trip
           </v-btn>
@@ -25,7 +25,6 @@
         <v-autocomplete
         v-model="FORMorigin"
         :items="items"
-        :menu-props="FORMorigin"
         :search-input.sync="searchOriginAirport"
         :loading="originLoading"
         item-text="city"
@@ -33,7 +32,6 @@
         label="Origin"
         hint="Select a city"
         persistent-hint
-        hide-no-data
         return-object
         prepend-icon="mdi-airplane-takeoff"
         >
@@ -45,7 +43,6 @@
         <v-autocomplete
         v-model="FORMdestination"
         :items="items"
-        :menu-props="FORMdestination"
         :search-input.sync="searchDestinationAirport"
         :loading="destinationLoading"
         item-text="city"
@@ -53,7 +50,6 @@
         label="Destination"
         hint="Select a city"
         persistent-hint
-        hide-no-data
         return-object
         prepend-icon="mdi-airplane-landing"
         >
@@ -110,43 +106,48 @@
       <v-divider></v-divider>
 
       <v-card-text class="text-xs-center">
-
-        <v-btn-toggle v-model="toggleClass">
-          <v-btn flat>
-            Economy
-          </v-btn>
-          <v-btn flat>
-            Business
-          </v-btn>
-          <v-btn flat>
-            First
-          </v-btn>
-        </v-btn-toggle>
-      </v-card-text>
-
-      <v-divider></v-divider>
-
-      <v-card-text>
-        <v-container class="text-xs-center">
-          <div class='flight-search-form__group'>
-            <vue-slider style="margin-top: 1rem;" v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
-          </div>
-          <div class='display gray text-xs-center'>Set the price interval</div>
+        <v-container>
+          <v-layout row>
+            <v-flex xs6>
+              <v-card-title>Seating class</v-card-title>
+              <v-btn-toggle v-model="toggleClass" mandatory>
+                <v-btn flat>
+                  Economy
+                </v-btn>
+                <v-btn flat>
+                  Business
+                </v-btn>
+                <v-btn flat>
+                  First
+                </v-btn>
+              </v-btn-toggle>
+            </v-flex>
+            <v-flex xs6>
+                <v-card-title>Number of passengers</v-card-title>
+                <v-select
+                :items="numberOfPassengers"
+                label="Number of passengers"
+                v-model="FORMtickets"
+                solo
+                prepend-icon="mdi-account"
+              ></v-select>
+            </v-flex>
+          </v-layout>
         </v-container>
       </v-card-text>
 
       <v-divider></v-divider>
 
       <v-card-text>
-        <v-select
-          :items="numberOfPassengers"
-          label="Number of passengers"
-          v-model="FORMtickets"
-          solo
-          prepend-icon="mdi-account"
-        ></v-select>
+        <v-card-title>Price interval</v-card-title>
+        <v-container class="text-xs-center">
+          <div class='flight-search-form__group'>
+            <vue-slider style="margin-top: 1rem;" v-bind="priceSlider" v-model="priceSlider.value"></vue-slider>
+          </div>
+        </v-container>
       </v-card-text>
 
+      <v-divider></v-divider>
 
       <!-- SUBMIT BUTTON  -->
       <v-card-text class="text-xs-center">
@@ -200,7 +201,7 @@ export default {
     arrivalDate: String,
     priceMin: Number,
     priceMax: Number,
-    setClass: Number,
+    seat_class: Number,
     tickets: Number,
   },
   data() {
@@ -210,7 +211,7 @@ export default {
       departureDateMenu: false,
       arrivalDateMenu: false,
       toggleRoundTrip: this.arrivalDate != '' ? 0 : 1,
-      toggleClass: this.setClass != null ? this.setClass : 0,
+      toggleClass: this.seat_class != null ? this.seat_class : 0,
       FORMorigin: this.origin,
       FORMdestination: this.destination,
       FORMdepartureDate: this.departureDate,
@@ -275,6 +276,7 @@ export default {
   created () {
       axios.get('/api/airports').then(res => {
         this.airports = res.data;
+        this.airportEntries = this.airports;
       });
   },
   watch: {
@@ -324,7 +326,7 @@ export default {
         arrivalDate: this.toggleRoundTrip == 0 ? this.FORMarrivalDate : null,
         priceMin: this.priceSlider.value[0],
         priceMax: this.priceSlider.value[1],
-        setClass: this.toggleClass,
+        seat_class: this.toggleClass,
         tickets: this.FORMtickets,
       });
 
@@ -339,7 +341,7 @@ export default {
           arrivalDate: this.toggleRoundTrip == 0 ? this.FORMarrivalDate : null,
           priceMin: this.priceSlider.value[0],
           priceMax: this.priceSlider.value[1],
-          setClass: this.toggleClass,
+          seat_class: this.toggleClass,
           tickets: this.FORMtickets,
         },
       });
