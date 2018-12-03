@@ -48,7 +48,7 @@
               </v-form>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <p class="subheading" v-html="this.formattedMessage"></p>
           </main>
 
   </v-card>
@@ -95,6 +95,14 @@ export default {
       ],
       valid: true
     }
+  },
+  computed: {
+    formattedMessage() {
+      if(this.message.substring(0,5) == "Error"){
+        return '<font color="red">' + this.message + '</font>';
+      }
+      return '<font color="green">' + this.message + '</font>';
+    },
   },
   created () {
       axios.get('/api/airports').then(res => {

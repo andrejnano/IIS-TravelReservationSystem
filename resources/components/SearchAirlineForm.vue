@@ -60,11 +60,10 @@
         <v-divider inset></v-divider>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <p class="subheading" v-html="this.formattedMessage"></p>
           </main>
-
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.searchMessage}}</p>
+            <p class="subheading" v-html="this.formattedSearchMessage"></p>
           </main>
 
             <!-- AIRLINE LIST -->
@@ -118,6 +117,17 @@ export default {
         v => (v && v.length <= 10) || 'Name must be less than 10 characters'
       ],
       valid: true
+    }
+  },
+  computed: {
+    formattedMessage() {
+      if(this.message.substring(0,5) == "Error"){
+        return '<font color="red">' + this.message + '</font>';
+      }
+      return '<font color="green">' + this.message + '</font>';
+    },
+    formattedSearchMessage() {
+      return '<font color="grey">' + this.searchMessage + '</font>';
     }
   },
   created () {
@@ -177,7 +187,7 @@ export default {
                   });
                   this.searchMessage = "Airlines containing '" + this.searchString + "' in hub";
                 }
-                if(searchString == ""){
+                if(this.searchString == ""){
                   this.searchMessage = "All airlines";
                 }
             } else {
@@ -232,6 +242,7 @@ export default {
         }).then((response) => {
             if (response.status == 200) {
               this.message = "Airline " + this.deletedName + " was successfully deleted";
+              this.search(); // actualize table
             } else {
               this.message = "Error - airline was not deleted";
             }
@@ -242,7 +253,6 @@ export default {
           });
       this.$refs.form.reset();
       this.actualAirline = ""; // hide edit form
-      this.search(); // actualize table
     }
   },
   components: {

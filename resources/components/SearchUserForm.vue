@@ -57,10 +57,10 @@
         </v-flex>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <p class="subheading" v-html="this.formattedMessage"></p>
           </main>
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.searchMessage}}</p>
+            <p class="subheading" v-html="this.formattedSearchMessage"></p>
           </main>
 
             <!-- USER LIST -->
@@ -118,6 +118,17 @@ export default {
         v => (v && v.length <= 10) || 'Name must be less than 10 characters'
       ],
       valid: true
+    }
+  },
+  computed: {
+    formattedMessage() {
+      if(this.message.substring(0,5) == "Error"){
+        return '<font color="red">' + this.message + '</font>';
+      }
+      return '<font color="green">' + this.message + '</font>';
+    },
+    formattedSearchMessage() {
+      return '<font color="grey">' + this.searchMessage + '</font>';
     }
   },
   created () {
@@ -183,6 +194,7 @@ export default {
           });
     },
     save() {
+      this.fullName = this.firstName + " " + this.lastName;
       console.log(this.isAdmin === true ? 1 : 0);
       console.log(this.isAdmin);
       axios.post('/api/update_user', {
@@ -193,7 +205,7 @@ export default {
             is_admin: this.isAdmin === true ? 1 : 0
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "User information was successfully saved!";
+              this.message = "User " + this.fullName + " was successfully saved";
               axios.get('/api/users', {
                 }).then((response) => {
                     if (response.status == 200) {

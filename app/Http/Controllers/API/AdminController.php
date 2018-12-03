@@ -145,7 +145,7 @@ class AdminController extends Controller
         else {
             try {
                 DB::table('users')->insert([
-                    "first_name" => $is_admin,
+                    "first_name" => $request->input("first_name"),
                     "last_name" => $request->input("last_name"),
                     "email" => $request->input("email"),
                     "password" => Hash::make($request->input("password")),

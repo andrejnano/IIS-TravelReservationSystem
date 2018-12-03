@@ -49,7 +49,7 @@
           </v-form>
 
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <p class="subheading" v-html="this.formattedMessage"></p>
           </main>
 
   </v-card>
@@ -93,10 +93,20 @@ export default {
       valid: true
     }
   },
+  computed: {
+    formattedMessage() {
+      if(this.message.substring(0,5) == "Error"){
+        return '<font color="red">' + this.message + '</font>';
+      }
+      return '<font color="green">' + this.message + '</font>';
+    },
+  },
   methods: {
     add(){
       // console.log(this.admin);
-      console.log(this.admin === "true" ? 1 : 0);
+      // console.log(this.admin === "true" ? 1 : 0);
+      console.log(this.firstName);
+      console.log(this.lastName);
       axios.post('/api/add_user', {
             first_name: this.firstName,
             last_name: this.lastName,

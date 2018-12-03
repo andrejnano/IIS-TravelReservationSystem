@@ -3,7 +3,7 @@
 
       <!-- TOOLBAR -->
       <v-toolbar card prominent>
-        <v-toolbar-title><v-icon>mdi-airplane-takeoff</v-icon>&nbsp;&nbsp;Flights table (200 newest flights)</v-toolbar-title>
+        <v-toolbar-title><v-icon>mdi-airplane-takeoff</v-icon>&nbsp;&nbsp;Recently added flights (200 newest)</v-toolbar-title>
       </v-toolbar>
 
         <!-- SEARCH FORM -->
@@ -47,10 +47,10 @@
 
 
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <p class="subheading" v-html="this.formattedMessage"></p>
           </main>
           <main role="main">
-            <p class="subheading font-weight-regular"> {{this.searchMessage}}</p>
+            <p class="subheading" v-html="this.formattedSearchMessage"></p>
           </main>
 
             <!-- FLIGHT LIST -->
@@ -113,12 +113,23 @@ export default {
       valid: true
     }
   },
+  computed: {
+    formattedMessage() {
+      if(this.message.substring(0,5) == "Error"){
+        return '<font color="red">' + this.message + '</font>';
+      }
+      return '<font color="green">' + this.message + '</font>';
+    },
+    formattedSearchMessage() {
+      return '<font color="grey">' + this.searchMessage + '</font>';
+    }
+  },
   created () {
     axios.get('/api/new_flights', {
         }).then((response) => {
             if (response.status == 200) {
               this.flights = response.data;
-              this.searchMessage = "All flights";
+              this.searchMessage = 'All flights';
             } else {
               this.message = "Error - not able to get flights";
             }
@@ -190,12 +201,12 @@ export default {
       this.actualFlight = "";
     },
     deleteFlight() {
-      this.deletedFlight = this.actualFlight + " (" + this.orogin + " → " + this.destination + ")";
+      this.deletedFlight = this.actualFlight + " (" + this.origin + " → " + this.destination + ")";
       axios.post('/api/delete_flight', {
             flight_number: this.actualFlight,
         }).then((response) => {
             if (response.status == 200) {
-              this.message = "Flight " + this.fullName + " was successfully deleted";
+              this.message = "Flight " + this.deletedFlight + " was successfully deleted";
             } else {
               this.message = "Error - flight was not deleted";
             }
