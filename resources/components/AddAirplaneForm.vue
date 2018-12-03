@@ -10,12 +10,12 @@
                 <v-text-field
                   v-model="producer"
                   :rules="nameRules"
-                  label="Producer"
+                  label="Producer (e.g. Boeing)"
                   required
                 ></v-text-field>
                 <v-text-field
                   v-model="model"
-                  label="Model"
+                  label="Model (e.g. 777-300ER)"
                   required
                 ></v-text-field>
                 <v-text-field
