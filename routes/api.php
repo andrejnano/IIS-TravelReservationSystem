@@ -70,8 +70,12 @@ Route::middleware('api')->get('/airports', 'API\GetTableController@get_airports'
 
 Route::middleware('api')->get('/flights', 'API\GetTableController@get_flights');
 
+Route::middleware('api')->get('/new_flights', 'API\GetTableController@get_new_flights');
+
 Route::middleware('api')->get('/airplanes', 'API\GetTableController@get_airplanes');
 
 Route::middleware('api')->get('/airlines', 'API\GetTableController@get_airlines');
 
 Route::middleware('api')->get('/users', 'API\AdminController@get_users');
+
+Route::middleware('api')->post('/pay', 'API\UserController@pay');

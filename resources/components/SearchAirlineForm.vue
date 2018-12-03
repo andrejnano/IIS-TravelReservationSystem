@@ -1,6 +1,11 @@
 <template>
   <v-card class="layout column" light>
 
+      <!-- TOOLBAR -->
+      <v-toolbar card prominent>
+        <v-toolbar-title><v-icon>mdi-domain</v-icon>&nbsp;&nbsp;Airlines table</v-toolbar-title>
+      </v-toolbar>
+
         <!-- SEARCH FORM -->
         <v-flex ma-2 xs11 sm8 md6 lg4 v-if="this.actualAirline == ''">
           <v-btn-toggle v-model="toggleSearch" mandatory>
@@ -51,6 +56,8 @@
                 </v-btn>
           </v-form>
         </v-flex>
+
+        <v-divider inset></v-divider>
 
           <main role="main">
             <p class="subheading font-weight-regular"> {{this.message}}</p>

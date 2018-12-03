@@ -1,9 +1,10 @@
 <template>
   <v-card class="layout column" light>
 
-          <main role="main">
-            <p class="subheading font-weight-regular"> Add new airline</p>
-          </main>
+      <!-- TOOLBAR -->
+      <v-toolbar card prominent>
+        <v-toolbar-title><v-icon>mdi-domain</v-icon>&nbsp;&nbsp;Add new airline</v-toolbar-title>
+      </v-toolbar>
 
           <v-form ref="form" v-model="valid" lazy-validation>
                 
@@ -97,7 +98,7 @@ export default {
           if (this.airports.length == 0) {
             let rd = res.data;
             for (var i = 0; i < rd.length; i++) {
-              this.airports.push(rd[i].airport_code.concat(" - ").concat(rd[i].city));
+              console.log(rd[i].airport_code.concat(" - ").concat(rd[i].city));
             }
           }
       });

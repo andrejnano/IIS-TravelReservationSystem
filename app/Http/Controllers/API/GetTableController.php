@@ -36,6 +36,17 @@ class GetTableController extends Controller
         }
         return json_encode($flight_arr);
     }
+
+    public function get_new_flights () {
+        $flights = DB::table('flights')->orderBy('id', 'desc')->limit(200)->get();
+
+        $flight_arr = array();
+        foreach ($flights as $flight) {
+            array_push($flight_arr, $flight);
+        }
+        return json_encode($flight_arr);
+    }
+
     public function get_airplanes () {
         $airplanes = DB::table('airplanes')->get();
 
@@ -45,6 +56,7 @@ class GetTableController extends Controller
         }
         return json_encode($airplane_arr);
     }
+
     public function get_airlines () {
         $airlines = DB::table('airlines')->get();
 

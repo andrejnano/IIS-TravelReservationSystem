@@ -1,62 +1,231 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- saved from url=(0067)https://www.fit.vutbr.cz/study/courses/IIS/private/projekt/doc.html -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2">
 
-    <title>Projekt IIS</title>
-    <style type="text/css">
-    	table { border-collapse: collapse; }
-    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
-    	dt { font-weight: bold; margin-top: 0.5em; }
-    </style>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Air Tickets Reservation</title>
+<style type="text/css">
+	table { border-collapse: collapse; }
+	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+	dt { font-weight: bold; margin-top: 0.5em; }
+</style>
 </head>
 <body>
 
-<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu
-     podle použitého editoru -->
+<!-- Zkontrolujte prosĂ­m nastavenĂ­ kĂłdovĂĄnĂ­ v hlaviÄce dokumentu 
+ podle pouĹžitĂŠho editoru -->
 
-<h1>Název zadání (editujte)</h1> <!-- Nahradte názvem svého zadání -->
+<h1>Flight Ticket Reservation System</h1> <!-- Nahradte nĂĄzvem svĂŠho zadĂĄnĂ­ -->
 
 <dl>
-	<dt>Autoři</dt>
-	<dd>Andrej Naňo <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+	<dt>Authors</dt>
+	<dd>Andrej NaĹo <!-- Nahraďż˝te skuteďż˝nďż˝m jmďż˝nem a e-mailem autora a popisem ďż˝innosti -->
 	    <a href="mailto:xnanoa00@stud.fit.vutbr.cz">xnanoa00@stud.fit.vutbr.cz</a> -
-		frontend
+		frontend, aplication interface design, flight itinerary creation, javascript, vue
 	</dd>
-	<dd>Stanislav Mechl <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+	<dd>Stanislav Mechl <!-- Nahraďż˝te skuteďż˝nďż˝m jmďż˝nem a e-mailem autora a popisem ďż˝innosti -->
 	    <a href="mailto:xmechl00@stud.fit.vutbr.cz">xmechl00@stud.fit.vutbr.cz</a> -
-    backend
+    	backend, database from IDS adjustment, create session for logged user, search flight by parameters, php, mysql
 	</dd>
-  <dd>Peter Marko <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+  <dd>Peter Marko <!-- Nahraďż˝te skuteďż˝nďż˝m jmďż˝nem a e-mailem autora a popisem ďż˝innosti -->
 	    <a href="mailto:xmarko15@stud.fit.vutbr.cz">xmarko15@stud.fit.vutbr.cz</a> -
-    backend
+    backend, user login implementation, API for database insertion, frontend for search tables, vue, php
 	</dd>
-	<dt>URL aplikace</dt>
-	<dd><a href="http://www.stud.fit.vutbr.cz/~xautor01/IIS">http://www.stud.fit.vutbr.cz/~xautor01/IIS</a></dd>
-	<dd>(pokud má aplikace více vstupních stránek, napište obdobně další URL)</dd>
+	<dt>URL of the application</dt>
+	<dd><a href="http://www.stud.fit.vutbr.cz/~xmarko15/IIS">http://www.stud.fit.vutbr.cz/~xmarko15/IIS</a></dd>
 </dl>
 
-<h2>Uživatelé systému pro testování</h2>
-<p>Uveďte prosím existující zástupce <strong>všech rolí uživatelů</strong>.</p>
+
+
+
+<h2>Test users</h2>
+<p>Roles of users, which can be used at login.</p>
 <table>
-<tbody><tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
-<tr><td>admin</td><td>admin</td><td>Administrátor</td></tr>
-<tr><td>prodavac</td><td>prodavac</td><td>Prodavač</td></tr>
-<tr><td>franta</td><td>franta</td><td>Zákazník</td></tr>
+<tr><th>Email</th><th>Password</th><th>Role</th></tr>
+<tr><td>a@d.min</td><td>password</td><td>Administrator</td></tr>
+<tr><td>todooooo</td><td>todooo</td><td>User</td></tr>
+</table>
+
+<h2>Implementation</h2>
+<p>
+	The application is divided into to main parts, frontend and backend. We have used this division so the 
+	two parts could be implemented simultaneously without conflicts. One student can implement frontend and 
+	other backend without conflicts and everybody can do what suits him better. Between this two main parts 
+	is application interface API, which was defined at the beginning of the project. API consists of 
+	multiple definitions of routes and their usages and return values. Frontend can access resources from 
+	backend using two types of requests GET or POST. Backend returns JSON containing information from the 
+	database as response. Frontend then parses JSON and shows information to user.
+</p>
+<p>
+	For implementation we have used two frameworks, Laravel for backend php implementation and Vue for 
+	frontend javascript implementation. With this frameworks we have been able to create more user friendly application and simple things were automated by the framework.
+</p>
+<h2>
+	Application Interface
+</h2>
+<table>
+<tbody>
+<tr>
+  <td><b>Route</b></td>
+  <td><b>Request type</b></td>
+  <td><b>Parameters</b></td>
+  <td><b>Action</b></td>
+</tr>
+<tr></tr>
+<td>/api/search</td>
+<td>get</td>
+<td>origin, destination, tickets, class, min_price, max_price, departure_date, arrival_date</td>
+<td>Returns JSON containing flights, which satisfies the condition</td>
+<tr></tr>
+<td>/api/flight</td>
+<td>get</td>
+<td>ft_1, ft_2, fb_1, fb_2, tickets, class</td>
+<td>Returns detail flight information about max for flights, which will be booked as reservation</td>
+<tr></tr>
+<td>/api/reservation</td>
+<td>post</td>
+<td></td>
+<td>creates new empty reservation for currently logged in user</td>
+<tr></tr>
+<td>/api/reserve</td>
+<td>post</td>
+<td>res_id, ticket_id, email, first_name, last_name</td>
+<td>Assigns ticket to reservation</td>
+<tr></tr>
+<td>/api/delete_reservation</td>
+<td>post</td>
+<td>res_id</td>
+<td>Removes specified reservation, user can remove only his reservations</td>
+<tr></tr>
+<td>/api/login</td>
+<td>post</td>
+<td>email</td>
+<td>password</td>
+<tr>Will set session parameters for user</tr>
+<td>/api/logout</td>
+<td>post</td>
+<td></td>
+<td>Will clear session</td>
+<tr></tr>
+<td>/api/session</td>
+<td>get</td>
+<td></td>
+<td>Returns current session parameters and data about user</td>
+<tr></tr>
+<td>/api/register</td>
+<td>post</td>
+<td>email, password, first_name, last_name</td>
+<td>Will create new user and log him in</td>
+<tr></tr>
+<td>/api/new_password</td>
+<td>post</td>
+<td>new_password</td>
+<td>Changes password of current user</td>
+<tr></tr>
+<td>/api/update_information</td>
+<td>post</td>
+<td>first_name, last_name, email</td>
+<td>Updates information about current user</td>
+<tr></tr>
+<td>/api/add_flight</td>
+<td>post</td>
+<td>airplane, airline, departure_time, arrival_time, origin, destination</td>
+<td>Create new flight, can be only used by admin</td>
+<tr></tr>
+<td>/api/add_airline</td>
+<td>post</td>
+<td>airline, full_name, nationality, hub</td>
+<td>Create new airline in database, can be only used by admin</td>
+<tr></tr>
+<td>/api/add_airport</td>
+<td>post</td>
+<td>airport_code, city, country</td>
+<td>Create new airport, can be only used by admin</td>
+<tr></tr>
+<td>/api/add_airplane</td>
+<td>post</td>
+<td>producer, model, fclass_seats, bclass_seats, eclass_seats, airline</td>
+<td>Create new airplane in DB, can be only used by admin</td>
+<tr></tr>
+<td>/api/add_user</td>
+<td>post</td>
+<td>first_name, last_name, email, password</td>
+<td>Create new user, can be only used by admin</td>
+<tr></tr>
+<td>/api/update_airline</td>
+<td>post</td>
+<td>full_name, nationality, hub, id_logo</td>
+<td>Updates information about airline, can be only used by admin</td>
+<tr></tr>
+<td>/api/update_user</td>
+<td>post</td>
+<td>first_name, last_name, email, password</td>
+<td>Updates information about user, can be only used by admin</td>
+<tr></tr>
+<td>/api/delete_user</td>
+<td>post</td>
+<td>id</td>
+<td>Removes user from DB, can be used by admin user</td>
+<tr></tr>
+<td>/api/my_reservations</td>
+<td>post</td>
+<td></td>
+<td>Show all reservations of current user</td>
+<tr></tr>
+<td>/api/return_ticket</td>
+<td>post</td>
+<td>ticket</td>
+<td>Deletes ticket from database</td>
+<tr></tr>
+<td>/api/delete_flight</td>
+<td>post</td>
+<td>flight_number</td>
+<td>Removes selected flight from DB, can be used by admin user</td>
+<tr></tr>
+<td>/api/delete_airplane</td>
+<td>post</td>
+<td>airplane</td>
+<td>Removes selected airplane from DB, can be used by admin user</td>
+<tr></tr>
+<td>/api/delete_airline</td>
+<td>post</td>
+<td>airline</td>
+<td>Removes selected airline from DB, can be used by admin user</td>
+<tr></tr>
+<td>/api/airports</td>
+<td>get</td>
+<td></td>
+<td>Returns information about all airports in DB</td>
+<tr></tr>
+<td>/api/flights</td>
+<td>get</td>
+<td></td>
+<td>Returns information about all flights in DB</td>
+<tr></tr>
+<td>/api/airplanes</td>
+<td>get</td>
+<td></td>
+<td>Returns information about all airplanes in DB</td>
+<tr></tr>
+<td>/api/airlines</td>
+<td>get</td>
+<td></td>
+<td>Returns information about all airlines in DB</td>
+<tr></tr>
+<td>/api/users</td>
+<td>get</td>
+<td></td>
+<td>Returns information about all users in DB</td>
+<tr></tr>
+<td>/api/pay</td>
+<td>post</td>
+<td>res_id</td>
+<td>User can pay his reservation</td>
 </tbody></table>
 
-<h2>Implementace</h2>
-<p>Stručná dokumentace k implementaci, která popisuje, které PHP skripty implementují jednotlivé případy použití uvedené v use-case diagramu z IDS. V případě, že bylo nutno při implementaci učinit změny v návrhu, musí být v dokumentaci zdůvodněny.</p>
+<h2>Instalation</h2>
 
-<h2>Instalace</h2>
-<ul>
-<li>Stručně popište postup instalace na server</li>
-<li>Softwarové požadavky (verze PHP apod.)</li>
-<li>Jak rozbalit, konfigurovat, inicializovat databází, ...</li>
-</ul>
-
-<h2>Známé problémy</h2>
-<p>Zde popište, které body zadání (IDS a IIS) nejsou implementovány a z jakého důvodu. Např. &#8222;Z časových důvodů nebyla implementována správa uživatelů.&#8221; Pomůžete tím zrychlit opravování, když neimplementované funkce nebudeme muset dlouze hledat.</p>
-
-
-
-</body></html>
+<h2>Known problems</h2>
+</body>
+</html>

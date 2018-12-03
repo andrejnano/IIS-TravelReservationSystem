@@ -1,34 +1,34 @@
+
 <template>
   <v-content>
     <loading :active.sync="isLoading" :can-cancel="true" :on-cancel="loadingCancel" :is-full-page="fullPage"></loading>
     <v-container fluid>
-      <v-layout ma-2 row justify-center>
-        <v-flex xs10 sm8 md6 lg4 pa-4 ma-4>
-          <v-card>
-            <v-card-text role="main">
-              <p class="subheading font-weight-regular"> {{this.message}}</p>
-              <h1 class="display-2 font-weight-bold mb-3">User information</h1><br>
-              <p class="subheading font-weight-regular"> First name:   <b>{{this.user.first_name}}</b></p>
-              <p class="subheading font-weight-regular"> Last name:   <b>{{this.user.last_name}}</b></p>
-              <p class="subheading font-weight-regular"> E-mail:   <b>{{this.user.email}}</b></p>
-            </v-card-text>
-            <v-card-text class="text-xs-center">
-              <v-btn color="info" @click="updateInformation" large>
-                Update information
-                <span slot="submitLoader" class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </v-btn>
-            </v-card-text>
-            <v-card-text class="text-xs-center">
-              <v-btn color="info" @click="newPassword" large>
-                Change password
-                <span slot="submitLoader" class="custom-loader">
-                  <v-icon light>cached</v-icon>
-                </span>
-              </v-btn>
-            </v-card-text>
-          </v-card>
+          <reservations-component v-if="1"/>
+      <v-layout ma-2 row align-start>
+        <v-flex ma-2 xs11 sm9 md7 lg5>
+          <main role="main">
+            <p class="subheading font-weight-regular"> {{this.message}}</p>
+            <h1 class="display-2 font-weight-bold mb-3">User information</h1><br>
+            <p class="subheading font-weight-regular"> First name:   <b>{{this.user.first_name}}</b></p>
+            <p class="subheading font-weight-regular"> Last name:   <b>{{this.user.last_name}}</b></p>
+            <p class="subheading font-weight-regular"> E-mail:   <b>{{this.user.email}}</b></p>
+          </main>
+          <v-card-text class="text-xs-center">
+            <v-btn color="info" @click="updateInformation" large>
+              Update information
+              <span slot="submitLoader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+              </span>
+            </v-btn>
+          </v-card-text>
+          <v-card-text class="text-xs-center">
+            <v-btn color="info" @click="newPassword" large>
+              Change password
+              <span slot="submitLoader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+              </span>
+            </v-btn>
+          </v-card-text>
         </v-flex>
 
         <v-flex ma-2 xs11 sm8 md6 lg4 v-if="passwordFormVisible">
@@ -85,6 +85,9 @@
                 <v-btn @click="cancelInformation">cancel</v-btn>
           </v-form>
 
+          <template v-if="sortToggle == 0">
+          </template>
+
           <v-card-text class="text-xs-center">
           </v-card-text>
         </v-flex>
@@ -111,6 +114,7 @@
     dom
   } from '@fortawesome/fontawesome-svg-core'
 
+  import ReservationComponent from '../components/Reservation.vue';
   import axios from 'axios'
 
   library.add(faSpinner)
@@ -224,6 +228,7 @@
     },
     components: {
       'font-awesome-icon': FontAwesomeIcon,
+      'reservations-component': ReservationComponent,
       Loading
     }
   }
