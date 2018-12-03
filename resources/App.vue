@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-  <v-app id="app">
+  <v-app id="app" dark>
 
     <navigation></navigation>
 

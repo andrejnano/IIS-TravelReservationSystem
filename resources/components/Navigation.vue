@@ -14,6 +14,9 @@
     <v-spacer></v-spacer>
     <template>
       <v-toolbar-items v-if="isLoggedIn">
+      <v-toolbar-items v-if="isAdmin">
+        <v-btn flat to="/admin">Edit database</v-btn>
+      </v-toolbar-items>
         <v-btn flat to="/profile">Logged in as {{ fullName }}</v-btn>
         <v-btn @click="logout" flat>Log out</v-btn>
       </v-toolbar-items>
@@ -52,6 +55,8 @@ export default {
       {
         console.log('session OK');
         this.isLoggedIn = true;
+        if (response.data.is_admin)
+          this.isAdmin = true;
         this.firstName = response.data.first_name ? response.data.first_name : 'Unknown';
         this.lastName = response.data.last_name ? response.data.last_name : 'Unknown';
         if(response.data.is_admin == 1){

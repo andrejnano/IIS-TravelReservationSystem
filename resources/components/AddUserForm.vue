@@ -6,6 +6,13 @@
           </main>
 
           <v-form ref="form" v-model="valid" lazy-validation>
+                <v-checkbox
+                  v-model="admin"
+                  true-value=true
+                  false-value=false
+                  label="Is admin"
+                  required
+                ></v-checkbox>
                 <v-text-field
                   v-model="firstName"
                   :rules="nameRules"
@@ -68,6 +75,7 @@ export default {
       email: "",
       password: "", 
       message: "",
+      admin: false,
       showPasswordField: false,
       rules: {
           required: value => !!value || 'Required.',
@@ -86,11 +94,14 @@ export default {
   },
   methods: {
     add(){
+      // console.log(this.admin);
+      // console.log(this.admin === "true" ? 1 : 0);
       axios.post('/api/add_user', {
             first_name: this.firstName,
             last_name: this.lastName,
             email: this.email,
-            password: this.password
+            password: this.password,
+            is_admin: this.admin === "true" ? 1 : 0
         }).then((response) => {
             if (response.status == 200) {
               this.message = "New user was successfully inserted";

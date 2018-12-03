@@ -611,7 +611,7 @@ class SearchController extends Controller
             if (!$tmp_ticket)
                 abort(409);
             $flight_arr['there']["ticket_ids"] = $tmp_ticket;
-            if (isset($flight_arr[1])) {
+            if (isset($flight_arr['back'])) {
                 $tmp_ticket = $this->insert_tickets($flight_arr['back'], $request);
                 if (!$tmp_ticket)
                     abort(409);
