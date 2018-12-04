@@ -205,7 +205,10 @@ export default {
       }
       output += " | <small> <span class='mdi mdi-calendar'></span> ";
       output += this.result.there['0'].departure_time.substring(0,10) + "</small>";
-      if (this.result.there.hasOwnProperty('1') || this.result.back.hasOwnProperty('1')) {
+      if (this.result.there.hasOwnProperty('1')) {
+        output += " | <span class='mdi mdi-autorenew'></span> <small>with changing</small>";
+      }
+      else if (this.result.hasOwnProperty('back') && this.result.back.hasOwnProperty('1')){
         output += " | <span class='mdi mdi-autorenew'></span> <small>with changing</small>";
       }
       return output;
